@@ -1,4 +1,5 @@
-import 'package:ad_common/ui/widget/color_manager.dart';
+
+import 'package:ad_common/ui/util/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

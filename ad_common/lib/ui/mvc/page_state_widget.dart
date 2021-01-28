@@ -1,12 +1,11 @@
 import 'dart:io';
 
+import 'package:ad_common/ui/util/color_manager.dart';
 import 'package:ad_common/ui/widget/common_state_page.dart';
 import 'package:ad_common/ui/widget/image_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../widget/color_manager.dart';
 
 abstract class BasePageStateWidget extends StatelessWidget {
   final Function onRetry;

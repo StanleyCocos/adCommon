@@ -20,6 +20,12 @@ dependencies:
   flutter_easyrefresh: 2.1.0
   provider: 4.3.1
   flutter_screenutil: 2.3.1
+  fluttertoast: 7.0.4
+
+
+  screenshot_callback:
+    git:
+      url: https://github.com/windows7lake/flutter_screenshot_callback.git
 
 dev_dependencies:
   flutter_test:
