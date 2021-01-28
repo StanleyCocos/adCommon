@@ -5,7 +5,7 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.8.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -21,6 +21,8 @@ dependencies:
   provider: 4.3.1
   flutter_screenutil: 2.3.1
   fluttertoast: 7.0.4
+  shared_preferences: ^0.5.7
+  synchronized: ^2.2.0+2
 
 
   screenshot_callback:
