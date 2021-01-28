@@ -21,7 +21,7 @@ extension StringOption on String {
   }
 
   /*
-  *  添加字符串到末尾位置
+  *  添加字符串到末尾位置network_state_listener.dart
   * */
   String addEnd(String sub) {
     if (this.isEmptyOrNull) return sub.isEmptyOrNull ? "" : sub;
