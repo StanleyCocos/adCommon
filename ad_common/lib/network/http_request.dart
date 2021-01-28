@@ -1,11 +1,12 @@
 import 'dart:collection';
+import 'package:ad_common/ad_common.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
-import 'header_interceptor.dart';
-import 'log_interceptor.dart';
+import 'http_request_setting.dart';
 
 typedef HttpRequestSuccessCallback = void Function(dynamic data);
-typedef HttpRequestErrorCallback = void Function(DioError error);
+typedef HttpRequestErrorCallback = void Function(DioError error, int stateCode);
 typedef HttpRequestCommonCallback = void Function();
 
 /// 可支持 restful 请求和普通API请求
@@ -18,11 +19,6 @@ typedef HttpRequestCommonCallback = void Function();
 ///  - 统一打印报错信息；
 class HttpRequest {
   static HttpRequest _instance;
-
-  static final String baseUrl = "";
-
-  static const int connectTimeOut = 30 * 1000; // 连接超时时间为10秒
-  static const int receiveTimeOut = 30 * 1000; // 响应超时时间为15秒
 
   /// 请求方式
   static const String GET = "get";
@@ -42,32 +38,31 @@ class HttpRequest {
 
   Dio get client => _client;
 
-  HttpRequest._internal() {
+  HttpRequestSetting _setting;
+
+  HttpRequest._internal();
+
+  /// 启动请求工具 并且设置请求参数
+  void startAndSetRequestParams(HttpRequestSetting setting){
     if (_client == null) {
+      _setting = setting;
       BaseOptions options = new BaseOptions();
-      options.connectTimeout = connectTimeOut;
-      options.receiveTimeout = receiveTimeOut;
-      options.baseUrl = baseUrl;
-      options.contentType = "application/x-www-form-urlencoded";
+      options.connectTimeout = setting.connectTimeOut;
+      options.receiveTimeout = setting.receiveTimeOut;
+      options.baseUrl = setting.baseUrl;
+      options.contentType = setting.contentType;
       _client = new Dio(options);
-      _client.interceptors.add(HeaderInterceptor());
-      _client.interceptors.add(LogPrintInterceptor(
-        request: true,
-        requestHeader: true,
-        responseHeader: false,
-        responseBody: true,
-      )); // 开启请求日志
-//      if(isDebug){
-//        (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-//            (client) {
-//          client.findProxy = (url) {
-//            ///设置代理 电脑ip地址
-//            return "PROXY 172.16.5.76:8888";
-//          };
-//        };
-//      }
+      _client.interceptors.add(setting.interceptorsWrapper);
+      _client.interceptors.add(setting.logPrintInterceptor);
+      if(isDebug && !setting.delegateHost.isEmptyOrNull) {
+        (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+            (client) {
+          client.findProxy = (url) => setting.delegateHost;
+        };
+      }
     }
   }
+
 
   /// Get请求 <br/>
   ///
@@ -406,7 +401,7 @@ class HttpRequest {
   /// @param [errorCallback] 错误处理回调方法 <br/>
   /// @param [error] DioError由dio封装的错误信息（可选） <br/>
   /// @param [errorMsg] 出错信息（可选） <br/>
-  static void _handleError(HttpRequestErrorCallback errorCallback,
+  void _handleError(HttpRequestErrorCallback errorCallback,
       {DioError error, String errorMsg}) {
     String errorDescription = "";
     String errorOutput = "";
@@ -446,24 +441,24 @@ class HttpRequest {
       errorOutput = "未知錯誤";
     }
     if (errorCallback != null) {
-      errorCallback(error);
+      errorCallback(error, error.response.statusCode);
     } else {
       //ToastManager.show(errorOutput);
     }
   }
 
-  static apiTest(String url,{Map<String, dynamic> params, Object result, int code}){
-    return;
-    // if (!isDebug || url.startsWith("http://172.16.11.80/")) return;
-    // HttpRequest.getInstance().post(
-    //   "http://172.16.11.80/laravel/design100/public/api/addHistory",
-    //   params: {
-    //     "requestApi": "${Api.DEBUG}$url",
-    //     "params": params,
-    //     "result": result,
-    //     "requestState": "$code",
-    //   },
-    // );
+  void apiTest(String url,{Map<String, dynamic> params, Object result, int code}){
+    if(!_setting.isRecordRequest)return;
+    if (!isDebug || url.startsWith("http://172.16.11.80/")) return;
+    HttpRequest.getInstance().post(
+      "http://172.16.11.80/laravel/design100/public/api/addHistory",
+      params: {
+        "requestApi": "${_setting.baseUrl}$url",
+        "params": params,
+        "result": result,
+        "requestState": "$code",
+      },
+    );
   }
 
 }

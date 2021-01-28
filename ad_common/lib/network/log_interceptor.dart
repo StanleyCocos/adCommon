@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:ad_common/ad_common.dart';
 import 'package:dio/dio.dart';
 
 /// [LogPrintInterceptor] is used to print logs during network requests.
@@ -15,10 +16,11 @@ class LogPrintInterceptor extends Interceptor {
     this.responseBody = false,
     this.error = true,
     this.logPrint = print,
+    this.showLog = isDebug,
   });
 
   /// Whether to print log [Options]
-  bool showLog = true;
+  bool showLog;
 
   /// Print request [Options]
   bool request;

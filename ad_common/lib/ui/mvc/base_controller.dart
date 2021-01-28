@@ -154,7 +154,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
         }
         loadSuccess(tempData, isRefresh: true);
       },
-      errorCallBack: (error) {
+      errorCallBack: (error, code) {
         isLoadError = true;
         refreshController.finishRefresh(success: false);
         loadError(error, isRefresh: true);
@@ -181,7 +181,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
             success: true, noMore: tempData.listData.isEmpty);
         loadSuccess(tempData);
       },
-      errorCallBack: (error) {
+      errorCallBack: (error, code) {
         refreshController.finishLoad(success: false);
         loadError(error);
       },
