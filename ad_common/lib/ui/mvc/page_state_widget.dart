@@ -5,7 +5,6 @@ import 'package:ad_common/ui/widget/image_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
 
 import '../widget/color_manager.dart';
 
@@ -120,33 +119,5 @@ class PageStateLoad extends StatelessWidget {
             strokeWidth: 2.0,
             valueColor: AlwaysStoppedAnimation(ColorManager.gray99),
           );
-  }
-}
-
-/// 瀑布流骨架屏幕
-class PageStateFlowLoad extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return WaterfallFlow.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 24.w),
-      gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 14.w,
-        mainAxisSpacing: 14.w,
-      ),
-      itemBuilder: (BuildContext c, int index) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: ColorManager.grayEE,
-          ),
-          alignment: Alignment.center,
-          height: ((index % 3) + 1) * 100.0,
-        );
-      },
-      itemCount: 8,
-    );
   }
 }

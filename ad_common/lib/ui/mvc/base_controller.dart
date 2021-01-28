@@ -10,6 +10,7 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
         BaseControllerState,
         BaseControllerLifeCycle,
         BaseControllerCommonMethod {
+
   /// 模型 数据提供
   T model;
 
@@ -236,12 +237,17 @@ enum PageStateType {
 
 /// 页面加载状态
 abstract class BaseControllerState {
+
+  /// 是否展示加载布局
   bool get loading;
 
+  /// 是否显示错误布局
   bool get error;
 
+  /// 是否显示空布局
   bool get empty;
 
+  /// 是否显示主内容
   bool get content;
 }
 

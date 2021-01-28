@@ -20,7 +20,6 @@ dependencies:
   flutter_easyrefresh: 2.1.0
   provider: 4.3.1
   flutter_screenutil: 2.3.1
-  waterfall_flow: 2.0.2
 
 dev_dependencies:
   flutter_test:
