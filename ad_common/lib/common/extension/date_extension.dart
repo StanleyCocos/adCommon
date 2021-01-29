@@ -1,5 +1,5 @@
+///时间-日期 扩展类
 extension DateOption on DateTime {
-
   /*
   * 是否为今天
   * */
@@ -144,10 +144,7 @@ extension DateOption on DateTime {
     a = DateTime.utc(a.year, a.month, a.day);
     b = DateTime.utc(b.year, b.month, b.day);
 
-    var diff = a
-        .toUtc()
-        .difference(b.toUtc())
-        .inDays;
+    var diff = a.toUtc().difference(b.toUtc()).inDays;
     if (diff.abs() >= 7) {
       return false;
     }
@@ -164,20 +161,51 @@ extension DateOption on DateTime {
   static bool isSameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 
-
   /*
   * 格式化
   * */
-  String string({String format = "yyyy-MM-dd HH:mm:ss"}) {
+  String string({String format = "yyyy-MM-dd HH:mm:ss", bool addZone = false}) {
     var time = format;
     var date = new DateTime.now();
     time = format.replaceAll("yyyy", date.year.toString());
-    time = format.replaceAll("MM", date.month.toString());
-    time = time.replaceAll("dd", date.day.toString());
-    time = time.replaceAll("HH", date.hour.toString());
-    time = time.replaceAll("mm", date.minute.toString());
-    time = time.replaceAll("ss", date.second.toString());
+    int tempMonth = date.month;
+    int tempDay = date.day;
+    int tempHour = date.hour;
+    int tempMinute = date.minute;
+    int tempSecond = date.second;
+    if (addZone) {
+      if (tempMonth > 9) {
+        time = time.replaceAll("MM", '$tempMonth');
+      } else {
+        time = time.replaceAll("MM", '0$tempMonth');
+      }
+      if (tempDay > 9) {
+        time = time.replaceAll("dd", '$tempDay');
+      } else {
+        time = time.replaceAll("dd", '0$tempDay');
+      }
+      if (tempHour > 9) {
+        time = time.replaceAll("HH", '$tempHour');
+      } else {
+        time = time.replaceAll("HH", '0$tempHour');
+      }
+      if (tempMinute > 9) {
+        time = time.replaceAll("mm", '$tempMinute');
+      } else {
+        time = time.replaceAll("mm", '0$tempMinute');
+      }
+      if (tempSecond > 9) {
+        time = time.replaceAll("ss", '$tempSecond');
+      } else {
+        time = time.replaceAll("ss", '0$tempSecond');
+      }
+    } else {
+      time = time.replaceAll("MM", '$tempMonth');
+      time = time.replaceAll("dd", '$tempDay');
+      time = time.replaceAll("HH", '$tempHour');
+      time = time.replaceAll("mm", '$tempMinute');
+      time = time.replaceAll("ss", '$tempSecond');
+    }
     return time;
   }
-
 }
