@@ -1,7 +1,5 @@
-
 /// 订阅者回调签名
 typedef void NotificationCallback(arg);
-
 
 /// 广播管理
 class NotificationManager {

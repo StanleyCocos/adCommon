@@ -1,5 +1,3 @@
-
-
 /// 类型安全转换工具
 class SafeManager {
   /// 将不确定的类型转换为int类型 <br>
@@ -115,7 +113,6 @@ class SafeManager {
     }
   }
 
-
   /// 将不确定的类型转换为List<String>类型 <br>
   ///
   /// @param value ：待转换的类型 <br>
@@ -124,11 +121,11 @@ class SafeManager {
     try {
       Object value = data[key];
       if (value == null) return [];
-      if (value is List){
+      if (value is List) {
         List<String> listArray = [];
-        for(var obj in value){
-          if(obj != null && obj != "null"){
-            if(obj is String){
+        for (var obj in value) {
+          if (obj != null && obj != "null") {
+            if (obj is String) {
               listArray.add(obj);
             }
           }
@@ -140,8 +137,6 @@ class SafeManager {
       return [];
     }
   }
-
-
 
   /// 将不确定的类型转换为Object类型 <br>
   ///

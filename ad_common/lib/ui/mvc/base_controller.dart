@@ -10,7 +10,6 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
         BaseControllerState,
         BaseControllerLifeCycle,
         BaseControllerCommonMethod {
-
   /// 模型 数据提供
   T model;
 
@@ -95,7 +94,7 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
 
   /// 获取页面间传递的参数
   Object getArgument(String key, {Object defaultValue}) {
-    final arguments = {};//RouteManager().currentRoute.settings.arguments;
+    final arguments = {}; //RouteManager().currentRoute.settings.arguments;
     if (arguments == null) return defaultValue;
     if (arguments is Map) {
       final value = arguments[key];
@@ -190,7 +189,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   }
 
   /// 请求开始回调
-  void loadBegin({bool isRefresh = false}){}
+  void loadBegin({bool isRefresh = false}) {}
 
   /// 请求成功回调
   void loadSuccess(B data, {bool isRefresh = false}) {}
@@ -237,7 +236,6 @@ enum PageStateType {
 
 /// 页面加载状态
 abstract class BaseControllerState {
-
   /// 是否展示加载布局
   bool get loading;
 
