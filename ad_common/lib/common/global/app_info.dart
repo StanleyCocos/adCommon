@@ -6,9 +6,8 @@ import 'package:ad_common/common/extension/string_extension.dart';
 import 'package:package_info/package_info.dart';
 import 'package:uuid/uuid.dart';
 
+///app信息管理类
 class AppInfoManager {
-
-
   /// 版本
   String get version => _version;
 
@@ -21,11 +20,13 @@ class AppInfoManager {
   /// 唯一标识
   String get imei => _imei;
 
+  String get androidId => _androidId;
+
   /// 设备系统版本
   String get systemVersion => _systemVersion;
 
-
   factory AppInfoManager() => _getInstance();
+
   static AppInfoManager get instance => _getInstance();
   static AppInfoManager _instance;
   static const String IMEI_KEY = "designUUID";
@@ -63,7 +64,7 @@ class AppInfoManager {
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
       _imei = await getImei();
-      if(_imei.isEmptyOrNull){
+      if (_imei.isEmptyOrNull) {
         _setImei(iosInfo.identifierForVendor);
         _imei = iosInfo.identifierForVendor;
       }
@@ -75,7 +76,8 @@ class AppInfoManager {
       _version = packageInfo.version;
       _systemVersion = androidInfo.version.release;
       _imei = await getImei();
-      if(_imei.isEmptyOrNull) {
+      _androidId = androidInfo.androidId;
+      if (_imei.isEmptyOrNull) {
         _setImei(Uuid().v4());
         _imei = await getImei();
       }
@@ -97,6 +99,7 @@ class AppInfoManager {
   String _version = "";
   String _versionCode = "";
   String _imei = "";
+  String _androidId = "";
   String _systemVersion = "";
 }
 
