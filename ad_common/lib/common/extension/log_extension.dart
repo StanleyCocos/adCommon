@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:ad_common/common/extension/date_extension.dart';
 
@@ -6,7 +5,7 @@ const bool isDebug = !kReleaseMode;
 
 stLog(Object message, {StackTrace current}) {
   if (isDebug) {
-    if(current != null){
+    if (current != null) {
       HYCustomTrace programInfo = HYCustomTrace(current);
       print(
           "${programInfo.fileName} line ${programInfo.lineNumber} time ${DateTime.now().string(format: "HH:mm:ss")}: $message");

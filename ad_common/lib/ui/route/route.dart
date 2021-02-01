@@ -1,10 +1,8 @@
-
 import 'package:ad_common/ui/route/route_state_option.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 enum RouteAction { PUSH, REPLACE, POP, REMOVE }
-
 
 class RouteManager extends NavigatorObserver {
   /// 工厂模式创建单例
@@ -39,7 +37,8 @@ class RouteManager extends NavigatorObserver {
       return navigator.pushReplacementNamed(routeName,
           arguments: arguments ?? "");
     } else {
-      return navigator.pushNamed(routeName.toString(), arguments: arguments ?? "");
+      return navigator.pushNamed(routeName.toString(),
+          arguments: arguments ?? "");
     }
   }
 
@@ -79,7 +78,7 @@ class RouteManager extends NavigatorObserver {
     super.didPush(route, previousRoute);
     _mRoutes.add(route);
     PaintingBinding.instance.imageCache.clearLiveImages();
-    option.forEach((e)=>e.didPush(route, previousRoute));
+    option.forEach((e) => e.didPush(route, previousRoute));
   }
 
   @override
@@ -87,14 +86,14 @@ class RouteManager extends NavigatorObserver {
     super.didPop(route, previousRoute);
     _mRoutes.remove(route);
     PaintingBinding.instance.imageCache.clearLiveImages();
-    option.forEach((e)=>e.didPop(route, previousRoute));
+    option.forEach((e) => e.didPop(route, previousRoute));
   }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didRemove(route, previousRoute);
     PaintingBinding.instance.imageCache.clearLiveImages();
-    option.forEach((e)=> e.didRemove(route, previousRoute));
+    option.forEach((e) => e.didRemove(route, previousRoute));
   }
 
   @override
@@ -102,21 +101,20 @@ class RouteManager extends NavigatorObserver {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     _mRoutes.last = newRoute;
     PaintingBinding.instance.imageCache.clearLiveImages();
-    option.forEach((e)=> e.didReplace(newRoute: newRoute, oldRoute: oldRoute));
+    option.forEach((e) => e.didReplace(newRoute: newRoute, oldRoute: oldRoute));
   }
 
   @override
-  void didStartUserGesture(
-      Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didStartUserGesture(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didStartUserGesture(route, previousRoute);
     PaintingBinding.instance.imageCache.clearLiveImages();
-    option.forEach((e)=>e.didStartUserGesture(route, previousRoute));
+    option.forEach((e) => e.didStartUserGesture(route, previousRoute));
   }
 
   @override
   void didStopUserGesture() {
     super.didStopUserGesture();
     PaintingBinding.instance.imageCache.clearLiveImages();
-    option.forEach((e)=> e.didStopUserGesture());
+    option.forEach((e) => e.didStopUserGesture());
   }
 }

@@ -1,11 +1,9 @@
-
 import 'dart:math';
 
 /*
 * 字符串常规操作
 * */
 extension StringOption on String {
-
   /*
   * 是否为null
   * */
@@ -31,7 +29,7 @@ extension StringOption on String {
   /*
   * 添加字符串到起始位置
   * */
-  String addStart(String sub){
+  String addStart(String sub) {
     if (this.isEmptyOrNull) return sub.isEmptyOrNull ? "" : sub;
     return sub + this;
   }
@@ -41,8 +39,8 @@ extension StringOption on String {
   * - Parameter start: 起始位置
   * - Parameter end: 结束位置，默认是到字符串的末尾位置
   * */
-  String deleteRange(int start, {int end, bool}){
-    if(this.isEmptyOrNull) return "";
+  String deleteRange(int start, {int end, bool}) {
+    if (this.isEmptyOrNull) return "";
     if (this.length <= start) return this;
     if (end == null) end = this.length - 1;
     if (this.length <= end) return this;
@@ -54,10 +52,10 @@ extension StringOption on String {
   * - Parameter sub: 子字符串
   * - Parameter isAll: 是否删除查找到的所有子字符串
   * */
-  String deleteSub(String sub, {bool isAll = false}){
-    if(this.isEmptyOrNull) return "";
-    if(sub.isEmptyOrNull) return this;
-    if(isAll){
+  String deleteSub(String sub, {bool isAll = false}) {
+    if (this.isEmptyOrNull) return "";
+    if (sub.isEmptyOrNull) return this;
+    if (isAll) {
       return this.replaceAll(sub, "");
     }
     return this.replaceFirst(sub, "");
@@ -88,7 +86,7 @@ extension StringOption on String {
   /*
   * 是否以子字符串开头
   * */
-  bool isStart(String sub){
+  bool isStart(String sub) {
     if (this.isEmptyOrNull) return false;
     if (sub.isEmptyOrNull) return false;
     return this.startsWith(sub);
@@ -97,7 +95,7 @@ extension StringOption on String {
   /*
   * 是否以子字符串结尾
   * */
-  bool isEnd(String sub){
+  bool isEnd(String sub) {
     if (this.isEmptyOrNull) return false;
     if (sub.isEmptyOrNull) return false;
     return this.endsWith(sub);
@@ -108,7 +106,7 @@ extension StringOption on String {
   * - Parameter start: 起始位置
   * - Parameter end: 截止位置 默认是到字符串的末尾位置
   * */
-  String sub(int start, {int end}){
+  String sub(int start, {int end}) {
     if (this.isEmptyOrNull) return "";
     if (end == null) end = this.length - 1;
     return this.substring(start, end);
@@ -117,7 +115,7 @@ extension StringOption on String {
   /*
   * 删除前后空格
   * */
-  String trim(String content){
+  String trim(String content) {
     if (this.isEmptyOrNull) return "";
     return content.trim();
   }
@@ -126,13 +124,56 @@ extension StringOption on String {
   * 随机获取一个字符串
   * - Parameter count: 位数
   * */
-  String random({int count = 6}){
+  String random({int count = 6}) {
     String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String left = '';
     for (var i = 0; i < count; i++) {
-      left = left + alphabet[Random().nextInt(alphabet.length-1)];
+      left = left + alphabet[Random().nextInt(alphabet.length - 1)];
     }
     return left;
+  }
+
+  /*
+  * 加千分号
+  * */
+  String formatNumByInt(int num) {
+    if (num >= 1000) {
+      String value = "$num";
+      String sub = "";
+      int size = value.length;
+      for (var i = 0; i < size; ++i) {
+        var bean = value[i];
+        sub += bean;
+        if ((size - i - 1) % 3 == 0 && i != size - 1) {
+          sub += ",";
+        }
+      }
+      return sub;
+    } else {
+      return "$num";
+    }
+  }
+
+  /*
+  * 加千分号
+  * */
+  String get formatNum {
+    List<String> numSub = this.split(".");
+    try {
+      int upValue = int.parse(numSub.first);
+      String value = formatNumByInt(upValue);
+      for (var i = 1; i < numSub.length; ++i) {
+        var bean = numSub[i];
+        if (i == 1) {
+          value += ".";
+        }
+        value += bean;
+      }
+      return value;
+    } catch (e) {
+      Future.error(e);
+    }
+    return this;
   }
 }
 
@@ -140,29 +181,27 @@ extension StringOption on String {
 * 字符串加密
 * */
 extension StringEncryption on String {
-
-  String md5(){
+  String md5() {
     return "";
   }
 
-  String base64(){
+  String base64() {
     return "";
   }
 
-  String sha1(){
+  String sha1() {
     return "";
   }
 
-  String rsa(){
+  String rsa() {
     return "";
   }
 
-  String aes(){
+  String aes() {
     return "";
   }
 
-  String des(){
+  String des() {
     return "";
   }
-
 }
