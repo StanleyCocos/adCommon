@@ -3,12 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ad_common/ad_common.dart';
 
 void main() {
-  test('dateTime测试', () {
-    var e = DateTime.now();
-    String value = e.string(format: 'yyyy-MM-dd HH:mm:ss', addZone: true);
+  test('千分号测试', () {
+    // String temp = '12345.934';
+    double temp = 1234567890.34;
+    String value = temp.formatNum;
     print('test value=$value');
+  });
 
-    String timeValue = DateOption.numToStringTimeByDayHourMinute(259200);
-    print('test timeValue=$timeValue');
+  test('校验测试', () {
+    String temp = '校验测试a';
+
+    bool value = RegexManager.isSpecialChar(temp);
+    print('test value=$value');
   });
 }
