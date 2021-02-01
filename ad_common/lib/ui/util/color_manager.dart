@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+///颜色管理类
 class ColorManager {
-
   static Color color(int value) {
     return Color(value);
   }
@@ -19,6 +19,7 @@ class ColorManager {
         (hex & 0x0000FF) >> 0, alpha);
   }
 
+  //字符串转color
   static Color hexFrom(String hexString) {
     final buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
@@ -30,8 +31,10 @@ class ColorManager {
     return hexColor(0x000000, alpha: alpha);
   }
 
+  //随机颜色
   static Color get random {
-    return Color.fromRGBO(Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1);
+    return Color.fromRGBO(
+        Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1);
   }
 
   static Color get black => hexColor(0x000000, alpha: 1);

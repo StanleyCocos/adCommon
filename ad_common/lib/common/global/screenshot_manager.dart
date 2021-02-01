@@ -18,7 +18,7 @@ class ScreenshotManager {
   void init() {
     screenshotCallback.addListener(
       () {
-        if(callback != null) callback();
+        if (callback != null) callback();
       },
     );
   }

@@ -1,3 +1,5 @@
+
+///校验管理类
 class RegexManager {
   /// 校验函数
   static bool verify(String content, String regex) {
@@ -47,7 +49,8 @@ class RegexManager {
   }
 
   /// 是否为邮箱
-  static bool isEmail(String content){
-    return verify(content, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$");
+  static bool isEmail(String content) {
+    return verify(
+        content, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+\$");
   }
 }
