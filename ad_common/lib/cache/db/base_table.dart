@@ -8,11 +8,24 @@ import 'split_merge.dart';
 
 abstract class BaseTableModel {
 
+  /*
+  * 表相应的的列字段属性
+  * */
   Map<String, BaseColumn> get map;
+
+  /*
+  * 需要提供实现类的实例
+  * */
   BaseTableModel copy();
 
+  /*
+  * 是否正常获取到结果(未测试)
+  * */
   bool result = false;
 
+  /*
+  * 默认主键
+  * */
   STInt id = STInt(primaryKey: true, autoIncrement: true);
 
   /*
