@@ -20,7 +20,8 @@ class AppInfoManager {
   /// 唯一标识
   String get imei => _imei;
 
-  String get androidId => _androidId;
+  ///设备标识
+  String get identifier => _identifier;
 
   /// 设备系统版本
   String get systemVersion => _systemVersion;
@@ -64,6 +65,7 @@ class AppInfoManager {
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
       _imei = await getImei();
+      _identifier = iosInfo.identifierForVendor;
       if (_imei.isEmptyOrNull) {
         _setImei(iosInfo.identifierForVendor);
         _imei = iosInfo.identifierForVendor;
@@ -76,7 +78,7 @@ class AppInfoManager {
       _version = packageInfo.version;
       _systemVersion = androidInfo.version.release;
       _imei = await getImei();
-      _androidId = androidInfo.androidId;
+      _identifier = androidInfo.androidId;
       if (_imei.isEmptyOrNull) {
         _setImei(Uuid().v4());
         _imei = await getImei();
@@ -99,7 +101,7 @@ class AppInfoManager {
   String _version = "";
   String _versionCode = "";
   String _imei = "";
-  String _androidId = "";
+  String _identifier = "";
   String _systemVersion = "";
 }
 

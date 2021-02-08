@@ -16,4 +16,10 @@ void main() {
     bool value = RegexManager.isSpecialChar(temp);
     print('test value=$value');
   });
+
+  test('time', () {
+    num value = 3.0;
+
+    print('test value=${value.ceil()}');
+  });
 }
