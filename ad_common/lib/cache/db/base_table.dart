@@ -26,9 +26,9 @@ abstract class BaseTableModel {
   /*
   * 清空表
   * */
-  static Future<int> clear(String table) async {
+  Future<int> clear(String table) async {
     Database db = await DBManager.getDatabase();
-    return await db?.rawDelete("DELETE FROM table");
+    return await db?.rawDelete("DELETE FROM table $runtimeType");
   }
 
   /*
