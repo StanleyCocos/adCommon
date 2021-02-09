@@ -99,15 +99,17 @@ abstract class BaseTableModel {
   /*
   * 获取所有记录
   * */
-  Future<List<BaseTableModel>> all() async {
+  Future<List<T>> all<T extends BaseTableModel>() async {
     var db = await DBManager.getDatabase();
     List<Map> maps = await db.query(
       "$runtimeType",
     );
+    print(maps);
     if (maps == null || maps.length == 0) return [];
-    List<BaseTableModel> list = [];
+
+    List<T> list = [];
     maps.forEach((element) {
-      BaseTableModel obj = copy();
+      var obj = this.copy();
       obj.setRowContent(rowData: element);
       list.add(obj);
     });
