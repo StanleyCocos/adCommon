@@ -32,63 +32,53 @@ class SpManager {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
-  static dynamic get(String name) {
-    name += isDebug ? '_debug' : '';
-    return _sharedPreferences?.get(name);
+  String _realName(name) => name += isDebug ? '_debug' : '';
+
+  dynamic get(String name) {
+    return _sharedPreferences?.get(_realName(name));
   }
 
-  static bool getBool(String name, {bool defaultValue = false}) {
-    name += isDebug ? '_debug' : '';
-    return _sharedPreferences?.getBool(name) ?? defaultValue;
+  bool getBool(String name, {bool defaultValue = false}) {
+    return _sharedPreferences?.getBool(_realName(name)) ?? defaultValue;
   }
 
-  static int getInt(String name, {int defaultValue = 0}) {
-    name += isDebug ? '_debug' : '';
-    return _sharedPreferences?.getInt(name) ?? defaultValue;
+  int getInt(String name, {int defaultValue = 0}) {
+    return _sharedPreferences?.getInt(_realName(name)) ?? defaultValue;
   }
 
-  static double getDouble(String name, {double defaultValue = 0.0}) {
-    name += isDebug ? '_debug' : '';
-    return _sharedPreferences?.getDouble(name) ?? defaultValue;
+  double getDouble(String name, {double defaultValue = 0.0}) {
+    return _sharedPreferences?.getDouble(_realName(name)) ?? defaultValue;
   }
 
-  static String getString(String name, {String defaultValue = ''}) {
-    name += isDebug ? '_debug' : '';
-    return _sharedPreferences?.getString(name) ?? defaultValue;
+  String getString(String name, {String defaultValue = ''}) {
+    return _sharedPreferences?.getString(_realName(name)) ?? defaultValue;
   }
 
-  static List<String> getStringList(String name) {
-    name += isDebug ? '_debug' : '';
-    return _sharedPreferences?.getStringList(name);
+  List<String> getStringList(String name) {
+    return _sharedPreferences?.getStringList(_realName(name));
   }
 
-  static void setBool(String name, bool value) {
-    name += isDebug ? '_debug' : '';
-    _sharedPreferences?.setBool(name, value);
+  void setBool(String name, bool value) {
+    _sharedPreferences?.setBool(_realName(name), value);
   }
 
-  static void setInt(String name, int value) {
-    name += isDebug ? '_debug' : '';
-    _sharedPreferences?.setInt(name, value);
+  void setInt(String name, int value) {
+    _sharedPreferences?.setInt(_realName(name), value);
   }
 
-  static void setDouble(String name, double value) {
-    name += isDebug ? '_debug' : '';
-    _sharedPreferences?.setDouble(name, value);
+  void setDouble(String name, double value) {
+    _sharedPreferences?.setDouble(_realName(name), value);
   }
 
-  static void setString(String name, String value) {
-    name += isDebug ? '_debug' : '';
-    _sharedPreferences?.setString(name, value);
+  void setString(String name, String value) {
+    _sharedPreferences?.setString(_realName(name), value);
   }
 
-  static void setStringList(String name, List<String> value) {
-    name += isDebug ? '_debug' : '';
-    _sharedPreferences?.setStringList(name, value);
+  void setStringList(String name, List<String> value) {
+    _sharedPreferences?.setStringList(_realName(name), value);
   }
 
-  static void remove(String name) {
-    name += isDebug ? '_debug' : '';
-    _sharedPreferences?.remove(name);
+  void remove(String name) {
+    _sharedPreferences?.remove(_realName(name));
   }
 }
