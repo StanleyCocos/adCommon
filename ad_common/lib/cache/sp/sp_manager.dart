@@ -4,81 +4,71 @@ import 'package:synchronized/synchronized.dart';
 
 /// 偏好设置存储管理类
 class SpManager {
-  static SpManager _singleton;
   static Lock _lock = Lock();
   static SharedPreferences _sharedPreferences;
 
-  //不同环境存储不同字段
-  static bool isDebug = false;
+  /// 不同环境存储不同字段
+  static bool _isDebug = false;
 
-  static Future<SpManager> getInstance() async {
-    if (_singleton == null) {
+  static Future init({isDebug = false}) async {
+    _isDebug = isDebug;
+    if (_sharedPreferences == null) {
       await _lock.synchronized(() async {
-        if (_singleton == null) {
-          // keep local instance till it is fully initialized.
-          // 保持本地实例直到完全初始化。
-          var singleton = SpManager._();
-          await singleton._init();
-          _singleton = singleton;
+        if (_sharedPreferences == null) {
+          _sharedPreferences = await SharedPreferences.getInstance();
         }
       });
     }
-    return _singleton;
+    return true;
   }
 
-  SpManager._();
+  static String _realName(name) => _isDebug ? "${name}_debug" : '$name';
 
-  Future _init() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-  }
-
-  String _realName(name) => name += isDebug ? '_debug' : '';
-
-  dynamic get(String name) {
+  static dynamic get(String name) {
     return _sharedPreferences?.get(_realName(name));
   }
 
-  bool getBool(String name, {bool defaultValue = false}) {
+  static bool getBool(String name, {bool defaultValue = false}) {
     return _sharedPreferences?.getBool(_realName(name)) ?? defaultValue;
   }
 
-  int getInt(String name, {int defaultValue = 0}) {
+  static int getInt(String name, {int defaultValue = 0}) {
     return _sharedPreferences?.getInt(_realName(name)) ?? defaultValue;
   }
 
-  double getDouble(String name, {double defaultValue = 0.0}) {
+  static double getDouble(String name, {double defaultValue = 0.0}) {
     return _sharedPreferences?.getDouble(_realName(name)) ?? defaultValue;
   }
 
-  String getString(String name, {String defaultValue = ''}) {
+  static String getString(String name, {String defaultValue = ''}) {
     return _sharedPreferences?.getString(_realName(name)) ?? defaultValue;
   }
 
-  List<String> getStringList(String name) {
+  static List<String> getStringList(String name) {
     return _sharedPreferences?.getStringList(_realName(name));
   }
 
-  void setBool(String name, bool value) {
+  static void setBool(String name, bool value) {
     _sharedPreferences?.setBool(_realName(name), value);
   }
 
-  void setInt(String name, int value) {
+  static void setInt(String name, int value) {
     _sharedPreferences?.setInt(_realName(name), value);
   }
 
-  void setDouble(String name, double value) {
+  static void setDouble(String name, double value) {
     _sharedPreferences?.setDouble(_realName(name), value);
   }
 
-  void setString(String name, String value) {
+  static void setString(String name, String value) {
     _sharedPreferences?.setString(_realName(name), value);
   }
 
-  void setStringList(String name, List<String> value) {
+  static void setStringList(String name, List<String> value) {
     _sharedPreferences?.setStringList(_realName(name), value);
   }
 
-  void remove(String name) {
+  static void remove(String name) {
     _sharedPreferences?.remove(_realName(name));
   }
 }
