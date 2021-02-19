@@ -52,5 +52,6 @@ export 'package:package_info/package_info.dart';
 export 'package:flutter_easyrefresh/easy_refresh.dart';
 export 'package:provider/provider.dart';
 export 'package:flutter_screenutil/screenutil.dart';
+export 'package:flutter_screenutil/size_extension.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:shared_preferences/shared_preferences.dart';
