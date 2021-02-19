@@ -93,7 +93,7 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
   }
 
   /// 获取页面间传递的参数
-  Object getArgument(String key, {Object defaultValue}) {
+  Object getArgument(Object key, {Object defaultValue}) {
     final arguments = RouteManager().currentRoute.settings.arguments;
     if (arguments == null) return defaultValue;
     if (arguments is Map) {
