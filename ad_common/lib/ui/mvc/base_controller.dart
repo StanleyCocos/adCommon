@@ -203,6 +203,14 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   /// 列表item点击
   void onItemClick<M>(M model, int index) {}
 
+  /// 添加参数
+  void addParams(Map<String, Object> params){
+    if(params == null) return;
+    if(params.length <= 0) return;
+    this.params = {"page": "1"};
+    this.params.addAll(params);
+  }
+
   void _setPageParams({bool isMore = false}) {
     if (isMore) {
       params["page"] = "${loadPage + 1}";
