@@ -11,7 +11,6 @@ export 'common/extension/map_extension.dart';
 export 'common/extension/string_extension.dart';
 
 export 'common/global/app_info.dart';
-export 'common/global/enum_manager.dart';
 export 'common/global/network_state_listener.dart';
 export 'common/global/global_notification.dart';
 export 'common/global/screenshot_manager.dart';

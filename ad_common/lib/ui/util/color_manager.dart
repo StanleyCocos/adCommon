@@ -5,6 +5,13 @@ import 'package:flutter/material.dart';
 
 ///颜色管理类
 class ColorManager {
+
+  static int _theme = 0x25C489;
+
+  static void init(int theme){
+    _theme = theme;
+  }
+
   static Color color(int value) {
     return Color(value);
   }
@@ -36,6 +43,8 @@ class ColorManager {
     return Color.fromRGBO(
         Random().nextInt(255), Random().nextInt(255), Random().nextInt(255), 1);
   }
+
+  static Color get theme => hexColor(_theme);
 
   static Color get black => hexColor(0x000000, alpha: 1);
 
