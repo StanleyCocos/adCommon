@@ -207,7 +207,6 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   void addParams(Map<String, Object> params){
     if(params == null) return;
     if(params.length <= 0) return;
-    this.params = {"page": "1"};
     this.params.addAll(params);
   }
 
