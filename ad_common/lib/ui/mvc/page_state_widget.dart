@@ -10,9 +10,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 abstract class BasePageStateWidget extends StatelessWidget {
   final Function onRetry;
   final String text;
-  final String type;
+  final Object type;
   final double width;
   final double height;
+  final String imagePath;
 
   BasePageStateWidget({
     this.onRetry,
@@ -20,6 +21,7 @@ abstract class BasePageStateWidget extends StatelessWidget {
     this.type,
     this.width,
     this.height,
+    this.imagePath = "placeholder/",
   });
 
   @override
@@ -34,7 +36,7 @@ abstract class BasePageStateWidget extends StatelessWidget {
         child: CommonStatePage(
           image: ImageManager.name(
             this.type,
-            path: "placeholder/",
+            path: imagePath,
             width: width,
             height: height,
             fit: BoxFit.contain,
@@ -48,11 +50,12 @@ abstract class BasePageStateWidget extends StatelessWidget {
 
 /// 网络错误
 class PageStateNetWorkError extends BasePageStateWidget {
-  PageStateNetWorkError({String text, Function onRetry})
+  PageStateNetWorkError({String text, Function onRetry, Object image, String path})
       : super(
           onRetry: onRetry,
           text: text ?? "網路不順，請檢查後再重試",
-          type: "",
+          type: image,
+          imagePath: path,
           width: ScreenUtil().setWidth(620),
           height: ScreenUtil().setWidth(410),
         );
@@ -60,11 +63,12 @@ class PageStateNetWorkError extends BasePageStateWidget {
 
 /// 请求错误
 class PageStateRequestError extends BasePageStateWidget {
-  PageStateRequestError({String text, Function onRetry})
+  PageStateRequestError({String text, Function onRetry, Object image, String path})
       : super(
           onRetry: onRetry,
           text: text ?? "請求錯誤，請重試",
-          type: "",
+          type: image,
+          imagePath: path,
           width: ScreenUtil().setWidth(620),
           height: ScreenUtil().setWidth(420),
         );
@@ -72,11 +76,12 @@ class PageStateRequestError extends BasePageStateWidget {
 
 /// 空页面
 class PageStateEmpty extends BasePageStateWidget {
-  PageStateEmpty({String text, Function onRetry, String image})
+  PageStateEmpty({String text, Function onRetry, Object image, String path})
       : super(
           onRetry: onRetry,
           text: text ?? "暫無數據",
           type: image,
+          imagePath: path,
           width: ScreenUtil().setWidth(620),
           height: ScreenUtil().setWidth(350),
         );
