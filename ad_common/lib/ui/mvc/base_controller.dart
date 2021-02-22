@@ -144,18 +144,13 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
         isLoadError = false;
         final tempData = this.data;
         tempData.initJsonData(data);
-        refreshController.finishRefresh(
-            success: true, noMore: tempData.listData.isEmpty);
-        if (tempData.listData.isEmpty) {
-          refreshController.finishLoad(success: true, noMore: true);
-        } else {
-          refreshController.resetLoadState();
-        }
+        refreshController.finishRefresh();
+        refreshController.resetLoadState();
         loadSuccess(tempData, isRefresh: true);
       },
       errorCallBack: (error, code) {
         isLoadError = true;
-        refreshController.finishRefresh(success: false);
+        refreshController.finishRefresh();
         loadError(error, isRefresh: true);
       },
       commonCallBack: () {
@@ -176,8 +171,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
         loadPage += 1;
         final tempData = this.data;
         tempData.initJsonData(data);
-        refreshController.finishLoad(
-            success: true, noMore: tempData.listData.isEmpty);
+        refreshController.finishLoad(noMore: tempData.listData.isEmpty);
         loadSuccess(tempData);
       },
       errorCallBack: (error, code) {
