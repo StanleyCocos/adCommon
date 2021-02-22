@@ -72,11 +72,11 @@ class PageStateRequestError extends BasePageStateWidget {
 
 /// 空页面
 class PageStateEmpty extends BasePageStateWidget {
-  PageStateEmpty({String text, Function onRetry})
+  PageStateEmpty({String text, Function onRetry, String image})
       : super(
           onRetry: onRetry,
           text: text ?? "暫無數據",
-          type: "",
+          type: image,
           width: ScreenUtil().setWidth(620),
           height: ScreenUtil().setWidth(350),
         );
