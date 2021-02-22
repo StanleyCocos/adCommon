@@ -29,7 +29,7 @@ class ImageManager {
 
   static ImageIcon icon(
       Object name, {
-        String path = "icons/",
+        String path = "icon/",
         double size = 24.0,
         String type = ".png",
         Color color = Colors.black,
