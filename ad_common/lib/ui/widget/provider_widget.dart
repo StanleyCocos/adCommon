@@ -8,9 +8,9 @@ class ProviderWidget<T extends ChangeNotifier> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
+    return ChangeNotifierProvider<T>.value(
       value: controller,
-      child: Consumer(
+      child: Consumer<T>(
         builder: (BuildContext context, ChangeNotifier provider, _) => builder(),
       ),
     );
