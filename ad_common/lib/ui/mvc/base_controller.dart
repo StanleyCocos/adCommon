@@ -144,13 +144,20 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
         isLoadError = false;
         final tempData = this.data;
         tempData.initJsonData(data);
-        refreshController.finishRefresh();
-        refreshController.resetLoadState();
+        try{
+          // 由于切换不同状态时 可能会把refresh视图干掉 这时这里会报异常
+          refreshController.finishRefresh();
+          refreshController.resetLoadState();
+        } catch(e){}
         loadSuccess(tempData, isRefresh: true);
       },
       errorCallBack: (error, code) {
         isLoadError = true;
-        refreshController.finishRefresh();
+        try{
+          // 由于切换不同状态时 可能会把refresh视图干掉 这时这里会报异常
+          refreshController.finishRefresh();
+          refreshController.resetLoadState();
+        } catch(e){}
         loadError(error, isRefresh: true);
       },
       commonCallBack: () {
