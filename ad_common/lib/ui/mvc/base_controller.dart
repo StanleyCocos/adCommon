@@ -134,8 +134,8 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
 
   /// 加载列表 下拉刷新
   Future<void> loadListData() async {
-    _setPageParams();
     loadBegin(isRefresh: true);
+    _setPageParams();
     await HttpRequest.getInstance().get(
       loadApi,
       params: params,
@@ -168,8 +168,8 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
 
   /// 加载列表 上拉加载更多
   Future<void> loadListDataMore() async {
-    _setPageParams(isMore: true);
     loadBegin(isRefresh: false);
+    _setPageParams(isMore: true);
     await HttpRequest.getInstance().get(
       loadApi,
       params: params,
@@ -208,6 +208,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   void addParams(Map<String, Object> params){
     if(params == null) return;
     if(params.length <= 0) return;
+    this.params.clear();
     this.params.addAll(params);
   }
 
