@@ -305,7 +305,7 @@ class _NavigationBarState extends State<NavigationBar> {
           leading = useCloseButton
               ? const CloseButton()
               : IconButton(
-                  icon: ImageIcon(AssetImage("assets/icon_arrow_left.png", package: 'ad_common'), color: ColorManager.gray33, size: 30),
+                  icon: ImageIcon(AssetImage("assets/icon_arrow_left.png", package: 'ad_common'), color: ColorManager.gray33, size: 20),
                   onPressed: () {
                     if (widget.onBackTap != null) {
                       widget.onBackTap();
