@@ -11,8 +11,10 @@ extension MapOption<K, V> on Map {
 
   void set({K key, V obj}){
     if(key == null) return;
-    if(obj == null) this.remove(key);
-    this[key] = obj;
+    if(obj == null) {
+      this.remove(key);
+    } else {
+      this[key] = obj;
+    }
   }
-
 }
