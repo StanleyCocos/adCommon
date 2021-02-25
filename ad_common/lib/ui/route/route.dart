@@ -24,6 +24,10 @@ class RouteManager extends NavigatorObserver {
   /// 当前路由
   Route get currentRoute => _mRoutes[_mRoutes.length - 1];
 
+  /// 获取所有路由
+  List<Route> get routes => _mRoutes;
+
+
   List<BaseRouteOption> option = [];
   String homePageType = "";
 
