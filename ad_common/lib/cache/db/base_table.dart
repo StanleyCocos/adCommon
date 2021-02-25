@@ -5,7 +5,6 @@ import 'db_manager.dart';
 import 'split_merge.dart';
 
 abstract class BaseTableModel {
-
   /*
   * 表相应的的列字段属性
   * */
@@ -61,6 +60,18 @@ abstract class BaseTableModel {
   }
 
   /*
+  *  批量插入数据
+  * */
+  Future<void> saveAll<T extends BaseTableModel>(List<T> list) async {
+    Database db = await DBManager.getDatabase();
+    await db.transaction((txn) async {
+      list.forEach((element) async {
+        await txn.insert("$runtimeType", element.contentMap);
+      });
+    });
+  }
+
+  /*
   * 更新数据
   * */
   Future<int> update({String where}) async {
@@ -74,8 +85,8 @@ abstract class BaseTableModel {
   * */
   Future<int> delete({String where}) async {
     Database db = await DBManager.getDatabase();
-    return await db?.delete(
-        "$runtimeType", where: where == null ? "id = ${id.content}" : where);
+    return await db?.delete("$runtimeType",
+        where: where == null ? "id = ${id.content}" : where);
   }
 
   /*
@@ -149,13 +160,10 @@ abstract class BaseTableModel {
   }
 }
 
-
 /*
 * 数据处理
 * */
 extension DataOption on BaseTableModel {
-
-
   /*
   * 获取列键值对
   * */
@@ -189,13 +197,15 @@ extension DataOption on BaseTableModel {
   * 转换集合列数据
   * */
   String getSetContent(STSet obj) {
-    if (obj.setList.length <= 0 || obj.content == null ||
+    if (obj.setList.length <= 0 ||
+        obj.content == null ||
         obj.content.length <= 0) return "";
     var value = "";
     obj.content.forEach((element) {
       if (element >= 0 && element < obj.setList.length) {
-        value += value.length > 0 ? ",${obj.setList[element]}" : "${obj
-            .setList[element]}";
+        value += value.length > 0
+            ? ",${obj.setList[element]}"
+            : "${obj.setList[element]}";
       }
     });
     return value;
@@ -262,7 +272,7 @@ extension DataOption on BaseTableModel {
   * 映射转换枚举的值
   * */
   int setEnumRowContent(STEnum obj, String value) {
-    for (int index = 0; index < obj.enumList.length; index ++) {
+    for (int index = 0; index < obj.enumList.length; index++) {
       var element = obj.enumList[index];
       if (value == element) {
         return index;
@@ -277,7 +287,7 @@ extension DataOption on BaseTableModel {
   List<int> setSetRowContent(STSet obj, String value) {
     List<String> list = value.split(",");
     List<int> indexList = [];
-    for (int index = 0; index < obj.setList.length; index ++) {
+    for (int index = 0; index < obj.setList.length; index++) {
       var element = obj.setList[index];
       if (list.contains(element)) {
         indexList.add(index);
@@ -285,5 +295,4 @@ extension DataOption on BaseTableModel {
     }
     return indexList;
   }
-
 }
