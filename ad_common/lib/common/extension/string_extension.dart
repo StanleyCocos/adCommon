@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:ad_common/common/extension/int_extension.dart';
 
 /*
@@ -53,7 +54,6 @@ extension StringOption on String {
     }
     return this;
   }
-
 
   /*
   *  添加字符串到末尾位置network_state_listener.dart
@@ -168,6 +168,19 @@ extension StringOption on String {
       left = left + alphabet[Random().nextInt(alphabet.length - 1)];
     }
     return left;
+  }
+
+  /*
+  * 字符串转换为枚举类型
+  * - Parameter values: 枚举值
+  * */
+  T toEnum<T>(List<T> values) {
+    return values.firstWhere(
+      (element) =>
+          element.toString().toLowerCase().split(".").last ==
+          '$this'.toLowerCase(),
+      orElse: () => null,
+    );
   }
 }
 
