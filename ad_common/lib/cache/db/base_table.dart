@@ -122,7 +122,7 @@ abstract class BaseTableModel {
       where: where.isNotEmpty ? where : "id=(select last_insert_id())",
       columns: columns,
     );
-    if (data.length <= 0) return this;
+    if (data.length <= 0) return null;
     result = true;
     setRowContent(rowData: data.first);
     return this;
