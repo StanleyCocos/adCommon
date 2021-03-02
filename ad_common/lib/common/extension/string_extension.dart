@@ -176,9 +176,7 @@ extension StringOption on String {
   * */
   T toEnum<T>(List<T> values) {
     return values.firstWhere(
-      (element) =>
-          element.toString().toLowerCase().split(".").last ==
-          '$this'.toLowerCase(),
+      (element) => element.toString().toLowerCase() == '$this'.toLowerCase(),
       orElse: () => null,
     );
   }
