@@ -105,7 +105,7 @@ abstract class BaseTableModel {
     List<String> columns = List.from(map.keys);
     List<Map> data = await db.query(
       "$runtimeType",
-      where: where.isNotEmpty ? where : "id=(select last_insert_id())",
+      where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
       columns: columns,
     );
     return data.isNotEmpty;
@@ -119,7 +119,7 @@ abstract class BaseTableModel {
     List<String> columns = List.from(map.keys);
     List<Map> data = await db.query(
       "$runtimeType",
-      where: where.isNotEmpty ? where : "id=(select last_insert_id())",
+      where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
       columns: columns,
     );
     if (data.length <= 0) return null;
