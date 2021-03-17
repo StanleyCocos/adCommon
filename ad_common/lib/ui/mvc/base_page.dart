@@ -58,7 +58,7 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
 
   @override
   Widget get error {
-    if (NetworkState.instance.state == ConnectivityResult.none) {
+    if (NetworkState().state == ConnectivityResult.none) {
       return PageStateNetWorkError(
         onRetry: controller.loadRetry,
       );
@@ -146,7 +146,7 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
 
   @override
   Widget get error {
-    if (NetworkState.instance.state == ConnectivityResult.none) {
+    if (NetworkState().state == ConnectivityResult.none) {
       return PageStateNetWorkError(
         onRetry: controller.loadRetry,
       );
