@@ -3,10 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastManager {
   static void show(
-      String msg, {
-        Toast length = Toast.LENGTH_SHORT,
-        gravity = ToastGravity.CENTER,
-      }) {
+    String msg, {
+    Toast length = Toast.LENGTH_SHORT,
+    gravity = ToastGravity.CENTER,
+  }) {
     Fluttertoast.cancel();
     Fluttertoast.showToast(
         msg: msg,
