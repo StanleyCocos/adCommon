@@ -17,9 +17,25 @@ dependencies:
 
 ### 初始化
 - 本地存储初始化
+```
+SpManager.init(isDebug:false);
+```
 - 数据库初始化
+```dart
+
+```
 - 网络请求初始化
+```dart
+
+```
 - 屏幕适配初始化
+```dart
+ScreenUtilInit(
+        designSize: Size(750, 1334),
+        allowFontScaling: true,
+        builder: () => MaterialApp()
+      )
+```
 
 
 
