@@ -5,10 +5,7 @@ import 'package:connectivity/connectivity.dart';
 class NetworkState {
   /// 工厂模式创建单例
   factory NetworkState() => _getInstance();
-
-  static NetworkState get instance => _getInstance();
   static NetworkState _instance;
-
   NetworkState._internal();
 
   static NetworkState _getInstance() {
@@ -16,12 +13,17 @@ class NetworkState {
     return _instance;
   }
 
+  StreamSubscription<ConnectivityResult> subscription;
   ConnectivityResult _state;
 
   void startListen() {
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       _state = result;
     });
+  }
+
+  void stopListen() {
+    subscription?.cancel();
   }
 
   Future<ConnectivityResult> check() async {
