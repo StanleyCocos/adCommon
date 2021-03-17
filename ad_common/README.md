@@ -1,6 +1,6 @@
 # ad_common
 
-A new Flutter package.
+8591与100项目共用库
 
 ## Getting Started
 
@@ -14,5 +14,8 @@ dependencies:
       ref: master      #正式分支
       //#ref: develop      #测试分支
 ```
+
+### 初始化
+
 
 

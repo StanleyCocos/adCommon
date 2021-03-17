@@ -14,12 +14,12 @@ dependencies:
   dio: ^3.0.10
   connectivity: 0.4.8+2
   device_info: ^2.0.0
-  package_info: 0.4.1
-  uuid: 2.2.0
+  package_info: ^2.0.0
+  uuid: ^3.0.1
   flutter_easyrefresh: ^2.1.8
-  provider: 4.3.1
+  provider: ^5.0.0
   flutter_screenutil: ^4.0.3+3
-  fluttertoast: 7.0.4
+  fluttertoast: ^7.1.8
   shared_preferences: ^0.5.7
   synchronized: ^2.2.0+2
   sqflite: ^1.3.2+3
