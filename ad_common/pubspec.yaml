@@ -18,7 +18,7 @@ dependencies:
   uuid: 2.2.0
   flutter_easyrefresh: ^2.1.8
   provider: 4.3.1
-  flutter_screenutil: 2.3.1
+  flutter_screenutil: ^4.0.3+1
   fluttertoast: 7.0.4
   shared_preferences: ^0.5.7
   synchronized: ^2.2.0+2
