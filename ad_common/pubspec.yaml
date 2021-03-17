@@ -2,7 +2,7 @@ name: ad_common
 description: A new Flutter package.
 version: 0.0.1
 author:
-homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.8.0 <3.0.0"
@@ -43,9 +43,9 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
 
-# To add assets to your package, add an assets section, like this:
- assets:
-   - assets/
+  # To add assets to your package, add an assets section, like this:
+  assets:
+    - assets/
 #
 # For details regarding assets in packages, see
 # https://flutter.dev/assets-and-images/#from-packages
