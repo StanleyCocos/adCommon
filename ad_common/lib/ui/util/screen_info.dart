@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_screenutil/screenutil.dart';
-
 
 class ScreenManager {
-
   factory ScreenManager() => _getInstance();
 
   static ScreenManager get instance => _getInstance();
   static ScreenManager _instance;
+
   ScreenManager._internal();
 
   static ScreenManager _getInstance() {
@@ -29,8 +27,7 @@ class ScreenManager {
   Orientation _orientation;
   ScreenSize _screenSize;
 
-  void initScreenParameter(BuildContext context){
-    ScreenUtil.init(context, width: 750, height: 1334, allowFontScaling: true);
+  void initScreenParameter(BuildContext context) {
     _navHeight = 56;
     _size = MediaQuery.of(context).size;
     _width = _size.width;
@@ -42,22 +39,36 @@ class ScreenManager {
     _longestSide = _size.longestSide;
     _orientation = MediaQuery.of(context).orientation;
     var aspectRatio = _longestSide / _shortestSide;
-    if (aspectRatio < 16 / 9) _screenSize = ScreenSize.Small;
-    else if (aspectRatio >= 16 / 9 && aspectRatio < 17 / 9) _screenSize = ScreenSize.Middle;
-    else _screenSize = ScreenSize.Large;
+    if (aspectRatio < 16 / 9)
+      _screenSize = ScreenSize.Small;
+    else if (aspectRatio >= 16 / 9 && aspectRatio < 17 / 9)
+      _screenSize = ScreenSize.Middle;
+    else
+      _screenSize = ScreenSize.Large;
   }
 
   Size get size => _size;
+
   double get width => _width;
+
   double get height => _height;
+
   double get navBarHeight => _navBarHeight;
+
   double get bottomSafeHeight => _bottomSafeHeight;
+
   double get topSafeHeight => _topSafeHeight;
+
   double get navHeight => _navHeight;
+
   double get shortestSide => _shortestSide;
+
   double get longestSide => _longestSide;
+
   Orientation get orientation => _orientation;
+
   ScreenSize get screenSize => _screenSize;
+
   double get safeArea => height - topSafeHeight - bottomSafeHeight;
 }
 
