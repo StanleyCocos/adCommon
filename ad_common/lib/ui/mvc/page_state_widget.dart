@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:ad_common/ui/util/color_manager.dart';
 import 'package:ad_common/ui/widget/common_state_page.dart';
-import 'package:ad_common/ui/widget/image_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,16 +8,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 abstract class BasePageStateWidget extends StatelessWidget {
   final Function onRetry;
   final String text;
-  final String type;
-  final double width;
-  final double height;
+  final Widget image;
 
   BasePageStateWidget({
     this.onRetry,
     this.text = "",
-    this.type,
-    this.width,
-    this.height,
+    this.image,
   });
 
   @override
@@ -32,13 +26,7 @@ abstract class BasePageStateWidget extends StatelessWidget {
       child: InkWell(
         onTap: () => onRetry(),
         child: CommonStatePage(
-          image: ImageManager.name(
-            this.type,
-            path: "placeholder/",
-            width: width,
-            height: height,
-            fit: BoxFit.contain,
-          ),
+          image: image,
           text: text,
         ),
       ),
@@ -48,37 +36,52 @@ abstract class BasePageStateWidget extends StatelessWidget {
 
 /// 网络错误
 class PageStateNetWorkError extends BasePageStateWidget {
-  PageStateNetWorkError({String text, Function onRetry})
+  PageStateNetWorkError(
+      {String text, Function onRetry, Object image, String path})
       : super(
           onRetry: onRetry,
           text: text ?? "網路不順，請檢查後再重試",
-          type: "",
-          width: ScreenUtil().setWidth(620),
-          height: ScreenUtil().setWidth(410),
+          image: Image.asset(
+            "assets/placeholder_network_error.png",
+            width: ScreenUtil().setWidth(620),
+            height: ScreenUtil().setWidth(410),
+            fit: BoxFit.contain,
+            package: "ad_common",
+          ),
         );
 }
 
+
 /// 请求错误
 class PageStateRequestError extends BasePageStateWidget {
-  PageStateRequestError({String text, Function onRetry})
+  PageStateRequestError(
+      {String text, Function onRetry, Object image, String path})
       : super(
           onRetry: onRetry,
           text: text ?? "請求錯誤，請重試",
-          type: "",
-          width: ScreenUtil().setWidth(620),
-          height: ScreenUtil().setWidth(420),
+          image: Image.asset(
+            "assets/placeholder_system_error.png",
+            width: ScreenUtil().setWidth(620),
+            height: ScreenUtil().setWidth(410),
+            fit: BoxFit.contain,
+            package: "ad_common",
+          ),
         );
 }
 
 /// 空页面
 class PageStateEmpty extends BasePageStateWidget {
-  PageStateEmpty({String text, Function onRetry})
+  PageStateEmpty({String text, Function onRetry, Object image, String path})
       : super(
           onRetry: onRetry,
           text: text ?? "暫無數據",
-          type: "",
-          width: ScreenUtil().setWidth(620),
-          height: ScreenUtil().setWidth(350),
+          image: Image.asset(
+            "assets/placeholder_empty_data.png",
+            width: ScreenUtil().setWidth(620),
+            height: ScreenUtil().setWidth(410),
+            fit: BoxFit.contain,
+            package: "ad_common",
+          ),
         );
 }
 

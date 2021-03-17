@@ -1,19 +1,16 @@
-import 'package:flutter_test/flutter_test.dart';
-
+import 'package:dio/dio.dart';
 import 'package:ad_common/ad_common.dart';
 
 void main() {
-  test('千分号测试', () {
-    // String temp = '12345.934';
-    double temp = 1234567890.34;
-    String value = temp.formatNum;
-    print('test value=$value');
-  });
+  HttpRequest.getInstance().startAndSetRequestParams(HttpRequestSetting(logPrintInterceptor: LogPrintInterceptor(), interceptorsWrapper: InterceptorsWrapper()));
 
-  test('校验测试', () {
-    String temp = '校验测试a';
+  // List<int> dd = [1, 2, 3, 4, 5, 6];
+  // print(dd.random);
+  // print(dd.item(2));
 
-    bool value = RegexManager.isSpecialChar(temp);
-    print('test value=$value');
-  });
+  Map<String, String> map = {"key1": "11", "key2": "22"};
+
+  map.set(key: "key2");
+  print(map);
+
 }

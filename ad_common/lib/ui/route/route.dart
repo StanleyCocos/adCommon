@@ -24,17 +24,21 @@ class RouteManager extends NavigatorObserver {
   /// 当前路由
   Route get currentRoute => _mRoutes[_mRoutes.length - 1];
 
+  /// 获取所有路由
+  List<Route> get routes => _mRoutes;
+
+
   List<BaseRouteOption> option = [];
   String homePageType = "";
 
   /// 跳转页面
   Future<Object> push(
-    String routeName, {
+      routeName, {
     Object arguments,
     bool isReplace = false,
   }) {
     if (isReplace) {
-      return navigator.pushReplacementNamed(routeName,
+      return navigator.pushReplacementNamed(routeName.toString(),
           arguments: arguments ?? "");
     } else {
       return navigator.pushNamed(routeName.toString(),
@@ -53,7 +57,7 @@ class RouteManager extends NavigatorObserver {
   }
 
   /// 返回页面
-  void pop<T extends Object>({String type, T result}) {
+  void pop<T extends Object>({type, T result}) {
     if (!navigator.canPop()) return;
     if (_mRoutes.length <= 0 || _mRoutes.last.settings.name == "/") return;
     if (type == null) {

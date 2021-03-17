@@ -1,14 +1,16 @@
-import 'package:ad_common/common/global/enum_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:ad_common/common/extension/string_extension.dart';
 
 
 class ImageManager {
-  static const FILE_PTH = "assets/images/";
+
+  static String _root = "assets/images/";
+
+  static void init(String path) => _root = path;
 
   static Image name(
-      String name, {
+      Object name, {
         String path = "",
         double width = 24.0,
         double height = 24.0,
@@ -16,7 +18,7 @@ class ImageManager {
         BoxFit fit = BoxFit.contain,
       }) {
     String imagePath =
-        FILE_PTH + path + name + type;
+        _root + path + _transformName(name) + type;
     return Image.asset(
       imagePath,
       width: width,
@@ -25,38 +27,28 @@ class ImageManager {
     );
   }
 
-  static ImageIcon nameIcon(
-      String name, {
-        String path = "",
+  static ImageIcon icon(
+      Object name, {
+        String path = "icon/",
         double size = 24.0,
         String type = ".png",
         Color color = Colors.black,
       }) {
     String imagePath =
-        FILE_PTH + path + name + type;
+        _root + path + _transformName(name) + type;
     return ImageIcon(AssetImage(imagePath), color: color, size: size);
   }
 
-  static String path(
-      String name, {
-        String path = "placeholder/",
-        String type = ".png",
-      }) {
-    String imagePath =
-        FILE_PTH + path + name + type;
-    return imagePath;
-  }
-
   static Image placeholder(
-      String name, {
-        String path = "",
+      Object name, {
+        String path = "placeholder/",
         String type = ".png",
         double width = double.infinity,
         double height = double.infinity,
         BoxFit fit = BoxFit.contain,
       }) {
     String imagePath =
-        FILE_PTH + path + name + type;
+        _root + path + _transformName(name) + type;
     return Image.asset(
       imagePath,
       width: width,
@@ -64,4 +56,21 @@ class ImageManager {
       fit: fit,
     );
   }
+
+
+  static String path(
+      Object name, {
+        String path = "",
+        String type = ".png",
+      }) {
+    String imagePath =
+        _root + path + _transformName(name) + type;
+    return imagePath;
+  }
+
+  static String _transformName(Object name) {
+    if(name is String) return name;
+    return name.toString().enumRowValue;
+  }
+
 }

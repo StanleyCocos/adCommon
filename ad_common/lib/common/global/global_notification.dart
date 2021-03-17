@@ -21,14 +21,14 @@ class NotificationManager {
   var _notificatio_queue = new Map<Object, List<NotificationCallback>>();
 
   /// 添加订阅者
-  void add(String name, NotificationCallback f) {
+  void add(Object name, NotificationCallback f) {
     if (name.toString() == null || f == null) return;
     _notificatio_queue[name] ??= new List<NotificationCallback>();
     _notificatio_queue[name].add(f);
   }
 
   /// 移除订阅者
-  void remove(String name, [NotificationCallback f]) {
+  void remove(Object name, [NotificationCallback f]) {
     var list = _notificatio_queue[name.toString()];
     if (name.toString() == null || list == null) return;
     if (f == null) {
@@ -39,7 +39,7 @@ class NotificationManager {
   }
 
   /// 触发事件，事件触发后该事件所有订阅者会被调用
-  void send(String name, [arg]) {
+  void send(Object name, [arg]) {
     var list = _notificatio_queue[name];
     if (list == null) return;
     int len = list.length - 1;

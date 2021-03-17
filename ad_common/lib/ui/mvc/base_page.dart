@@ -77,6 +77,8 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
 
   Color get backgroundColor => Colors.white;
 
+  bool get extendBodyBehindAppBar => false;
+
   /// 状态栏颜色
   SystemUiOverlayStyle get style => SystemUiOverlayStyle.dark;
 
@@ -90,6 +92,7 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
           builder: (context, controller, _) {
             return Scaffold(
               backgroundColor: backgroundColor,
+              extendBodyBehindAppBar: extendBodyBehindAppBar,
               appBar: navigation,
               body: body,
             );

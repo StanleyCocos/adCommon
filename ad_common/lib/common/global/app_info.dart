@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:ad_common/common/extension/string_extension.dart';
+import 'package:crypto/crypto.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter_keychain/flutter_keychain.dart';
-import 'package:ad_common/common/extension/string_extension.dart';
 import 'package:package_info/package_info.dart';
-import 'package:uuid/uuid.dart';
 
 ///app信息管理类
 class AppInfoManager {
@@ -20,7 +21,8 @@ class AppInfoManager {
   /// 唯一标识
   String get imei => _imei;
 
-  String get androidId => _androidId;
+  ///设备标识
+  String get identifier => _identifier;
 
   /// 设备系统版本
   String get systemVersion => _systemVersion;
@@ -64,6 +66,7 @@ class AppInfoManager {
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
       _imei = await getImei();
+      _identifier = iosInfo.identifierForVendor;
       if (_imei.isEmptyOrNull) {
         _setImei(iosInfo.identifierForVendor);
         _imei = iosInfo.identifierForVendor;
@@ -76,12 +79,28 @@ class AppInfoManager {
       _version = packageInfo.version;
       _systemVersion = androidInfo.version.release;
       _imei = await getImei();
-      _androidId = androidInfo.androidId;
+      _identifier = androidInfo.androidId;
       if (_imei.isEmptyOrNull) {
-        _setImei(Uuid().v4());
-        _imei = await getImei();
+        _imei = generateUUID(androidInfo.androidId);
       }
     }
+  }
+
+  String generateUUID(String androidId) {
+    var androidId = Utf8Encoder().convert(_identifier);
+    String uuid = md5.convert(androidId).toString();
+    if (uuid.length != 32) return "";
+    StringBuffer sb = StringBuffer();
+    sb.write(uuid.substring(0, 8));
+    sb.write("-");
+    sb.write(uuid.substring(8, 12));
+    sb.write("-");
+    sb.write(uuid.substring(12, 16));
+    sb.write("-");
+    sb.write(uuid.substring(16, 20));
+    sb.write("-");
+    sb.write(uuid.substring(20, 32));
+    return sb.toString();
   }
 
   String userAgent() {
@@ -99,7 +118,7 @@ class AppInfoManager {
   String _version = "";
   String _versionCode = "";
   String _imei = "";
-  String _androidId = "";
+  String _identifier = "";
   String _systemVersion = "";
 }
 

@@ -47,8 +47,8 @@ class HttpRequest {
     if (_client == null) {
       _setting = setting;
       BaseOptions options = new BaseOptions();
-      options.connectTimeout = setting.connectTimeOut;
-      options.receiveTimeout = setting.receiveTimeOut;
+      options.connectTimeout = setting.connectTimeOut * 1000;
+      options.receiveTimeout = setting.receiveTimeOut * 1000;
       options.baseUrl = setting.baseUrl;
       options.contentType = setting.contentType;
       _client = new Dio(options);

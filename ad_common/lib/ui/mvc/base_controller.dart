@@ -93,8 +93,8 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
   }
 
   /// 获取页面间传递的参数
-  Object getArgument(String key, {Object defaultValue}) {
-    final arguments = {}; //RouteManager().currentRoute.settings.arguments;
+  Object getArgument(Object key, {Object defaultValue}) {
+    final arguments = RouteManager().currentRoute.settings.arguments;
     if (arguments == null) return defaultValue;
     if (arguments is Map) {
       final value = arguments[key];
@@ -134,8 +134,8 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
 
   /// 加载列表 下拉刷新
   Future<void> loadListData() async {
-    _setPageParams();
     loadBegin(isRefresh: true);
+    _setPageParams();
     await HttpRequest.getInstance().get(
       loadApi,
       params: params,
@@ -144,18 +144,20 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
         isLoadError = false;
         final tempData = this.data;
         tempData.initJsonData(data);
-        refreshController.finishRefresh(
-            success: true, noMore: tempData.listData.isEmpty);
-        if (tempData.listData.isEmpty) {
-          refreshController.finishLoad(success: true, noMore: true);
-        } else {
+        try{
+          // 由于切换不同状态时 可能会把refresh视图干掉 这时这里会报异常
+          refreshController.finishRefresh();
           refreshController.resetLoadState();
-        }
+        } catch(e){}
         loadSuccess(tempData, isRefresh: true);
       },
       errorCallBack: (error, code) {
         isLoadError = true;
-        refreshController.finishRefresh(success: false);
+        try{
+          // 由于切换不同状态时 可能会把refresh视图干掉 这时这里会报异常
+          refreshController.finishRefresh();
+          refreshController.resetLoadState();
+        } catch(e){}
         loadError(error, isRefresh: true);
       },
       commonCallBack: () {
@@ -166,8 +168,8 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
 
   /// 加载列表 上拉加载更多
   Future<void> loadListDataMore() async {
-    _setPageParams(isMore: true);
     loadBegin(isRefresh: false);
+    _setPageParams(isMore: true);
     await HttpRequest.getInstance().get(
       loadApi,
       params: params,
@@ -176,8 +178,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
         loadPage += 1;
         final tempData = this.data;
         tempData.initJsonData(data);
-        refreshController.finishLoad(
-            success: true, noMore: tempData.listData.isEmpty);
+        refreshController.finishLoad(noMore: tempData.listData.isEmpty);
         loadSuccess(tempData);
       },
       errorCallBack: (error, code) {
@@ -202,6 +203,13 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
 
   /// 列表item点击
   void onItemClick<M>(M model, int index) {}
+
+  /// 添加参数
+  void addParams(Map<String, Object> params){
+    if(params == null) return;
+    this.params.clear();
+    this.params.addAll(params);
+  }
 
   void _setPageParams({bool isMore = false}) {
     if (isMore) {

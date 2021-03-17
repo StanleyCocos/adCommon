@@ -1,11 +1,9 @@
-
 import 'package:ad_common/ui/util/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 const double kToolbarHeight = 50.0;
-const double _kLeadingWidth =
-    kToolbarHeight; // So the leading button is square.
+const double _kLeadingWidth = kToolbarHeight; // So the leading button is square.
 
 // Bottom justify the kToolbarHeight child which may overflow the top.
 class _ToolbarContainerLayout extends SingleChildLayoutDelegate {
@@ -64,8 +62,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
         assert(titleSpacing != null),
         assert(toolbarOpacity != null),
         assert(bottomOpacity != null),
-        preferredSize = Size.fromHeight(
-            kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
+        preferredSize = Size.fromHeight(kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
         super(key: key);
 
   /// A widget to display before the [title].
@@ -264,32 +261,19 @@ class _NavigationBarState extends State<NavigationBar> {
     final bool hasDrawer = scaffold?.hasDrawer ?? false;
     final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
     final bool canPop = parentRoute?.canPop ?? false;
-    final bool useCloseButton =
-        parentRoute is PageRoute<dynamic> && parentRoute.fullscreenDialog;
+    final bool useCloseButton = parentRoute is PageRoute<dynamic> && parentRoute.fullscreenDialog;
 
-    IconThemeData overallIconTheme =
-        IconThemeData(color: Colors.black, opacity: 1, size: 16);
-    IconThemeData actionsIconTheme =
-        IconThemeData(color: Colors.black, opacity: 1, size: 16);
-    TextStyle centerStyle =
-        widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
-    TextStyle sideStyle =
-        widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
+    IconThemeData overallIconTheme = IconThemeData(color: Colors.black, opacity: 1, size: 16);
+    IconThemeData actionsIconTheme = IconThemeData(color: Colors.black, opacity: 1, size: 16);
+    TextStyle centerStyle = widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
+    TextStyle sideStyle = widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
 
     if (widget.toolbarOpacity != 1.0) {
-      final double opacity =
-          const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn)
-              .transform(widget.toolbarOpacity);
-      if (centerStyle?.color != null)
-        centerStyle =
-            centerStyle.copyWith(color: centerStyle.color.withOpacity(opacity));
-      if (sideStyle?.color != null)
-        sideStyle =
-            sideStyle.copyWith(color: sideStyle.color.withOpacity(opacity));
-      overallIconTheme = overallIconTheme.copyWith(
-          opacity: opacity * (overallIconTheme.opacity ?? 1.0));
-      actionsIconTheme = actionsIconTheme.copyWith(
-          opacity: opacity * (actionsIconTheme.opacity ?? 1.0));
+      final double opacity = const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn).transform(widget.toolbarOpacity);
+      if (centerStyle?.color != null) centerStyle = centerStyle.copyWith(color: centerStyle.color.withOpacity(opacity));
+      if (sideStyle?.color != null) sideStyle = sideStyle.copyWith(color: sideStyle.color.withOpacity(opacity));
+      overallIconTheme = overallIconTheme.copyWith(opacity: opacity * (overallIconTheme.opacity ?? 1.0));
+      actionsIconTheme = actionsIconTheme.copyWith(opacity: opacity * (actionsIconTheme.opacity ?? 1.0));
     }
 
     Widget leading = widget.leading;
@@ -305,7 +289,8 @@ class _NavigationBarState extends State<NavigationBar> {
           leading = useCloseButton
               ? const CloseButton()
               : IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: ColorManager.gray33, size: 30,),
+                  icon: ImageIcon(AssetImage("assets/icon_arrow_left.png", package: 'ad_common'),
+                      color: ColorManager.gray33, size: 20),
                   onPressed: () {
                     if (widget.onBackTap != null) {
                       widget.onBackTap();
@@ -396,9 +381,7 @@ class _NavigationBarState extends State<NavigationBar> {
           widget.bottomOpacity == 1.0
               ? widget.bottom
               : Opacity(
-                  opacity:
-                      const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn)
-                          .transform(widget.bottomOpacity),
+                  opacity: const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn).transform(widget.bottomOpacity),
                   child: widget.bottom,
                 ),
         ],
@@ -429,9 +412,8 @@ class _NavigationBarState extends State<NavigationBar> {
       );
     }
     final Brightness brightness = widget.brightness ?? Brightness.dark;
-    final SystemUiOverlayStyle overlayStyle = brightness == Brightness.light
-        ? SystemUiOverlayStyle.light
-        : SystemUiOverlayStyle.dark;
+    final SystemUiOverlayStyle overlayStyle =
+        brightness == Brightness.light ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
 
     return Semantics(
       container: true,
