@@ -11,14 +11,34 @@ class RegexManager {
     return verify(content, r"^\d*$");
   }
 
+  /// 是否包含为数字
+  static bool hasNumber(String content) {
+    return verify(content, r"\d");
+  }
+
   /// 是否全部为汉字
   static bool isChinese(String content) {
     return verify(content, r"^[\u4e00-\u9fa5]*$");
   }
 
+  /// 是否包含为汉字
+  static bool hasChinese(String content) {
+    return verify(content, r"[\u4e00-\u9fa5]");
+  }
+
   /// 是否全部为字母
   static bool isLetter(String content) {
     return verify(content, r"^[a-zA-Z]*$");
+  }
+
+  /// 是否包含为字母
+  static bool hasLetter(String content) {
+    return verify(content, r"[a-zA-Z]");
+  }
+
+  /// 是否包含符号
+  static bool hasSymbol(String content) {
+    return verify(content, "[`~!@#\$%^&*()_\-+=<>?:\"{}|,.//\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘’，。、]");
   }
 
   /// 是否为汉字加字母(全字母、全汉字、字母与汉字组合)
