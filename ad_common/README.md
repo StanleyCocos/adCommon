@@ -28,13 +28,17 @@ SpManager.init(isDebug:false);
 ```dart
 
 ```
+- app信息初始化
+```dart
+AppInfoManager.instance.initInfo();
+```
 - 屏幕适配初始化
 ```dart
 ScreenUtilInit(
         designSize: Size(750, 1334),
         allowFontScaling: true,
         builder: () => MaterialApp()
-      )
+      );
 ```
 
 
