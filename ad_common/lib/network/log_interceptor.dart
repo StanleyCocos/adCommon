@@ -80,8 +80,12 @@ class LogPrintInterceptor extends Interceptor {
       printV("请求头部:");
       options.headers.forEach((key, v) {
         if (key == "Authorization") {
-          printKV("$key", "${v.toString().substring(0, 800)}");
-          printV("${v.toString().substring(800, v.toString().length)}");
+          if (v.toString().length > 800) {
+            printKV("$key", "${v.toString().substring(0, 800)}");
+            printV("${v.toString().substring(800, v.toString().length)}");
+          } else {
+            printKV("$key", "$v");
+          }
         } else {
           printKV("$key", "$v");
         }
