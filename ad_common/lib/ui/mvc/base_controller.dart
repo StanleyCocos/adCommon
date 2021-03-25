@@ -114,95 +114,13 @@ extension PageJump on BaseController {
     bool isReplace = false,
     PageTransitionType type = PageTransitionType.left,
   }) {
-    var route = _routeBuild(page, type, arguments);
+    var route = RouteManager().routeBuild(page: page, type: type, arguments: arguments);
     return RouteManager()
         .pushRoute(route, arguments: arguments, isReplace: isReplace);
   }
 
   void pop<T>({type, T result}) {
     return RouteManager().pop(type: type, result: result);
-  }
-
-  Route _routeBuild(Widget page, PageTransitionType type, Object arguments) {
-    switch (type) {
-      case PageTransitionType.scale:
-        return ScaleRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-
-      case PageTransitionType.fade:
-        return FadeRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-
-      case PageTransitionType.rotate:
-        return RotateRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-
-      case PageTransitionType.top:
-        return TopBottomRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-
-      case PageTransitionType.left:
-        return LeftRightRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-
-      case PageTransitionType.bottom:
-        return BottomTopRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-
-      case PageTransitionType.right:
-        return RightLeftRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-      case PageTransitionType.none:
-        return NoAnimRouter(
-          page: page,
-          settings: RouteSettings(
-            name: page.runtimeType.toString(),
-            arguments: arguments,
-          ),
-        );
-    }
-    return MaterialPageRoute(
-      builder: (context) => page,
-      settings: RouteSettings(
-        name: page.runtimeType.toString(),
-        arguments: arguments,
-      ),
-    );
   }
 }
 

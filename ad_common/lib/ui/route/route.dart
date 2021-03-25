@@ -2,6 +2,8 @@ import 'package:ad_common/ui/route/route_state_option.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'animation.dart';
+
 enum RouteAction { PUSH, REPLACE, POP, REMOVE }
 
 class RouteManager extends NavigatorObserver {
@@ -72,6 +74,89 @@ class RouteManager extends NavigatorObserver {
       });
     }
   }
+
+  Route routeBuild({Widget page, PageTransitionType type, Object arguments}) {
+    switch (type) {
+      case PageTransitionType.scale:
+        return ScaleRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+
+      case PageTransitionType.fade:
+        return FadeRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+
+      case PageTransitionType.rotate:
+        return RotateRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+
+      case PageTransitionType.top:
+        return TopBottomRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+
+      case PageTransitionType.left:
+        return LeftRightRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+
+      case PageTransitionType.bottom:
+        return BottomTopRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+
+      case PageTransitionType.right:
+        return RightLeftRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+      case PageTransitionType.none:
+        return NoAnimRouter(
+          page: page,
+          settings: RouteSettings(
+            name: page.runtimeType.toString(),
+            arguments: arguments,
+          ),
+        );
+    }
+    return MaterialPageRoute(
+      builder: (context) => page,
+      settings: RouteSettings(
+        name: page.runtimeType.toString(),
+        arguments: arguments,
+      ),
+    );
+  }
+
 
   bool isCurrentRoute(String pageType) {
     return currentRoute.settings.name == pageType.toString();
