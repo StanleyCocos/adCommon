@@ -112,7 +112,7 @@ extension PageJump on BaseController {
     Widget page, {
     Object arguments,
     bool isReplace = false,
-    PageTransitionType type = PageTransitionType.left,
+    PageTransitionType type = PageTransitionType.right,
   }) {
     var route = RouteManager().routeBuild(page: page, type: type, arguments: arguments);
     return RouteManager()
