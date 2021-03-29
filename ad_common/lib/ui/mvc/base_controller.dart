@@ -1,6 +1,8 @@
 import 'package:ad_common/network/http_request.dart';
+import 'package:ad_common/ui/route/animation.dart';
 import 'package:ad_common/ui/route/route.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'base_model.dart';
@@ -105,6 +107,23 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
   }
 }
 
+extension PageJump on BaseController {
+  Future<Object> push(
+    Widget page, {
+    Object arguments,
+    bool isReplace = false,
+    PageTransitionType type = PageTransitionType.left,
+  }) {
+    var route = RouteManager().routeBuild(page: page, type: type, arguments: arguments);
+    return RouteManager()
+        .pushRoute(route, arguments: arguments, isReplace: isReplace);
+  }
+
+  void pop<T>({type, T result}) {
+    return RouteManager().pop(type: type, result: result);
+  }
+}
+
 abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
     extends BaseController<T> {
   /// 分页控制器
@@ -144,20 +163,20 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
         isLoadError = false;
         final tempData = this.data;
         tempData.initJsonData(data);
-        try{
+        try {
           // 由于切换不同状态时 可能会把refresh视图干掉 这时这里会报异常
           refreshController.finishRefresh();
           refreshController.resetLoadState();
-        } catch(e){}
+        } catch (e) {}
         loadSuccess(tempData, isRefresh: true);
       },
       errorCallBack: (error, code) {
         isLoadError = true;
-        try{
+        try {
           // 由于切换不同状态时 可能会把refresh视图干掉 这时这里会报异常
           refreshController.finishRefresh();
           refreshController.resetLoadState();
-        } catch(e){}
+        } catch (e) {}
         loadError(error, isRefresh: true);
       },
       commonCallBack: () {
@@ -205,8 +224,8 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   void onItemClick<M>(M model, int index) {}
 
   /// 添加参数
-  void addParams(Map<String, Object> params){
-    if(params == null) return;
+  void addParams(Map<String, Object> params) {
+    if (params == null) return;
     this.params.clear();
     this.params.addAll(params);
   }

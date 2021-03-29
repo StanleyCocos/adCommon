@@ -28,6 +28,8 @@ export 'ui/mvc/base_model.dart';
 export 'ui/mvc/base_page.dart';
 export 'ui/mvc/page_state_widget.dart';
 
+export 'ui/dialog/dialog_manager.dart';
+
 export 'ui/route/route.dart';
 export 'ui/route/route_state_option.dart';
 
