@@ -269,7 +269,7 @@ class HttpRequest {
     Map<String, dynamic> newParams = HashMap<String, dynamic>();
     params = params ?? {};
     params.forEach((key, value) {
-      if (url.indexOf(key) != -1) {
+      if (url.indexOf(":$key") != -1) {
         url = url.replaceAll(':$key', value.toString());
       } else {
         newParams.putIfAbsent(key, () => value);
