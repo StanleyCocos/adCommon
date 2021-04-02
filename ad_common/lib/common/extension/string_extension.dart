@@ -21,6 +21,15 @@ extension StringOption on String {
   }
 
   /*
+  * 是否不为null或者空
+  * */
+  bool get isNotEmptyOrNull {
+    if (isNull) return true;
+    if (this.isEmpty) return true;
+    return false;
+  }
+
+  /*
   * 拆分枚举
   * */
   String get enumRowValue {
