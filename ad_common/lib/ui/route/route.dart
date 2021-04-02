@@ -21,7 +21,7 @@ class RouteManager extends NavigatorObserver {
   }
 
   /// 当前路由栈
-  List<Route> _mRoutes = List<Route>();
+  List<Route> _mRoutes = [];
 
   /// 当前路由
   Route get currentRoute => _mRoutes[_mRoutes.length - 1];
@@ -29,28 +29,24 @@ class RouteManager extends NavigatorObserver {
   /// 获取所有路由
   List<Route> get routes => _mRoutes;
 
-
   List<BaseRouteOption> option = [];
   String homePageType = "";
 
   /// 跳转页面
   Future<Object> push(
-      routeName, {
+    routeName, {
     Object arguments,
     bool isReplace = false,
   }) {
     if (isReplace) {
-      return navigator.pushReplacementNamed(routeName.toString(),
-          arguments: arguments ?? "");
+      return navigator.pushReplacementNamed(routeName.toString(), arguments: arguments ?? "");
     } else {
-      return navigator.pushNamed(routeName.toString(),
-          arguments: arguments ?? "");
+      return navigator.pushNamed(routeName.toString(), arguments: arguments ?? "");
     }
   }
 
   /// 跳转页面
-  Future<Object> pushRoute(Route route,
-      {Object arguments, bool isReplace = false}) {
+  Future<Object> pushRoute(Route route, {Object arguments, bool isReplace = false}) {
     if (isReplace) {
       return navigator.pushReplacement(route);
     } else {
@@ -156,7 +152,6 @@ class RouteManager extends NavigatorObserver {
       ),
     );
   }
-
 
   bool isCurrentRoute(String pageType) {
     return currentRoute.settings.name == pageType.toString();

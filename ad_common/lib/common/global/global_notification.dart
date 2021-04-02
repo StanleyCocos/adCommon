@@ -23,7 +23,7 @@ class NotificationManager {
   /// 添加订阅者
   void add(Object name, NotificationCallback f) {
     if (name.toString() == null || f == null) return;
-    _notificatio_queue[name] ??= new List<NotificationCallback>();
+    _notificatio_queue[name] ??= [];
     _notificatio_queue[name].add(f);
   }
 
