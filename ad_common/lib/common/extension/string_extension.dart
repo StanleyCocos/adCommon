@@ -23,11 +23,7 @@ extension StringOption on String {
   /*
   * 是否不为null或者空
   * */
-  bool get isNotEmptyOrNull {
-    if (isNull) return true;
-    if (this.isEmpty) return true;
-    return false;
-  }
+  bool get isNotEmptyOrNull => !isEmptyOrNull;
 
   /*
   * 拆分枚举
