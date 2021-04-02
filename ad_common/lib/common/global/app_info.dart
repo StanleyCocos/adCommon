@@ -53,7 +53,7 @@ class AppInfoManager {
     return "";
   }
 
-  Future<String> _setImei(String imei) async {
+  Future<void> _setImei(String imei) async {
     FlutterKeychain.put(key: IMEI_KEY, value: imei);
   }
 
