@@ -75,7 +75,7 @@ class RouteManager extends NavigatorObserver {
     }
   }
 
-  Route routeBuild({Widget page, PageTransitionType type, Object arguments}) {
+  Route routeBuild({Widget page, PageTransitionType type = PageTransitionType.right, Object arguments}) {
     switch (type) {
       case PageTransitionType.scale:
         return ScaleRouter(
