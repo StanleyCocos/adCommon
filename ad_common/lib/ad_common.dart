@@ -16,6 +16,7 @@ export 'common/global/global_notification.dart';
 export 'common/global/screenshot_manager.dart';
 export 'common/global/regex_manager.dart';
 export 'common/global/screenshot_manager.dart';
+export 'common/global/auth_manager.dart';
 
 export 'network/http_request.dart';
 export 'network/header_interceptor.dart';
