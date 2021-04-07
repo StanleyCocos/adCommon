@@ -56,3 +56,4 @@ export 'package:provider/provider.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:shared_preferences/shared_preferences.dart';
+export 'package:permission_handler/permission_handler.dart';
