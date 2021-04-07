@@ -23,6 +23,7 @@ dependencies:
   shared_preferences: ^2.0.5
   synchronized: ^3.0.0
   sqflite: ^2.0.0+3
+  permission_handler: ^6.0.1
 
   screenshot_callback:
     git:
