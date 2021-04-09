@@ -109,7 +109,7 @@ class SpManager {
   }
 
   static bool containsKey(name) {
-    if (name is String && name.isNull) return;
+    if (name is String && name.isNull) return false;
     return _sharedPreferences?.containsKey(_realName(name)) ?? false;
   }
 }
