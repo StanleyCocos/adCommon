@@ -1,16 +1,13 @@
-import 'package:dio/dio.dart';
 import 'package:ad_common/ad_common.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  HttpRequest.getInstance().startAndSetRequestParams(HttpRequestSetting(logPrintInterceptor: LogPrintInterceptor(), interceptorsWrapper: InterceptorsWrapper()));
 
-  // List<int> dd = [1, 2, 3, 4, 5, 6];
-  // print(dd.random);
-  // print(dd.item(2));
-
-  Map<String, String> map = {"key1": "11", "key2": "22"};
-
-  map.set(key: "key2");
-  print(map);
-
+  test('isEmptyOrNull', () {
+    String value = '';
+    List temp ;
+    print('test value isEmpty=${value.isEmptyOrNull}');
+    print('test temp isEmpty=${temp.isEmptyOrNull}');
+    print('test temp isEmpty=${temp?.isEmptyOrNull}');
+  });
 }

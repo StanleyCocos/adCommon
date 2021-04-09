@@ -16,6 +16,7 @@ export 'common/global/global_notification.dart';
 export 'common/global/screenshot_manager.dart';
 export 'common/global/regex_manager.dart';
 export 'common/global/screenshot_manager.dart';
+export 'common/global/auth_manager.dart';
 
 export 'network/http_request.dart';
 export 'network/header_interceptor.dart';
@@ -55,3 +56,4 @@ export 'package:provider/provider.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:shared_preferences/shared_preferences.dart';
+export 'package:permission_handler/permission_handler.dart';
