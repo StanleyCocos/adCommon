@@ -23,8 +23,22 @@ class RouteManager extends NavigatorObserver {
   /// 当前路由栈
   List<Route> _mRoutes = [];
 
+  /// 当前路由大小
+  int get routesSize => _mRoutes.length;
+
   /// 当前路由
-  Route get currentRoute => _mRoutes[_mRoutes.length - 1];
+  Route get currentRoute => _mRoutes[routesSize - 1];
+
+  /// 上个路由
+  Route get previousRoute {
+    return routesSize > 1 ? _mRoutes[routesSize - 2] : null;
+  }
+
+  /// 上个路由
+  Route getRouteByIndex(int index) {
+    if (index < routesSize && index >= 0) return _mRoutes[index];
+    return null;
+  }
 
   /// 获取所有路由
   List<Route> get routes => _mRoutes;
@@ -39,14 +53,17 @@ class RouteManager extends NavigatorObserver {
     bool isReplace = false,
   }) {
     if (isReplace) {
-      return navigator.pushReplacementNamed(routeName.toString(), arguments: arguments ?? "");
+      return navigator.pushReplacementNamed(routeName.toString(),
+          arguments: arguments ?? "");
     } else {
-      return navigator.pushNamed(routeName.toString(), arguments: arguments ?? "");
+      return navigator.pushNamed(routeName.toString(),
+          arguments: arguments ?? "");
     }
   }
 
   /// 跳转页面
-  Future<Object> pushRoute(Route route, {Object arguments, bool isReplace = false}) {
+  Future<Object> pushRoute(Route route,
+      {Object arguments, bool isReplace = false}) {
     if (isReplace) {
       return navigator.pushReplacement(route);
     } else {
@@ -71,7 +88,10 @@ class RouteManager extends NavigatorObserver {
     }
   }
 
-  Route routeBuild({Widget page, PageTransitionType type = PageTransitionType.right, Object arguments}) {
+  Route routeBuild(
+      {Widget page,
+      PageTransitionType type = PageTransitionType.right,
+      Object arguments}) {
     switch (type) {
       case PageTransitionType.scale:
         return ScaleRouter(
