@@ -53,7 +53,7 @@ class LogPrintInterceptor extends Interceptor {
   void Function(Object object) logPrint;
 
   @override
-  Future onRequest(RequestOptions options) async {
+  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     if (!showLog) return;
     printV('*************** 请求发起 ***************');
     printKV('请求链接', options.uri);
@@ -99,11 +99,11 @@ class LogPrintInterceptor extends Interceptor {
   }
 
   @override
-  Future onError(DioError err) async {
+  Future onError(DioError err, ErrorInterceptorHandler handler) async {
     if (!showLog) return;
     if (error) {
       printV('*************** 请求出错 ***************:');
-      printKV("出错链接", err.request.uri);
+      printKV("出错链接", err.response.realUri);
       printKV("出错原因", err);
       if (err.response != null) {
         _printResponse(err.response);
@@ -113,14 +113,14 @@ class LogPrintInterceptor extends Interceptor {
   }
 
   @override
-  Future onResponse(Response response) async {
+  Future onResponse(Response response, ResponseInterceptorHandler handler) async {
     if (!showLog) return;
     printV("*************** 请求响应 ***************");
     _printResponse(response);
   }
 
   void _printResponse(Response response) {
-    printKV('响应链接', response.request?.uri);
+    printKV('响应链接', response.realUri);
     if (responseHeader) {
       printKV('响应状态码', response.statusCode);
       if (response.isRedirect == true) {

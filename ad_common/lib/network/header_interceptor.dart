@@ -7,7 +7,7 @@ class HeaderInterceptor extends InterceptorsWrapper {
   addHeaderInterceptors(RequestOptions options) async {}
 
   @override
-  Future onRequest(RequestOptions options) async {
+  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     return options;
   }
 }

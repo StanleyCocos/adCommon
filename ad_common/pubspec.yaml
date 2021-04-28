@@ -11,14 +11,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dio: ^3.0.10
+  dio: ^4.0.0
   connectivity: ^3.0.2
   device_info: ^2.0.0
   package_info: ^2.0.0
   uuid: ^3.0.1
   flutter_easyrefresh: ^2.1.8
   provider: ^5.0.0
-  flutter_screenutil: ^4.0.3+3
+  flutter_screenutil: 5.0.0
   fluttertoast: ^7.1.8
   shared_preferences: ^2.0.5
   synchronized: ^3.0.0
