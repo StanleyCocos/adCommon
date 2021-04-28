@@ -55,12 +55,15 @@ class HttpRequest {
       _client.interceptors.add(setting.interceptorsWrapper);
       _client.interceptors.add(setting.logPrintInterceptor);
       if (isDebug && !setting.delegateHost.isEmptyOrNull) {
-        (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (client) {
+        (_client.httpClientAdapter as DefaultHttpClientAdapter)
+            .onHttpClientCreate =
+            (client) {
           client.findProxy = (url) => setting.delegateHost;
         };
       }
     }
   }
+
 
   /// Get请求 <br/>
   ///
@@ -70,8 +73,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> get(
-    String url, {
+  Future<bool> get(String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -99,8 +101,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> post(
-    String url, {
+  Future<bool> post(String url, {
     Options options,
     Map<String, dynamic> params,
     Map<String, dynamic> formData,
@@ -130,8 +131,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> delete(
-    String url, {
+  Future<bool> delete(String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -159,8 +159,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> patch(
-    String url, {
+  Future<bool> patch(String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -190,8 +189,7 @@ class HttpRequest {
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [onReceiveProgress] 接收进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> put(
-    String url, {
+  Future<bool> put(String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -222,8 +220,7 @@ class HttpRequest {
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> postUpload(
-    String url, {
+  Future<bool> postUpload(String url, {
     Options options,
     Map<String, dynamic> formData,
     HttpRequestSuccessCallback callBack,
@@ -256,8 +253,7 @@ class HttpRequest {
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> _request(
-    String url, {
+  Future<bool> _request(String url, {
     String method,
     Options options,
     Map<String, dynamic> params,
@@ -283,7 +279,7 @@ class HttpRequest {
     try {
       switch (method) {
         case GET:
-          // 组合GET请求的参数
+        // 组合GET请求的参数
           if (newParams != null && newParams.isNotEmpty) {
             response = await _client.get(
               url,
@@ -380,11 +376,15 @@ class HttpRequest {
       if (callBack != null) {
         callBack(response.data);
       }
-      apiTest(url, params: newParams, result: response.data, code: response.statusCode);
+      apiTest(url, params: newParams,
+          result: response.data,
+          code: response.statusCode);
       // 请求成功返回 true
       return true;
     } on DioError catch (e) {
-      apiTest(url, params: newParams, result: e.message, code: response?.statusCode);
+      apiTest(url, params: newParams,
+          result: e.message,
+          code: response?.statusCode);
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
       // 请求回调公共处理方法s
       if (commonCallBack != null) commonCallBack();
@@ -399,33 +399,36 @@ class HttpRequest {
   /// @param [errorCallback] 错误处理回调方法 <br/>
   /// @param [error] DioError由dio封装的错误信息（可选） <br/>
   /// @param [errorMsg] 出错信息（可选） <br/>
-  void _handleError(HttpRequestErrorCallback errorCallback, {DioError error, String errorMsg}) {
+  void _handleError(HttpRequestErrorCallback errorCallback,
+      {DioError error, String errorMsg}) {
     String errorDescription = "";
     String errorOutput = "";
     if (error is DioError) {
       switch (error.type) {
-        case DioErrorType.other:
+        case DioErrorType.DEFAULT:
           errorDescription = error.message;
           errorOutput = "網絡不順，請檢查網絡後再重新整理";
           break;
-        case DioErrorType.cancel:
+        case DioErrorType.CANCEL:
           errorDescription = "请求被取消";
           errorOutput = "請求取消";
           break;
-        case DioErrorType.connectTimeout:
+        case DioErrorType.CONNECT_TIMEOUT:
           errorDescription = "连接服务器超时";
           errorOutput = "連接服務器超時";
           break;
-        case DioErrorType.sendTimeout:
+        case DioErrorType.SEND_TIMEOUT:
           errorDescription = "请求服务器超时";
           errorOutput = "請求服務器超時";
           break;
-        case DioErrorType.receiveTimeout:
+        case DioErrorType.RECEIVE_TIMEOUT:
           errorDescription = "服务器响应超时";
           errorOutput = "服務器響應超時";
           break;
-        case DioErrorType.response:
-          errorDescription = "状态码: " + "${error.response.statusCode}  出错信息: ${error.response.statusMessage}";
+        case DioErrorType.RESPONSE:
+          errorDescription = "状态码: " +
+              "${error.response.statusCode}  出错信息: ${error.response
+                  .statusMessage}";
           errorOutput = "請求錯誤: ${error.response.statusMessage}";
           break;
       }
@@ -443,7 +446,8 @@ class HttpRequest {
     }
   }
 
-  void apiTest(String url, {Map<String, dynamic> params, Object result, int code}) {
+  void apiTest(String url,
+      {Map<String, dynamic> params, Object result, int code}) {
     if (!_setting.isRecordRequest) return;
     if (!isDebug || url.startsWith("http://172.16.11.80/")) return;
     HttpRequest.getInstance().post(
@@ -456,4 +460,5 @@ class HttpRequest {
       },
     );
   }
+
 }
