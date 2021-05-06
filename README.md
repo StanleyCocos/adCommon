@@ -20,35 +20,41 @@
   );
   ```
 ### 存储管理
-    1. 偏好设置
-    ```
-    // 存储
-    SpManager.setBool("key", true);
-    SpManager.setString("key", "true");
-    
-    // 获取
-    Object obj = SpManager.get("key");
-    String str = SpManager.getString("key", defaultValue: "");
-     ```
-    2. 数据库
-      1. 创建表
-      ```
-      class TestTable extends BaseTableModel {
-        @override
-        BaseTableModel copy() => TestTable();
+#### 1. 偏好设置
+```
+// 存储
+SpManager.setBool("key", true);
+SpManager.setString("key", "true");
 
-        // 添加的表字段
-        STText info = STText(defaultValue: "", canNull: false);
-        STInt age = STInt(defaultValue: 20,);
+ // 获取
+Object obj = SpManager.get("key");
+String str = SpManager.getString("key", defaultValue: "");
+```
+#### 2. 数据库
+1. 创建表
+```
+ class TestTable extends BaseTableModel {
+          @override
+          BaseTableModel copy() => TestTable();
 
-        @override
-        Map<String, BaseColumn> get map => {
-          "info": info,
-          "age": age,
-          "id": id
-        };
-      }
-      ```
+          // 添加的表字段
+          STText info = STText(defaultValue: "", canNull: false);
+          STInt age = STInt(defaultValue: 20,);
 
+          @override
+          Map<String, BaseColumn> get map => {
+            "info": info,
+            "age": age,
+            "id": id
+          };
+        }       
+```
+#### 操作
+```
+TestTable test1 = TestTable();
+test1.age.content = 5;
+test1.info.content = "info";
+test1.save();
+```
   
     
