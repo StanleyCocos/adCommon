@@ -1,7 +1,9 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:ad_common/ad_common.dart';
+import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/dio.dart';
+
+
 
 /// [LogPrintInterceptor] is used to print logs during network requests.
 /// It's better to add [LogPrintInterceptor] to the tail of the interceptor queue,
@@ -53,12 +55,14 @@ class LogPrintInterceptor extends Interceptor {
   void Function(Object object) logPrint;
 
   @override
-  Future onRequest(RequestOptions options) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (!showLog) return;
     printV('*************** 请求发起 ***************');
     printKV('请求链接', options.uri);
 
-    if (request) {
+    //单个请求-是否打印-请求参数
+    bool singleRequestShowLog = options.extra[singleRequestShowLogKey] ?? true;
+    if (request && singleRequestShowLog) {
       printKV('请求方式', options.method);
       if (options.method == "POST") {
         if (options.data is FormData) {
@@ -76,7 +80,10 @@ class LogPrintInterceptor extends Interceptor {
         printKV('请求参数', options.queryParameters);
       }
     }
-    if (requestHeader) {
+
+    //单个请求-是否打印-请求头部
+    bool singleRequestHeaderShowLog = options.extra[singleRequestHeaderShowLogKey] ?? true;
+    if (requestHeader && singleRequestHeaderShowLog) {
       printV("请求头部:");
       options.headers.forEach((key, v) {
         if (key == "Authorization") {
@@ -91,37 +98,48 @@ class LogPrintInterceptor extends Interceptor {
         }
       });
     }
-    if (requestBody) {
+
+    //单个请求-是否打印-请求参数
+    bool singleRequestBodyShowLog = options.extra[singleRequestBodyShowLogKey] ?? true;
+    if (requestBody && singleRequestBodyShowLog) {
       printV("请求参数 Body:");
       prettyPrintJson(options.data);
     }
     printV("");
+    return super.onRequest(options, handler);
   }
 
   @override
-  Future onError(DioError err) async {
+  void onError(DioError err, ErrorInterceptorHandler handler) {
     if (!showLog) return;
-    if (error) {
+
+    //单个请求-是否打印-错误信息
+    bool singleErrorShowLog = err.requestOptions.extra[singleErrorShowLogKey] ?? true;
+    if (error && singleErrorShowLog) {
       printV('*************** 请求出错 ***************:');
-      printKV("出错链接", err.request.uri);
+      printKV("出错链接", err.requestOptions.uri);
       printKV("出错原因", err);
       if (err.response != null) {
         _printResponse(err.response);
       }
       printV("");
     }
+    return super.onError(err, handler);
   }
 
   @override
-  Future onResponse(Response response) async {
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (!showLog) return;
     printV("*************** 请求响应 ***************");
     _printResponse(response);
+    return super.onResponse(response, handler);
   }
 
   void _printResponse(Response response) {
-    printKV('响应链接', response.request?.uri);
-    if (responseHeader) {
+    printKV('响应链接', response.requestOptions?.uri);
+    //单个请求-是否打印-响应头
+    bool singleResponseHeaderShowLog = response.requestOptions.extra[singleResponseHeaderShowLogKey] ?? true;
+    if (responseHeader && singleResponseHeaderShowLog) {
       printKV('响应状态码', response.statusCode);
       if (response.isRedirect == true) {
         printKV('redirect', response.realUri);
@@ -133,7 +151,10 @@ class LogPrintInterceptor extends Interceptor {
         }
       }
     }
-    if (responseBody) {
+
+    //单个请求-是否打印-响应头
+    bool singleResponseBodyShowLog = response.requestOptions.extra[singleResponseBodyShowLogKey] ?? true;
+    if (responseBody && singleResponseBodyShowLog) {
       printV("响应内容:");
       prettyPrintJson(response.toString());
     }

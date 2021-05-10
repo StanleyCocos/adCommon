@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dio: 3.0.10
+  dio: 4.0.0
   connectivity: 3.0.2
   device_info: 2.0.0
   package_info: 2.0.0
@@ -42,6 +42,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+
+  uses-material-design: true
 
   # To add assets to your package, add an assets section, like this:
   assets:
