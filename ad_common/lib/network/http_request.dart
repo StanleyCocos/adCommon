@@ -493,11 +493,10 @@ class HttpRequest {
     }
 
     //是否显示错误提示
-    bool singleResponseBodyShowLog =
-        error.requestOptions.extra[singleShowErrorToastKey] ?? false;
+    bool singleShowErrorToast = error.requestOptions.extra[singleShowErrorToastKey] ?? false;
     if (errorCallback != null) {
       errorCallback(error, error.response.statusCode);
-    } else if (singleResponseBodyShowLog) {
+    } else if (singleShowErrorToast) {
       ToastManager.show(errorOutput);
     }
   }
