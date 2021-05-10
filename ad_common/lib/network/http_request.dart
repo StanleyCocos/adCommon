@@ -1,8 +1,9 @@
 import 'dart:collection';
+import 'dart:io';
+import 'dart:convert' as convert;
 import 'package:ad_common/ad_common.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-
 import 'http_request_setting.dart';
 
 typedef HttpRequestSuccessCallback = void Function(dynamic data);
@@ -56,14 +57,12 @@ class HttpRequest {
       _client.interceptors.add(setting.logPrintInterceptor);
       if (isDebug && !setting.delegateHost.isEmptyOrNull) {
         (_client.httpClientAdapter as DefaultHttpClientAdapter)
-            .onHttpClientCreate =
-            (client) {
+            .onHttpClientCreate = (client) {
           client.findProxy = (url) => setting.delegateHost;
         };
       }
     }
   }
-
 
   /// Get请求 <br/>
   ///
@@ -73,7 +72,8 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> get(String url, {
+  Future<bool> get(
+    String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -101,7 +101,8 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> post(String url, {
+  Future<bool> post(
+    String url, {
     Options options,
     Map<String, dynamic> params,
     Map<String, dynamic> formData,
@@ -131,7 +132,8 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> delete(String url, {
+  Future<bool> delete(
+    String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -159,7 +161,8 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> patch(String url, {
+  Future<bool> patch(
+    String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -189,7 +192,8 @@ class HttpRequest {
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [onReceiveProgress] 接收进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> put(String url, {
+  Future<bool> put(
+    String url, {
     Options options,
     Map<String, dynamic> params,
     HttpRequestSuccessCallback callBack,
@@ -220,7 +224,8 @@ class HttpRequest {
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> postUpload(String url, {
+  Future<bool> postUpload(
+    String url, {
     Options options,
     Map<String, dynamic> formData,
     HttpRequestSuccessCallback callBack,
@@ -253,7 +258,8 @@ class HttpRequest {
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> _request(String url, {
+  Future<bool> _request(
+    String url, {
     String method,
     Options options,
     Map<String, dynamic> params,
@@ -279,7 +285,7 @@ class HttpRequest {
     try {
       switch (method) {
         case GET:
-        // 组合GET请求的参数
+          // 组合GET请求的参数
           if (newParams != null && newParams.isNotEmpty) {
             response = await _client.get(
               url,
@@ -376,15 +382,25 @@ class HttpRequest {
       if (callBack != null) {
         callBack(response.data);
       }
-      apiTest(url, params: newParams,
-          result: response.data,
-          code: response.statusCode);
+      apiTest(
+        url: url,
+        params: newParams,
+        result: response.data,
+        code: response.statusCode,
+        header: _client.options.headers,
+        method: method,
+      );
       // 请求成功返回 true
       return true;
     } on DioError catch (e) {
-      apiTest(url, params: newParams,
-          result: e.message,
-          code: response?.statusCode);
+      apiTest(
+        url: url,
+        params: newParams,
+        result: {"message": e.message},
+        code: e?.response?.statusCode,
+        header: _client.options.headers,
+        method: method,
+      );
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
       // 请求回调公共处理方法s
       if (commonCallBack != null) commonCallBack();
@@ -427,8 +443,7 @@ class HttpRequest {
           break;
         case DioErrorType.RESPONSE:
           errorDescription = "状态码: " +
-              "${error.response.statusCode}  出错信息: ${error.response
-                  .statusMessage}";
+              "${error.response.statusCode}  出错信息: ${error.response.statusMessage}";
           errorOutput = "請求錯誤: ${error.response.statusMessage}";
           break;
       }
@@ -446,19 +461,43 @@ class HttpRequest {
     }
   }
 
-  void apiTest(String url,
-      {Map<String, dynamic> params, Object result, int code}) {
+  void apiTest({String url,
+    Map<String, dynamic> params,
+    Object result, int code,
+    Map<String, dynamic> header,
+    String method
+  }) {
     if (!_setting.isRecordRequest) return;
-    if (!isDebug || url.startsWith("http://172.16.11.80/")) return;
+    if (!isDebug || url.startsWith("http://101.133.142.11:8080")) return;
+    if (!url.startsWith("http")) url = _client.options.baseUrl + url;
+    Map<String, Object> headers = {};
+    headers.addAll(header);
+    if(LogPrintInterceptor.headers.length > 0){
+      for(int i = LogPrintInterceptor.headers.length - 1; i >= 0; i--){
+        var map = LogPrintInterceptor.headers[i];
+        if(map.containsKey(url)){
+          headers.addAll(map[url]);
+        }
+      }
+    }
+    print("fasdfdsfads： ${headers.toString()}");
+    var currentHeader = {};
+    headers.forEach((key, value) {
+      currentHeader[key] = value.toString();
+    });
     HttpRequest.getInstance().post(
-      "http://172.16.11.80/laravel/design100/public/api/addHistory",
+      "http://101.133.142.11:8080/api/history",
       params: {
-        "requestApi": "${_setting.baseUrl}$url",
-        "params": params,
-        "result": result,
-        "requestState": "$code",
+        "hedaer": convert.jsonEncode(currentHeader).toString(),
+        "url": url,
+        "params": convert.jsonEncode(params).toString(),
+        "result": convert.jsonEncode(result).toString(),
+        "imei": AppInfoManager.instance.imei,
+        "client": Platform.isAndroid ? "Android" : "iOS",
+        "version": AppInfoManager.instance.version,
+        "code": "${code == null ? "": code}",
+        "method": method,
       },
     );
   }
-
 }
