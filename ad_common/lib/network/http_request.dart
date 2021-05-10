@@ -1,5 +1,9 @@
 import 'dart:collection';
+import 'dart:convert' as convert;
+import 'dart:io';
+
 import 'package:ad_common/ad_common.dart';
+import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 
@@ -46,36 +50,37 @@ class HttpRequest {
   void startAndSetRequestParams(HttpRequestSetting setting) {
     if (_client == null) {
       _setting = setting;
-      BaseOptions options = new BaseOptions();
+      BaseOptions options = BaseOptions();
       options.connectTimeout = setting.connectTimeOut * 1000;
       options.receiveTimeout = setting.receiveTimeOut * 1000;
       options.baseUrl = setting.baseUrl;
       options.contentType = setting.contentType;
-      _client = new Dio(options);
+      _client = Dio(options);
       _client.interceptors.add(setting.interceptorsWrapper);
       _client.interceptors.add(setting.logPrintInterceptor);
       if (isDebug && !setting.delegateHost.isEmptyOrNull) {
         (_client.httpClientAdapter as DefaultHttpClientAdapter)
-            .onHttpClientCreate =
-            (client) {
+            .onHttpClientCreate = (client) {
           client.findProxy = (url) => setting.delegateHost;
         };
       }
     }
   }
 
-
   /// Get请求 <br/>
   ///
   /// @param [url] 请求地址 <br/>
   /// @param [params] 请求参数（可选） <br/>
+  /// @param [extra] 扩展（可选） <br/>
   /// @param [callBack] 请求结果回调方法（可选） <br/>
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> get(String url, {
+  Future<bool> get(
+    String url, {
     Options options,
     Map<String, dynamic> params,
+    OptionsExtra extra,
     HttpRequestSuccessCallback callBack,
     HttpRequestErrorCallback errorCallBack,
     HttpRequestCommonCallback commonCallBack,
@@ -86,6 +91,7 @@ class HttpRequest {
       method: GET,
       options: options,
       params: params,
+      extra: extra,
       callBack: callBack,
       errorCallBack: errorCallBack,
       commonCallBack: commonCallBack,
@@ -97,14 +103,17 @@ class HttpRequest {
   ///
   /// @param [url] 请求地址 <br/>
   /// @param [params] 请求参数（可选） <br/>
+  /// @param [extra] 扩展（可选） <br/>
   /// @param [callBack] 请求结果回调方法（可选） <br/>
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> post(String url, {
+  Future<bool> post(
+    String url, {
     Options options,
     Map<String, dynamic> params,
     Map<String, dynamic> formData,
+    OptionsExtra extra,
     HttpRequestSuccessCallback callBack,
     HttpRequestErrorCallback errorCallBack,
     HttpRequestCommonCallback commonCallBack,
@@ -116,6 +125,7 @@ class HttpRequest {
       options: options,
       params: params,
       formData: formData,
+      extra: extra,
       callBack: callBack,
       errorCallBack: errorCallBack,
       commonCallBack: commonCallBack,
@@ -127,13 +137,16 @@ class HttpRequest {
   ///
   /// @param [url] 请求地址 <br/>
   /// @param [params] 请求参数（可选） <br/>
+  /// @param [extra] 扩展（可选） <br/>
   /// @param [callBack] 请求结果回调方法（可选） <br/>
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> delete(String url, {
+  Future<bool> delete(
+    String url, {
     Options options,
     Map<String, dynamic> params,
+    OptionsExtra extra,
     HttpRequestSuccessCallback callBack,
     HttpRequestErrorCallback errorCallBack,
     HttpRequestCommonCallback commonCallBack,
@@ -144,6 +157,7 @@ class HttpRequest {
       method: DELETE,
       options: options,
       params: params,
+      extra: extra,
       callBack: callBack,
       errorCallBack: errorCallBack,
       commonCallBack: commonCallBack,
@@ -155,13 +169,16 @@ class HttpRequest {
   ///
   /// @param [url] 请求地址 <br/>
   /// @param [params] 请求参数（可选） <br/>
+  /// @param [extra] 扩展（可选） <br/>
   /// @param [callBack] 请求结果回调方法（可选） <br/>
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> patch(String url, {
+  Future<bool> patch(
+    String url, {
     Options options,
     Map<String, dynamic> params,
+    OptionsExtra extra,
     HttpRequestSuccessCallback callBack,
     HttpRequestErrorCallback errorCallBack,
     HttpRequestCommonCallback commonCallBack,
@@ -172,6 +189,7 @@ class HttpRequest {
       method: PATCH,
       options: options,
       params: params,
+      extra: extra,
       callBack: callBack,
       errorCallBack: errorCallBack,
       commonCallBack: commonCallBack,
@@ -183,15 +201,18 @@ class HttpRequest {
   ///
   /// @param [url] 请求地址 <br/>
   /// @param [formData] 请求form表单数据（可选） <br/>
+  /// @param [extra] 扩展（可选） <br/>
   /// @param [callBack] 请求结果回调方法（可选） <br/>
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [onReceiveProgress] 接收进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> put(String url, {
+  Future<bool> put(
+    String url, {
     Options options,
     Map<String, dynamic> params,
+    OptionsExtra extra,
     HttpRequestSuccessCallback callBack,
     HttpRequestErrorCallback errorCallBack,
     HttpRequestCommonCallback commonCallBack,
@@ -203,6 +224,7 @@ class HttpRequest {
       method: PUT,
       options: options,
       params: params,
+      extra: extra,
       callBack: callBack,
       errorCallBack: errorCallBack,
       commonCallBack: commonCallBack,
@@ -215,14 +237,17 @@ class HttpRequest {
   ///
   /// @param [url] 请求地址 <br/>
   /// @param [formData] 请求form表单数据（可选） <br/>
+  /// @param [extra] 扩展（可选） <br/>
   /// @param [callBack] 请求结果回调方法（可选） <br/>
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> postUpload(String url, {
+  Future<bool> postUpload(
+    String url, {
     Options options,
     Map<String, dynamic> formData,
+    OptionsExtra extra,
     HttpRequestSuccessCallback callBack,
     HttpRequestErrorCallback errorCallBack,
     HttpRequestCommonCallback commonCallBack,
@@ -234,6 +259,7 @@ class HttpRequest {
       method: POST,
       options: options,
       formData: formData,
+      extra: extra,
       callBack: callBack,
       errorCallBack: errorCallBack,
       commonCallBack: commonCallBack,
@@ -248,16 +274,19 @@ class HttpRequest {
   /// @param [method] 请求方式：GET、POST、DELETE、PATCH、PUT（可选）<br/>
   /// @param [params] 请求参数（可选） <br/>
   /// @param [formData] 请求form表单数据（可选） <br/>
+  /// @param [extra] 扩展（可选） <br/>
   /// @param [callBack] 请求结果回调方法（可选） <br/>
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> _request(String url, {
+  Future<bool> _request(
+    String url, {
     String method,
     Options options,
     Map<String, dynamic> params,
     Map<String, dynamic> formData,
+    OptionsExtra extra,
     HttpRequestSuccessCallback callBack,
     HttpRequestErrorCallback errorCallBack,
     HttpRequestCommonCallback commonCallBack,
@@ -275,11 +304,25 @@ class HttpRequest {
         newParams.putIfAbsent(key, () => value);
       }
     });
+
+    //请求扩展
+    if (options == null) options = Options();
+    if (extra == null) extra = OptionsExtra();
+    options.extra = {
+      singleRequestShowLogKey: extra.singleRequestShowLog,
+      singleRequestHeaderShowLogKey: extra.singleRequestHeaderShowLog,
+      singleRequestBodyShowLogKey: extra.singleRequestBodyShowLog,
+      singleResponseHeaderShowLogKey: extra.singleResponseHeaderShowLog,
+      singleResponseBodyShowLogKey: extra.singleResponseBodyShowLog,
+      singleErrorShowLogKey: extra.singleErrorShowLog,
+      singleShowErrorToastKey: extra.singleErrorToastKey,
+    };
+
     Response response;
     try {
       switch (method) {
         case GET:
-        // 组合GET请求的参数
+          // 组合GET请求的参数
           if (newParams != null && newParams.isNotEmpty) {
             response = await _client.get(
               url,
@@ -376,15 +419,25 @@ class HttpRequest {
       if (callBack != null) {
         callBack(response.data);
       }
-      apiTest(url, params: newParams,
-          result: response.data,
-          code: response.statusCode);
+      apiTest(
+        url: url,
+        params: newParams,
+        result: response.data,
+        code: response.statusCode,
+        header: _client.options.headers,
+        method: method,
+      );
       // 请求成功返回 true
       return true;
     } on DioError catch (e) {
-      apiTest(url, params: newParams,
-          result: e.message,
-          code: response?.statusCode);
+      apiTest(
+        url: url,
+        params: newParams,
+        result: {"message": e.message},
+        code: e?.response?.statusCode,
+        header: _client.options.headers,
+        method: method,
+      );
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
       // 请求回调公共处理方法s
       if (commonCallBack != null) commonCallBack();
@@ -405,30 +458,29 @@ class HttpRequest {
     String errorOutput = "";
     if (error is DioError) {
       switch (error.type) {
-        case DioErrorType.DEFAULT:
+        case DioErrorType.other:
           errorDescription = error.message;
           errorOutput = "網絡不順，請檢查網絡後再重新整理";
           break;
-        case DioErrorType.CANCEL:
+        case DioErrorType.cancel:
           errorDescription = "请求被取消";
           errorOutput = "請求取消";
           break;
-        case DioErrorType.CONNECT_TIMEOUT:
+        case DioErrorType.connectTimeout:
           errorDescription = "连接服务器超时";
           errorOutput = "連接服務器超時";
           break;
-        case DioErrorType.SEND_TIMEOUT:
+        case DioErrorType.sendTimeout:
           errorDescription = "请求服务器超时";
           errorOutput = "請求服務器超時";
           break;
-        case DioErrorType.RECEIVE_TIMEOUT:
+        case DioErrorType.receiveTimeout:
           errorDescription = "服务器响应超时";
           errorOutput = "服務器響應超時";
           break;
-        case DioErrorType.RESPONSE:
+        case DioErrorType.response:
           errorDescription = "状态码: " +
-              "${error.response.statusCode}  出错信息: ${error.response
-                  .statusMessage}";
+              "${error.response.statusCode}  出错信息: ${error.response.statusMessage}";
           errorOutput = "請求錯誤: ${error.response.statusMessage}";
           break;
       }
@@ -439,26 +491,54 @@ class HttpRequest {
       errorDescription = "未知错误";
       errorOutput = "未知錯誤";
     }
+
+    //是否显示错误提示
+    bool singleShowErrorToast = error.requestOptions.extra[singleShowErrorToastKey] ?? false;
     if (errorCallback != null) {
       errorCallback(error, error.response.statusCode);
-    } else {
-      //ToastManager.show(errorOutput);
+    } else if (singleShowErrorToast) {
+      ToastManager.show(errorOutput);
     }
   }
 
-  void apiTest(String url,
-      {Map<String, dynamic> params, Object result, int code}) {
+  void apiTest(
+      {String url,
+      Map<String, dynamic> params,
+      Object result,
+      int code,
+      Map<String, dynamic> header,
+      String method}) {
     if (!_setting.isRecordRequest) return;
-    if (!isDebug || url.startsWith("http://172.16.11.80/")) return;
+    if (!isDebug || url.startsWith("http://101.133.142.11:8080")) return;
+    if (!url.startsWith("http")) url = _client.options.baseUrl + url;
+    Map<String, Object> headers = {};
+    headers.addAll(header);
+    if (LogPrintInterceptor.headers.length > 0) {
+      for (int i = LogPrintInterceptor.headers.length - 1; i >= 0; i--) {
+        var map = LogPrintInterceptor.headers[i];
+        if (map.containsKey(url)) {
+          headers.addAll(map[url]);
+        }
+      }
+    }
+    print("fasdfdsfads： ${headers.toString()}");
+    var currentHeader = {};
+    headers.forEach((key, value) {
+      currentHeader[key] = value.toString();
+    });
     HttpRequest.getInstance().post(
-      "http://172.16.11.80/laravel/design100/public/api/addHistory",
+      "http://101.133.142.11:8080/api/history",
       params: {
-        "requestApi": "${_setting.baseUrl}$url",
-        "params": params,
-        "result": result,
-        "requestState": "$code",
+        "hedaer": convert.jsonEncode(currentHeader).toString(),
+        "url": url,
+        "params": convert.jsonEncode(params).toString(),
+        "result": convert.jsonEncode(result).toString(),
+        "imei": AppInfoManager.instance.imei,
+        "client": Platform.isAndroid ? "Android" : "iOS",
+        "version": AppInfoManager.instance.version,
+        "code": "${code == null ? "" : code}",
+        "method": method,
       },
     );
   }
-
 }
