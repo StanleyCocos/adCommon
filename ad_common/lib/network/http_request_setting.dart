@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'log_interceptor.dart';
 
 class HttpRequestSetting {
-
   /// 基础URL(host)
   final String baseUrl;
 
