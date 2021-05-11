@@ -3,8 +3,6 @@ import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/dio.dart';
 
-
-
 /// [LogPrintInterceptor] is used to print logs during network requests.
 /// It's better to add [LogPrintInterceptor] to the tail of the interceptor queue,
 /// otherwise the changes made in the interceptor behind A will not be printed out.
@@ -56,6 +54,7 @@ class LogPrintInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    super.onRequest(options, handler);
     if (!showLog) return;
     printV('*************** 请求发起 ***************');
     printKV('请求链接', options.uri);
@@ -106,11 +105,11 @@ class LogPrintInterceptor extends Interceptor {
       prettyPrintJson(options.data);
     }
     printV("");
-    return super.onRequest(options, handler);
   }
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
+    super.onError(err, handler);
     if (!showLog) return;
 
     //单个请求-是否打印-错误信息
@@ -124,15 +123,14 @@ class LogPrintInterceptor extends Interceptor {
       }
       printV("");
     }
-    return super.onError(err, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    super.onResponse(response, handler);
     if (!showLog) return;
     printV("*************** 请求响应 ***************");
     _printResponse(response);
-    return super.onResponse(response, handler);
   }
 
   void _printResponse(Response response) {
