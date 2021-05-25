@@ -19,7 +19,7 @@ dependencies:
   flutter_easyrefresh: 2.1.8
   provider: 5.0.0
   flutter_screenutil: 5.0.0
-  fluttertoast: 7.1.8
+  fluttertoast: 8.0.7
   shared_preferences: 2.0.5
   synchronized: 3.0.0
   sqflite: 2.0.0+3
