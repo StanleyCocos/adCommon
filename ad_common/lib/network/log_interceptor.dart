@@ -7,7 +7,14 @@ import 'package:dio/dio.dart';
 /// It's better to add [LogPrintInterceptor] to the tail of the interceptor queue,
 /// otherwise the changes made in the interceptor behind A will not be printed out.
 /// This is because the execution of interceptors is in the order of addition.
+///
+///
+
+
+
 class LogPrintInterceptor extends Interceptor {
+  static List<Map<String, Object>> headers = [];
+
   LogPrintInterceptor({
     this.request = true,
     this.requestHeader = true,
@@ -78,6 +85,13 @@ class LogPrintInterceptor extends Interceptor {
     }
     if (requestHeader) {
       printV("请求头部:");
+      if(headers.length > 20){
+        headers.removeAt(0);
+      }
+      if(!options.uri.toString().contains("http://101.133.142.11:8080")){
+        var map = {options.uri.toString(): options.headers};
+        headers.add(map);
+      }
       options.headers.forEach((key, v) {
         if (key == "Authorization") {
           if (v.toString().length > 800) {
