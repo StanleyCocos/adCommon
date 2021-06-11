@@ -420,8 +420,8 @@ class HttpRequest {
         callBack(response.data);
       }
       Map<String, dynamic> tempHeader = {};
-      tempHeader.addAll(_client.options.headers);
-      tempHeader.addAll(options.headers);
+      if(_client?.options?.headers != null && _client.options.headers.length > 0) tempHeader.addAll(_client.options.headers);
+      if(options?.headers != null && options.headers.length > 0) tempHeader.addAll(options.headers);
       apiTest(
         url: url,
         params: newParams,
