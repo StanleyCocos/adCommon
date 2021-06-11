@@ -419,12 +419,15 @@ class HttpRequest {
       if (callBack != null) {
         callBack(response.data);
       }
+      Map<String, dynamic> tempHeader = {};
+      tempHeader.addAll(_client.options.headers);
+      tempHeader.addAll(options.headers);
       apiTest(
         url: url,
         params: newParams,
         result: response.data,
         code: response.statusCode,
-        header: _client.options.headers,
+        header: tempHeader,
         method: method,
       );
       // 请求成功返回 true
