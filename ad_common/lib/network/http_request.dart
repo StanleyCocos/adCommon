@@ -521,7 +521,6 @@ class HttpRequest {
         }
       }
     }
-    print("fasdfdsfads： ${headers.toString()}");
     var currentHeader = {};
     headers.forEach((key, value) {
       currentHeader[key] = value.toString();

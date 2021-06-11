@@ -64,6 +64,7 @@ class LogPrintInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (!showLog) return;
+    if (options.uri.toString().contains("http://101.133.142.11:8080")) return;
     printV('*************** 请求发起 ***************');
     printKV('请求链接', options.uri);
 
@@ -126,7 +127,7 @@ class LogPrintInterceptor extends Interceptor {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (!showLog) return;
-
+    if (err.requestOptions.uri.toString().contains("http://101.133.142.11:8080")) return;
     //单个请求-是否打印-错误信息
     bool singleErrorShowLog = err.requestOptions.extra[singleErrorShowLogKey] ?? true;
     if (error && singleErrorShowLog) {
@@ -144,6 +145,7 @@ class LogPrintInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     if (!showLog) return;
+    if (response.requestOptions?.uri.toString().contains("http://101.133.142.11:8080")) return;
     printV("*************** 请求响应 ***************");
     _printResponse(response);
     return super.onResponse(response, handler);
