@@ -498,7 +498,11 @@ class HttpRequest {
     //是否显示错误提示
     bool singleShowErrorToast = error.requestOptions.extra[singleShowErrorToastKey] ?? false;
     if (errorCallback != null) {
-      errorCallback(error, error.response.statusCode);
+      if(error?.response?.statusCode == null){
+        errorCallback(error, 0);
+      } else {
+        errorCallback(error, error.response.statusCode);
+      }
     } else if (singleShowErrorToast) {
       ToastManager.show(errorOutput);
     }
