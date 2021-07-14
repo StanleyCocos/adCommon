@@ -26,9 +26,8 @@ class NotificationManager {
     if(_containsObj(name, bindObj) == -1){
       // 不存在 添加(防止重复添加)
       NotificationObject object = NotificationObject(object: bindObj, callback: callback);
-      stLog("添加通知: name: ${name.toString()} 绑定对象: ${bindObj}");
-      _notificationQueue[name] ??= [];
-      _notificationQueue[name].add(object);
+      _notificationQueue[name.toString()] ??= [];
+      _notificationQueue[name.toString()].add(object);
     }
   }
 
@@ -39,7 +38,6 @@ class NotificationManager {
     if (name.toString() == null || list == null) return;
     int index = _containsObj(name, bindObj);
     if(index != -1) list.removeAt(index);
-    stLog("移除通知: name: ${name.toString()} 移除对象: ${bindObj}");
     _notificationQueue[name.toString()] = list;
   }
 
@@ -47,7 +45,6 @@ class NotificationManager {
   void delete(Object name){
     if(name.toString() == null || name.toString().length <= 0) return;
     if(_notificationQueue.containsKey(name.toString())){
-      stLog("删除通知: name: ${name.toString()}");
       _notificationQueue.remove(name.toString());
     }
   }
@@ -57,7 +54,6 @@ class NotificationManager {
     var list = _notificationQueue[name.toString()];
     if (list == null) return;
     list.forEach((element) {
-      stLog("发送通知: name: ${name.toString()} 发送对象: ${element}");
       element.callback(arg);
     });
   }
