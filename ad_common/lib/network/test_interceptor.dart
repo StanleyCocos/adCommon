@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:ad_common/ad_common.dart';
 
 class ApiTestInterceptor extends InterceptorsWrapper {
-
   String get baseUrl => "http://101.133.142.11:8080";
+
   String get uploadUrl => "/api/history";
 
   @override
@@ -16,8 +16,8 @@ class ApiTestInterceptor extends InterceptorsWrapper {
       params: err.requestOptions.queryParameters,
       header: err.requestOptions.headers,
       method: err.requestOptions.method,
-      responseCode: err.response.statusCode,
-      responseBody: err.response.data,
+      responseCode: err.response?.statusCode,
+      responseBody: err.response?.data,
     );
   }
 
@@ -43,15 +43,31 @@ class ApiTestInterceptor extends InterceptorsWrapper {
     dynamic responseBody,
   }) {
     if (url.startsWith(baseUrl)) return;
+
+    // 将header转化为json可解析类型
+    Map<String, dynamic> headerMap = {};
+    header.forEach((key, value) {
+      headerMap[key] = value.toString();
+    });
+
+    String paramsStr = "";
+    String headerStr = "";
+    String responseBodyStr = "";
+    try {
+      paramsStr = jsonEncode(params);
+      headerStr = jsonEncode(headerMap);
+      responseBodyStr = jsonEncode(responseBody);
+    } catch (JsonUnsupportedObjectError) {}
+
     HttpRequest.getInstance().post(
       "$baseUrl$uploadUrl",
       params: {
         "url": url,
         "method": method,
-        "params": jsonEncode(params),
-        "hedaer": jsonEncode(header),
-        "code": "$responseCode",
-        "result": jsonEncode(responseBody),
+        "params": paramsStr,
+        "hedaer": headerStr,
+        "code": "${responseCode ?? ""}",
+        "result": responseBodyStr,
         "client": Platform.isAndroid ? "Android" : "iOS",
         "imei": AppInfoManager().imei,
         "version": AppInfoManager().version,
