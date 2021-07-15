@@ -1,6 +1,7 @@
 import 'package:ad_common/ad_common.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:ad_common/network/http_request.dart';
+import 'package:flutter_test/flutter_test.dart';
+
 import 'test_Interceptor.dart';
 
 void main() {
@@ -13,15 +14,17 @@ void main() {
   });
 
   test('dio-4.0.0', () async {
-    HttpRequest.getInstance().startAndSetRequestParams(HttpRequestSetting(
-      logPrintInterceptor: LogPrintInterceptor(
-        responseBody: true,
-        showLog: true,
-        requestHeader: true,
-      ),
-      interceptorsWrapper: NetworkInterceptor(),
+    HttpRequest().init(HttpRequestSetting(
       connectTimeOut: 30,
       receiveTimeOut: 30,
+      interceptors: [
+        NetworkInterceptor(),
+        LogPrintInterceptor(
+          responseBody: true,
+          showLog: true,
+          requestHeader: true,
+        ),
+      ],
     ));
 
     String url = 'https://m.debug.8591.com.hk/node/mall/detail';

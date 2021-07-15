@@ -1,6 +1,4 @@
 import 'dart:collection';
-import 'dart:convert' as convert;
-import 'dart:io';
 
 import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/options_extra.dart';
@@ -31,6 +29,8 @@ class HttpRequest {
   static const String PATCH = 'patch';
   static const String DELETE = 'delete';
 
+  factory HttpRequest() => getInstance();
+
   static HttpRequest getInstance() {
     if (_instance == null) {
       _instance = HttpRequest._internal();
@@ -42,22 +42,20 @@ class HttpRequest {
 
   Dio get client => _client;
 
-  HttpRequestSetting _setting;
-
   HttpRequest._internal();
 
   /// 启动请求工具 并且设置请求参数
-  void startAndSetRequestParams(HttpRequestSetting setting) {
+  void init(HttpRequestSetting setting) {
     if (_client == null) {
-      _setting = setting;
       BaseOptions options = BaseOptions();
       options.connectTimeout = setting.connectTimeOut * 1000;
       options.receiveTimeout = setting.receiveTimeOut * 1000;
       options.baseUrl = setting.baseUrl;
       options.contentType = setting.contentType;
       _client = Dio(options);
-      _client.interceptors.add(setting.interceptorsWrapper);
-      _client.interceptors.add(setting.logPrintInterceptor);
+      setting.interceptors?.forEach((interceptor) {
+        _client.interceptors.add(interceptor);
+      });
       if (isDebug && !setting.delegateHost.isEmptyOrNull) {
         (_client.httpClientAdapter as DefaultHttpClientAdapter)
             .onHttpClientCreate = (client) {
@@ -420,27 +418,16 @@ class HttpRequest {
         callBack(response.data);
       }
       Map<String, dynamic> tempHeader = {};
-      if(_client?.options?.headers != null && _client.options.headers.length > 0) tempHeader.addAll(_client.options.headers);
-      if(options?.headers != null && options.headers.length > 0) tempHeader.addAll(options.headers);
-      apiTest(
-        url: url,
-        params: newParams,
-        result: response.data,
-        code: response.statusCode,
-        header: tempHeader,
-        method: method,
-      );
+      if (_client?.options?.headers != null &&
+          _client.options.headers.length > 0) {
+        tempHeader.addAll(_client.options.headers);
+      }
+      if (options?.headers != null && options.headers.length > 0) {
+        tempHeader.addAll(options.headers);
+      }
       // 请求成功返回 true
       return true;
     } on DioError catch (e) {
-      apiTest(
-        url: url,
-        params: newParams,
-        result: {"message": e.message},
-        code: e?.response?.statusCode,
-        header: _client.options.headers,
-        method: method,
-      );
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
       // 请求回调公共处理方法s
       if (commonCallBack != null) commonCallBack();
@@ -457,48 +444,39 @@ class HttpRequest {
   /// @param [errorMsg] 出错信息（可选） <br/>
   void _handleError(HttpRequestErrorCallback errorCallback,
       {DioError error, String errorMsg}) {
-    String errorDescription = "";
     String errorOutput = "";
     if (error is DioError) {
       switch (error.type) {
         case DioErrorType.other:
-          errorDescription = error.message;
           errorOutput = "網絡不順，請檢查網絡後再重新整理";
           break;
         case DioErrorType.cancel:
-          errorDescription = "请求被取消";
           errorOutput = "請求取消";
           break;
         case DioErrorType.connectTimeout:
-          errorDescription = "连接服务器超时";
           errorOutput = "連接服務器超時";
           break;
         case DioErrorType.sendTimeout:
-          errorDescription = "请求服务器超时";
           errorOutput = "請求服務器超時";
           break;
         case DioErrorType.receiveTimeout:
-          errorDescription = "服务器响应超时";
           errorOutput = "服務器響應超時";
           break;
         case DioErrorType.response:
-          errorDescription = "状态码: " +
-              "${error.response.statusCode}  出错信息: ${error.response.statusMessage}";
           errorOutput = "請求錯誤: ${error.response.statusMessage}";
           break;
       }
     } else if (errorMsg.isNotEmpty) {
-      errorDescription = errorMsg;
       errorOutput = "網絡不順，請檢查網絡後再重新整理";
     } else {
-      errorDescription = "未知错误";
       errorOutput = "未知錯誤";
     }
 
-    //是否显示错误提示
-    bool singleShowErrorToast = error.requestOptions.extra[singleShowErrorToastKey] ?? false;
+    // 是否显示错误提示
+    bool singleShowErrorToast =
+        error.requestOptions.extra[singleShowErrorToastKey] ?? false;
     if (errorCallback != null) {
-      if(error?.response?.statusCode == null){
+      if (error?.response?.statusCode == null) {
         errorCallback(error, 0);
       } else {
         errorCallback(error, error.response.statusCode);
@@ -506,45 +484,5 @@ class HttpRequest {
     } else if (singleShowErrorToast) {
       ToastManager.show(errorOutput);
     }
-  }
-
-  void apiTest(
-      {String url,
-      Map<String, dynamic> params,
-      Object result,
-      int code,
-      Map<String, dynamic> header,
-      String method}) {
-    if (!_setting.isRecordRequest) return;
-    if (!isDebug || url.startsWith("http://101.133.142.11:8080")) return;
-    if (!url.startsWith("http")) url = _client.options.baseUrl + url;
-    Map<String, Object> headers = {};
-    headers.addAll(header);
-    if (LogPrintInterceptor.headers.length > 0) {
-      for (int i = LogPrintInterceptor.headers.length - 1; i >= 0; i--) {
-        var map = LogPrintInterceptor.headers[i];
-        if (map.containsKey(url)) {
-          headers.addAll(map[url]);
-        }
-      }
-    }
-    var currentHeader = {};
-    headers.forEach((key, value) {
-      currentHeader[key] = value.toString();
-    });
-    HttpRequest.getInstance().post(
-      "http://101.133.142.11:8080/api/history",
-      params: {
-        "hedaer": convert.jsonEncode(currentHeader).toString(),
-        "url": url,
-        "params": convert.jsonEncode(params).toString(),
-        "result": convert.jsonEncode(result).toString(),
-        "imei": AppInfoManager.instance.imei,
-        "client": Platform.isAndroid ? "Android" : "iOS",
-        "version": AppInfoManager.instance.version,
-        "code": "${code == null ? "" : code}",
-        "method": method,
-      },
-    );
   }
 }
