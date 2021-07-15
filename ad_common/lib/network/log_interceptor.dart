@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/dio.dart';
@@ -54,8 +55,26 @@ class LogPrintInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    super.onRequest(options, handler);
-    if (!showLog) return;
+    if (!showLog) return super.onRequest(options, handler);
+    _printRequest(options);
+    return super.onRequest(options, handler);
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    if (!showLog) return super.onError(err, handler);
+    _printError(err);
+    return super.onError(err, handler);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (!showLog) return super.onResponse(response, handler);
+    _printResponse(response);
+    return super.onResponse(response, handler);
+  }
+
+  void _printRequest(RequestOptions options) {
     printV('*************** 请求发起 ***************');
     printKV('请求链接', options.uri);
 
@@ -81,7 +100,8 @@ class LogPrintInterceptor extends Interceptor {
     }
 
     //单个请求-是否打印-请求头部
-    bool singleRequestHeaderShowLog = options.extra[singleRequestHeaderShowLogKey] ?? true;
+    bool singleRequestHeaderShowLog =
+        options.extra[singleRequestHeaderShowLogKey] ?? true;
     if (requestHeader && singleRequestHeaderShowLog) {
       printV("请求头部:");
       options.headers.forEach((key, v) {
@@ -99,7 +119,8 @@ class LogPrintInterceptor extends Interceptor {
     }
 
     //单个请求-是否打印-请求参数
-    bool singleRequestBodyShowLog = options.extra[singleRequestBodyShowLogKey] ?? true;
+    bool singleRequestBodyShowLog =
+        options.extra[singleRequestBodyShowLogKey] ?? true;
     if (requestBody && singleRequestBodyShowLog) {
       printV("请求参数 Body:");
       prettyPrintJson(options.data);
@@ -107,13 +128,10 @@ class LogPrintInterceptor extends Interceptor {
     printV("");
   }
 
-  @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
-    super.onError(err, handler);
-    if (!showLog) return;
-
+  void _printError(DioError err) {
     //单个请求-是否打印-错误信息
-    bool singleErrorShowLog = err.requestOptions.extra[singleErrorShowLogKey] ?? true;
+    bool singleErrorShowLog =
+        err.requestOptions.extra[singleErrorShowLogKey] ?? true;
     if (error && singleErrorShowLog) {
       printV('*************** 请求出错 ***************:');
       printKV("出错链接", err.requestOptions.uri);
@@ -125,18 +143,12 @@ class LogPrintInterceptor extends Interceptor {
     }
   }
 
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    super.onResponse(response, handler);
-    if (!showLog) return;
-    printV("*************** 请求响应 ***************");
-    _printResponse(response);
-  }
-
   void _printResponse(Response response) {
+    printV("*************** 请求响应 ***************");
     printKV('响应链接', response.requestOptions?.uri);
     //单个请求-是否打印-响应头
-    bool singleResponseHeaderShowLog = response.requestOptions.extra[singleResponseHeaderShowLogKey] ?? true;
+    bool singleResponseHeaderShowLog =
+        response.requestOptions.extra[singleResponseHeaderShowLogKey] ?? true;
     if (responseHeader && singleResponseHeaderShowLog) {
       printKV('响应状态码', response.statusCode);
       if (response.isRedirect == true) {
@@ -151,7 +163,8 @@ class LogPrintInterceptor extends Interceptor {
     }
 
     //单个请求-是否打印-响应头
-    bool singleResponseBodyShowLog = response.requestOptions.extra[singleResponseBodyShowLogKey] ?? true;
+    bool singleResponseBodyShowLog =
+        response.requestOptions.extra[singleResponseBodyShowLogKey] ?? true;
     if (responseBody && singleResponseBodyShowLog) {
       printV("响应内容:");
       prettyPrintJson(response.toString());
@@ -159,25 +172,25 @@ class LogPrintInterceptor extends Interceptor {
     printV("");
   }
 
-  printV(Object v) {
-    logPrint('$v');
+  void printV(Object value) {
+    logPrint('$value');
   }
 
-  printKV(String key, Object v) {
-    logPrint('$key: $v');
+  void printKV(String key, Object value) {
+    logPrint('$key: $value');
   }
 
   JsonDecoder decoder = JsonDecoder();
   JsonEncoder encoder = JsonEncoder.withIndent('  ');
 
   /// 打印Json格式化数据
-  void prettyPrintJson(String input) {
+  void prettyPrintJson(String json) {
     try {
-      var object = decoder.convert(input);
+      var object = decoder.convert(json);
       var prettyString = encoder.convert(object);
       prettyString.split('\n').forEach((element) => print(element));
     } on FormatException catch (_) {
-      logPrint(input);
+      logPrint(json);
     }
   }
 }

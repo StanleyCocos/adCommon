@@ -70,6 +70,10 @@ class ScreenManager {
   ScreenSize get screenSize => _screenSize;
 
   double get safeArea => height - topSafeHeight - bottomSafeHeight;
+
+  bool get isLargeScreen => screenSize == ScreenSize.Large;
+  bool get isMiddleScreen => screenSize == ScreenSize.Middle;
+  bool get isSmallScreen => screenSize == ScreenSize.Small;
 }
 
 enum ScreenSize { Large, Middle, Small }
