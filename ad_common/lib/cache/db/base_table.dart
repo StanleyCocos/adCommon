@@ -34,118 +34,138 @@ abstract class BaseTableModel {
   }
 
   /*
-  * 清空表
-  * */
-  Future<int> clear(String table) async {
-    Database db = await DBManager.getDatabase();
-    return await db?.rawDelete("DELETE FROM table $runtimeType");
-  }
-
-  /*
   * 创建表
   * */
   Future create() async {
-    var createSql = "create table if not exists $runtimeType($column);";
-    Database db = await DBManager.getDatabase();
-    return await db?.execute(createSql);
+    try{
+      var createSql = "create table if not exists $runtimeType($column);";
+      Database db = await DBManager.getDatabase();
+      return await db?.execute(createSql);
+    }catch(e){}
   }
 
   /*
   *  插入数据
   * */
   Future<int> save() async {
-    await create();
-    Database db = await DBManager.getDatabase();
-    return await db?.insert("$runtimeType", contentMap);
+    try {
+      await create();
+      Database db = await DBManager.getDatabase();
+      return await db?.insert("$runtimeType", contentMap);
+    }catch(e){}
   }
 
   /*
   *  批量插入数据
   * */
   Future<void> saveAll<T extends BaseTableModel>(List<T> list) async {
-    Database db = await DBManager.getDatabase();
-    await db.transaction((txn) async {
-      list.forEach((element) async {
-        await txn.insert("$runtimeType", element.contentMap);
+    try{
+      await create();
+      Database db = await DBManager.getDatabase();
+      await db.transaction((txn) async {
+        list.forEach((element) async {
+          await txn.insert("$runtimeType", element.contentMap);
+        });
       });
-    });
+    } catch(e){}
   }
 
   /*
   * 更新数据
   * */
   Future<int> update({String where}) async {
-    Database db = await DBManager.getDatabase();
-    return await db?.update("$runtimeType", contentMap,
-        where: where == null ? "id = ${id.content}" : where);
+    try{
+      Database db = await DBManager.getDatabase();
+      return await db?.update("$runtimeType", contentMap,
+          where: where == null ? "id = ${id.content}" : where);
+    }catch(e){
+      return 0;
+    }
   }
 
   /*
   * 删除数据
   * */
   Future<int> delete({String where}) async {
-    Database db = await DBManager.getDatabase();
-    return await db?.delete("$runtimeType",
-        where: where == null ? "id = ${id.content}" : where);
+    try{
+      Database db = await DBManager.getDatabase();
+      return await db?.delete("$runtimeType",
+          where: where == null ? "id = ${id.content}" : where);
+    }catch(e){
+      return 0;
+    }
   }
 
   /*
-  * 清空表数据
+  * 清空表
   * */
-  Future<int> deleteAll() async {
-    Database db = await DBManager.getDatabase();
-    return await db.rawDelete("DELETE FROM $runtimeType");
+  Future<void> clear() async {
+   try{
+     Database db = await DBManager.getDatabase();
+     return await db?.execute("DELETE FROM $runtimeType");
+   }catch(e){
+     return 0;
+   }
   }
 
   /*
   * 判断当前查询数据是否存在
   * */
   Future<bool> contain({String where = ""}) async {
-    Database db = await DBManager.getDatabase();
-    List<String> columns = List.from(map.keys);
-    List<Map> data = await db.query(
-      "$runtimeType",
-      where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
-      columns: columns,
-    );
-    return data.isNotEmpty;
+    try{
+      Database db = await DBManager.getDatabase();
+      List<String> columns = List.from(map.keys);
+      List<Map> data = await db.query(
+        "$runtimeType",
+        where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
+        columns: columns,
+      );
+      return data.isNotEmpty;
+    } catch(e){
+      return false;
+    }
   }
 
   /*
   * 获取单挑记录
   * */
   Future<BaseTableModel> one({String where = ""}) async {
-    Database db = await DBManager.getDatabase();
-    List<String> columns = List.from(map.keys);
-    List<Map> data = await db.query(
-      "$runtimeType",
-      where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
-      columns: columns,
-    );
-    if (data.length <= 0) return null;
-    result = true;
-    setRowContent(rowData: data.first);
-    return this;
+    try{
+      Database db = await DBManager.getDatabase();
+      List<String> columns = List.from(map.keys);
+      List<Map> data = await db.query(
+        "$runtimeType",
+        where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
+        columns: columns,
+      );
+      if (data.length <= 0) return null;
+      setRowContent(rowData: data.first);
+      return this;
+    } catch(e){
+      return null;
+    }
   }
 
   /*
   * 获取所有记录
   * */
   Future<List<T>> all<T extends BaseTableModel>() async {
-    var db = await DBManager.getDatabase();
-    List<Map> maps = await db.query(
-      "$runtimeType",
-    );
-    print(maps);
-    if (maps == null || maps.length == 0) return [];
-
-    List<T> list = [];
-    maps.forEach((element) {
-      var obj = this.copy();
-      obj.setRowContent(rowData: element);
-      list.add(obj);
-    });
-    return list;
+    try{
+      var db = await DBManager.getDatabase();
+      List<Map> maps = await db.query(
+        "$runtimeType",
+      );
+      if (maps == null || maps.length == 0) return [];
+      List<T> list = [];
+      maps.forEach((element) {
+        var obj = this.copy();
+        obj.setRowContent(rowData: element);
+        list.add(obj);
+      });
+      return list;
+    }catch(e){
+      return [];
+    }
   }
 
   /*
@@ -245,7 +265,6 @@ extension DataOption on BaseTableModel {
       var temp = columns.length > 0 ? "," : "";
       columns += "$temp${ColumnSplitMerge.combine(v, key: k)}";
     });
-
     return columns;
   }
 
@@ -255,7 +274,6 @@ extension DataOption on BaseTableModel {
   void setRowContent({Map<String, Object> rowData}) {
     if (rowData == null || rowData.length <= 0) return;
     var temp = map;
-    temp["id"].content = 2;
     rowData.forEach((key, value) {
       if (temp[key].type == "set") {
         temp[key].content = setSetRowContent(temp[key], value);
