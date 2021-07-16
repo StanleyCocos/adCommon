@@ -109,7 +109,7 @@ abstract class BaseTableModel {
   Future<void> clear() async {
    try{
      Database db = await DBManager.getDatabase();
-     return await db?.execute("DELETE FROM $runtimeType");
+     return await db.rawDelete("DELETE FROM $runtimeType");
    }catch(e){
      return 0;
    }
