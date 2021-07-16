@@ -52,22 +52,29 @@ abstract class BaseTableModel {
       await create();
       Database db = await DBManager.getDatabase();
       return await db?.insert("$runtimeType", contentMap);
-    }catch(e){}
+    }catch(e){
+      return 0;
+    }
   }
 
   /*
   *  批量插入数据
   * */
-  Future<void> saveAll<T extends BaseTableModel>(List<T> list) async {
+  Future<int> saveBatch<T extends BaseTableModel>(List<T> list) async {
     try{
       await create();
       Database db = await DBManager.getDatabase();
+      var count = 0;
       await db.transaction((txn) async {
         list.forEach((element) async {
-          await txn.insert("$runtimeType", element.contentMap);
+          var state = await txn.insert("$runtimeType", element.contentMap);
+          if(state > 0) count ++;
         });
       });
-    } catch(e){}
+      return count;
+    } catch(e){
+      return 0;
+    }
   }
 
   /*
