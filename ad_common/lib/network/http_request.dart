@@ -1,10 +1,11 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'http_request_setting.dart';
 
 typedef HttpRequestSuccessCallback = void Function(dynamic data);
@@ -29,7 +30,7 @@ class HttpRequest {
   static const String PATCH = 'patch';
   static const String DELETE = 'delete';
 
-  factory HttpRequest() => getInstance();
+  factory   HttpRequest() => getInstance();
 
   static HttpRequest getInstance() {
     if (_instance == null) {
@@ -45,7 +46,7 @@ class HttpRequest {
   HttpRequest._internal();
 
   /// 启动请求工具 并且设置请求参数
-  void init(HttpRequestSetting setting) {
+  void init(HttpRequestSetting setting) async {
     if (_client == null) {
       BaseOptions options = BaseOptions();
       options.connectTimeout = setting.connectTimeOut * 1000;
@@ -56,10 +57,23 @@ class HttpRequest {
       setting.interceptors?.forEach((interceptor) {
         _client.interceptors.add(interceptor);
       });
+      if(setting.cookie != null){
+        var appDocDir = await getApplicationDocumentsDirectory();
+        var cookies = PersistCookieJar(ignoreExpires: true, storage: FileStorage(appDocDir.path + "/.cookies/" ));
+        // Cookie cookie = Cookie("dev", "192.168.2.12");
+        // cookie.domain = ".dev.100.com.tw";
+        // cookie.path = "/";
+        // cookie.expires = DateTime.now()..millisecondsSinceEpoch;
+        cookies.saveFromResponse(Uri(), [setting.cookie]);
+        _client.interceptors.add(CookieManager(cookies));
+      }
       if (isDebug && !setting.delegateHost.isEmptyOrNull) {
         (_client.httpClientAdapter as DefaultHttpClientAdapter)
             .onHttpClientCreate = (client) {
-          client.findProxy = (url) => setting.delegateHost;
+          client.findProxy = (url){
+            return "PROXY ${setting.delegateHost}";
+          };
+          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
         };
       }
     }

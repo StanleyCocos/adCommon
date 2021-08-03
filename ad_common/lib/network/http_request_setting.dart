@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 class HttpRequestSetting {
@@ -19,6 +21,9 @@ class HttpRequestSetting {
   /// 请求代理(测试环境)
   final String delegateHost;
 
+  /// 添加cookie
+  final Cookie cookie;
+
   HttpRequestSetting({
     this.baseUrl = "",
     this.connectTimeOut = 10,
@@ -26,5 +31,6 @@ class HttpRequestSetting {
     this.contentType = "application/x-www-form-urlencoded",
     this.interceptors,
     this.delegateHost,
+    this.cookie,
   });
 }
