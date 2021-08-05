@@ -49,6 +49,7 @@ class HttpRequest {
   void init(HttpRequestSetting setting) async {
     if (_client == null) {
       BaseOptions options = BaseOptions();
+      if(setting.dev.isNotEmptyOrNull)options.headers[HttpHeaders.cookieHeader] = "dev=${setting.dev};";
       options.connectTimeout = setting.connectTimeOut * 1000;
       options.receiveTimeout = setting.receiveTimeOut * 1000;
       options.baseUrl = setting.baseUrl;
@@ -57,16 +58,6 @@ class HttpRequest {
       setting.interceptors?.forEach((interceptor) {
         _client.interceptors.add(interceptor);
       });
-      if(setting.cookie != null){
-        var appDocDir = await getApplicationDocumentsDirectory();
-        var cookies = PersistCookieJar(ignoreExpires: true, storage: FileStorage(appDocDir.path + "/.cookies/" ));
-        // Cookie cookie = Cookie("dev", "192.168.2.12");
-        // cookie.domain = ".dev.100.com.tw";
-        // cookie.path = "/";
-        // cookie.expires = DateTime.now()..millisecondsSinceEpoch;
-        cookies.saveFromResponse(Uri(), [setting.cookie]);
-        _client.interceptors.add(CookieManager(cookies));
-      }
       if (isDebug && !setting.delegateHost.isEmptyOrNull) {
         (_client.httpClientAdapter as DefaultHttpClientAdapter)
             .onHttpClientCreate = (client) {

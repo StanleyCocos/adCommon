@@ -22,7 +22,7 @@ class HttpRequestSetting {
   final String delegateHost;
 
   /// 添加cookie
-  final Cookie cookie;
+  final String dev;
 
   HttpRequestSetting({
     this.baseUrl = "",
@@ -31,6 +31,6 @@ class HttpRequestSetting {
     this.contentType = "application/x-www-form-urlencoded",
     this.interceptors,
     this.delegateHost,
-    this.cookie,
+    this.dev,
   });
 }
