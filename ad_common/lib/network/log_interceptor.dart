@@ -123,7 +123,7 @@ class LogPrintInterceptor extends Interceptor {
         options.extra[singleRequestBodyShowLogKey] ?? true;
     if (requestBody && singleRequestBodyShowLog) {
       printV("请求参数 Body:");
-      prettyPrintJson(options.data);
+      prettyPrintJson(options.data.toString());
     }
     printV("");
   }
