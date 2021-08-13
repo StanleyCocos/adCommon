@@ -54,7 +54,7 @@ class RouteManager extends NavigatorObserver {
     bool isRemoveUntil = false,
   }) {
     if (isRemoveUntil) {
-      navigator.pushNamedAndRemoveUntil(routeName.toString(), (route) => false,
+     return navigator.pushNamedAndRemoveUntil(routeName.toString(), (route) => false,
           arguments: arguments ?? "");
     } else if (isReplace) {
       return navigator.pushReplacementNamed(routeName.toString(),
