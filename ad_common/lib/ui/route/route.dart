@@ -51,8 +51,12 @@ class RouteManager extends NavigatorObserver {
     routeName, {
     Object arguments,
     bool isReplace = false,
+    bool isRemoveUntil = false,
   }) {
-    if (isReplace) {
+    if (isRemoveUntil) {
+      navigator.pushNamedAndRemoveUntil(routeName.toString(), (route) => false,
+          arguments: arguments ?? "");
+    } else if (isReplace) {
       return navigator.pushReplacementNamed(routeName.toString(),
           arguments: arguments ?? "");
     } else {
@@ -62,9 +66,15 @@ class RouteManager extends NavigatorObserver {
   }
 
   /// 跳转页面
-  Future<Object> pushRoute(Route route,
-      {Object arguments, bool isReplace = false}) {
-    if (isReplace) {
+  Future<Object> pushRoute(
+    Route route, {
+    Object arguments,
+    bool isReplace = false,
+    bool isRemoveUntil = false,
+  }) {
+    if (isRemoveUntil) {
+      return navigator.pushAndRemoveUntil(route, (route) => false);
+    } else if (isReplace) {
       return navigator.pushReplacement(route);
     } else {
       return navigator.push(route);
