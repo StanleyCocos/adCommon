@@ -7,13 +7,13 @@ class SafeManager {
   static int parseInt(Map<String, dynamic> data, String key,
       {int defaultValue = 0}) {
     try {
-      Object value = data[key];
+      Object? value = data[key];
       if (value == null) return defaultValue;
       if (value is int) return value;
       if (value is double) return value.toInt();
       if (value is bool) return value ? 1 : 0;
       if (value is String) {
-        var temp = int.tryParse(value) ?? double.tryParse(value).toInt();
+        var temp = int.tryParse(value) ?? double.tryParse(value)!.toInt();
         if (temp == null) return defaultValue;
         return temp;
       }
@@ -30,7 +30,7 @@ class SafeManager {
   static double parseDouble(Map<String, dynamic> data, String key,
       {double defaultValue = 0.0}) {
     try {
-      Object value = data[key];
+      Object? value = data[key];
       if (value == null) return defaultValue;
       if (value is double) return value;
       if (value is int) return value.toDouble();
@@ -53,7 +53,7 @@ class SafeManager {
   static String parseString(Map<String, dynamic> data, String key,
       {String defaultValue = ""}) {
     try {
-      Object value = data[key];
+      Object? value = data[key];
       if (value == null) return defaultValue;
       if (value is String) return value;
       if (value is int) return value.toString();
@@ -72,7 +72,7 @@ class SafeManager {
   static bool parseBoolean(Map<String, dynamic> data, String key,
       {bool defaultValue = false}) {
     try {
-      Object value = data[key];
+      Object? value = data[key];
       if (value == null) return defaultValue;
       if (value is bool) return value;
       if (value is int) {
@@ -104,7 +104,7 @@ class SafeManager {
   /// @return 转换后的List类型 <br>
   static List parseList(Map<String, dynamic> data, String key) {
     try {
-      Object value = data[key];
+      Object? value = data[key];
       if (value == null) return [];
       if (value is List) return value;
       return [];
@@ -119,7 +119,7 @@ class SafeManager {
   /// @return 转换后的List<String>类型 <br>
   static List<String> parseStrList(Map<String, dynamic> data, String key) {
     try {
-      Object value = data[key];
+      Object? value = data[key];
       if (value == null) return [];
       if (value is List) {
         List<String> listArray = [];
@@ -142,7 +142,7 @@ class SafeManager {
   ///
   /// @param value ：待转换的类型 <br>
   /// @return 转换后的Object类型 <br>
-  static Map<String, dynamic> parseObject(
+  static Map<String, dynamic>? parseObject(
       Map<String, dynamic> data, String key) {
     try {
       var value = Map<String, dynamic>.from(data[key]);

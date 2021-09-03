@@ -1,15 +1,15 @@
 import 'package:screenshot_callback/screenshot_callback.dart';
 
 class ScreenshotManager {
-  static ScreenshotManager _instance;
+  static ScreenshotManager? _instance;
 
   factory ScreenshotManager() {
     if (_instance == null) _instance = ScreenshotManager._();
-    return _instance;
+    return _instance!;
   }
 
-  ScreenshotCallback screenshotCallback;
-  Function callback;
+  late ScreenshotCallback screenshotCallback;
+  Function? callback;
 
   ScreenshotManager._() {
     screenshotCallback = ScreenshotCallback();
@@ -18,7 +18,7 @@ class ScreenshotManager {
   void init() {
     screenshotCallback.addListener(
       () {
-        if (callback != null) callback();
+        if (callback != null) callback!();
       },
     );
   }

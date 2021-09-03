@@ -170,7 +170,7 @@ extension DateOption on DateTime {
     if (curTime <= 0) return "00:00:00";
     int hour = curTime ~/ 3600;
     int minutes = (curTime - hour * 3600) ~/ 60;
-    int seconds = curTime % 60;
+    int seconds = curTime % 60 as int;
     String hourValue;
     if (hour == 0) {
       hourValue = "00";

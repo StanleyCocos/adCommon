@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:ad_common/common/extension/int_extension.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 /*
 * 字符串常规操作
 * */
-extension StringOption on String {
+extension StringOption on String? {
   /*
   * 是否为null
   * */
@@ -16,7 +17,7 @@ extension StringOption on String {
   * */
   bool get isEmptyOrNull {
     if (isNull) return true;
-    if (this.isEmpty) return true;
+    if (this!.isEmpty) return true;
     return false;
   }
 
@@ -30,7 +31,7 @@ extension StringOption on String {
   * */
   String get enumRowValue {
     if (isEmptyOrNull) return "";
-    var array = split(".");
+    var array = this!.split(".");
     if (array.length == 2) {
       return array[1];
     }
@@ -40,9 +41,9 @@ extension StringOption on String {
   /*
   * 加千分号
   * */
-  String get formatNum {
+  String? get formatNum {
     if (isEmptyOrNull) return "";
-    List<String> numSub = split(".");
+    List<String> numSub = this!.split(".");
     try {
       int upValue = int.parse(numSub.first);
       String value = upValue.formatNum;
@@ -65,7 +66,7 @@ extension StringOption on String {
   * */
   String addEnd(String sub) {
     if (this.isEmptyOrNull) return sub.isEmptyOrNull ? "" : sub;
-    return this + sub;
+    return this! + sub;
   }
 
   /*
@@ -73,7 +74,7 @@ extension StringOption on String {
   * */
   String addStart(String sub) {
     if (this.isEmptyOrNull) return sub.isEmptyOrNull ? "" : sub;
-    return sub + this;
+    return sub + this!;
   }
 
   /*
@@ -81,12 +82,12 @@ extension StringOption on String {
   * - Parameter start: 起始位置
   * - Parameter end: 结束位置，默认是到字符串的末尾位置
   * */
-  String deleteRange(int start, {int end, bool}) {
+  String? deleteRange(int start, {int? end, bool}) {
     if (this.isEmptyOrNull) return "";
-    if (this.length <= start) return this;
-    if (end == null) end = this.length - 1;
-    if (this.length <= end) return this;
-    return this.replaceRange(start, end, "");
+    if (this!.length <= start) return this;
+    if (end == null) end = this!.length - 1;
+    if (this!.length <= end) return this;
+    return this!.replaceRange(start, end, "");
   }
 
   /*
@@ -94,13 +95,13 @@ extension StringOption on String {
   * - Parameter sub: 子字符串
   * - Parameter isAll: 是否删除查找到的所有子字符串
   * */
-  String deleteSub(String sub, {bool isAll = false}) {
+  String? deleteSub(String sub, {bool isAll = false}) {
     if (this.isEmptyOrNull) return "";
     if (sub.isEmptyOrNull) return this;
     if (isAll) {
-      return this.replaceAll(sub, "");
+      return this!.replaceAll(sub, "");
     }
-    return this.replaceFirst(sub, "");
+    return this!.replaceFirst(sub, "");
   }
 
   /*
@@ -109,11 +110,11 @@ extension StringOption on String {
   * - Parameter replace: 替换的子字符串
   * - Parameter isAll: 是否替换查找到的所有子字符串
   * */
-  String replaceSub(String from, String replace, {bool isAll = false}) {
+  String? replaceSub(String from, String replace, {bool isAll = false}) {
     if (from.isEmptyOrNull) return this;
     if (replace.length < 0) return this;
-    if (isAll) return this.replaceAll(from, replace);
-    return this.replaceFirst(from, replace);
+    if (isAll) return this!.replaceAll(from, replace);
+    return this!.replaceFirst(from, replace);
   }
 
   /*
@@ -122,7 +123,7 @@ extension StringOption on String {
   bool isContains(String sub) {
     if (this.isEmptyOrNull) return false;
     if (sub.isEmptyOrNull) return false;
-    return this.contains(sub);
+    return this!.contains(sub);
   }
 
   /*
@@ -131,7 +132,7 @@ extension StringOption on String {
   bool isStart(String sub) {
     if (this.isEmptyOrNull) return false;
     if (sub.isEmptyOrNull) return false;
-    return this.startsWith(sub);
+    return this!.startsWith(sub);
   }
 
   /*
@@ -140,7 +141,7 @@ extension StringOption on String {
   bool isEnd(String sub) {
     if (this.isEmptyOrNull) return false;
     if (sub.isEmptyOrNull) return false;
-    return this.endsWith(sub);
+    return this!.endsWith(sub);
   }
 
   /*
@@ -148,10 +149,10 @@ extension StringOption on String {
   * - Parameter start: 起始位置
   * - Parameter end: 截止位置 默认是到字符串的末尾位置
   * */
-  String sub(int start, {int end}) {
+  String sub(int start, {int? end}) {
     if (this.isEmptyOrNull) return "";
-    if (end == null) end = this.length - 1;
-    return this.substring(start, end);
+    if (end == null) end = this!.length - 1;
+    return this!.substring(start, end);
   }
 
   /*
@@ -179,10 +180,9 @@ extension StringOption on String {
   * 字符串转换为枚举类型
   * - Parameter values: 枚举值
   * */
-  T toEnum<T>(List<T> values) {
-    return values.firstWhere(
+  T? toEnum<T>(List<T> values) {
+    return values.firstWhereOrNull(
       (element) => element.toString().toLowerCase() == '$this'.toLowerCase(),
-      orElse: () => null,
     );
   }
 }

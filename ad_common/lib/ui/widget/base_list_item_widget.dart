@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 
 
-typedef ListItemCallback<T> = void Function(T model, int index);
+typedef ListItemCallback<T> = void Function(T model, int? index);
 
  class BaseListItemWidget<T> extends StatelessWidget {
-  final T model;
-  final int position;
-  final ListItemCallback<T> onClick;
-  Widget get content => null;
+  final T? model;
+  final int? position;
+  final ListItemCallback<T?>? onClick;
+  Widget? get content => null;
 
   BaseListItemWidget({
     this.onClick,
@@ -18,7 +18,7 @@ typedef ListItemCallback<T> = void Function(T model, int index);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> onClick(model, position),
+      onTap: ()=> onClick!(model, position),
       child: content,
     );
   }

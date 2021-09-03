@@ -6,7 +6,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 /// 球脉冲Footer
 class BallPulseFooter extends Footer {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 颜色
   final Color color;
@@ -39,7 +39,7 @@ class BallPulseFooter extends Footer {
       double loadIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteLoad,
       bool success,
       bool noMore) {
@@ -72,15 +72,15 @@ class BallPulseFooter extends Footer {
 /// 球脉冲组件
 class BallPulseFooterWidget extends StatefulWidget {
   /// 颜色
-  final Color color;
+  final Color? color;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
-  final LinkFooterNotifier linkNotifier;
+  final LinkFooterNotifier? linkNotifier;
 
   const BallPulseFooterWidget({
-    Key key,
+    Key? key,
     this.color,
     this.backgroundColor,
     this.linkNotifier,
@@ -93,14 +93,14 @@ class BallPulseFooterWidget extends StatefulWidget {
 }
 
 class BallPulseFooterWidgetState extends State<BallPulseFooterWidget> {
-  LoadMode get _refreshState => widget.linkNotifier.loadState;
+  LoadMode get _refreshState => widget.linkNotifier!.loadState;
 
-  double get _indicatorExtent => widget.linkNotifier.loadIndicatorExtent;
+  double get _indicatorExtent => widget.linkNotifier!.loadIndicatorExtent;
 
-  bool get _noMore => widget.linkNotifier.noMore;
+  bool get _noMore => widget.linkNotifier!.noMore;
 
   // 球大小
-  double _ballSize1, _ballSize2, _ballSize3;
+  double? _ballSize1, _ballSize2, _ballSize3;
 
   // 动画阶段
   int animationPhase = 1;

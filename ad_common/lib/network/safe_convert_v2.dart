@@ -1,5 +1,5 @@
 // ignore: missing_return
-T asT<T>(Map<String, dynamic> json, String key, {T defaultValue}) {
+T? asT<T>(Map<String, dynamic> json, String key, {T? defaultValue}) {
   dynamic value = json[key];
   if (value is T) return value;
 
@@ -8,10 +8,10 @@ T asT<T>(Map<String, dynamic> json, String key, {T defaultValue}) {
     if (value is double)
       return value.toInt() as T;
     else if (value is bool)
-      return value ? 1 : 0 as T;
+      return value ? 1 as T? : 0 as T;
     else if (value is String)
-      return int.tryParse(value) ??
-          double.tryParse(value)?.toInt() ??
+      return int.tryParse(value) as T? ??
+          double.tryParse(value)?.toInt() as T? ??
           defaultValue;
     else
       return defaultValue;
@@ -20,14 +20,14 @@ T asT<T>(Map<String, dynamic> json, String key, {T defaultValue}) {
     if (value is int)
       return value.toDouble() as T;
     else if (value is bool)
-      return value ? 1.0 : 0.0 as T;
+      return value ? 1.0 as T? : 0.0 as T;
     else if (value is String)
-      return double.tryParse(value) ?? defaultValue;
+      return double.tryParse(value) as T? ?? defaultValue;
     else
       return defaultValue;
   } else if ('' is T) {
     defaultValue = '' as T;
-    return value.toString() ?? defaultValue;
+    return (value.toString() ?? defaultValue) as T?;
   } else if (false is T) {
     defaultValue = false as T;
     String valueS = value.toString();
