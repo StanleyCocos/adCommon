@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:ad_common/ad_common.dart';
-import 'package:device_info/device_info.dart';
+import 'package:ad_common/common/extension/string_extension.dart';
+import 'package:crypto/crypto.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_keychain/flutter_keychain.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 ///app信息管理类
 class AppInfoManager {
@@ -12,31 +13,31 @@ class AppInfoManager {
   String get version => _version;
 
   /// 设备类型
-  String get mode => _mode;
+  String? get mode => _mode;
 
   /// 版本号
   String get versionCode => _versionCode;
 
   /// 唯一标识
-  String get imei => _imei;
+  String? get imei => _imei;
 
   ///设备标识
-  String get identifier => _identifier;
+  String? get identifier => _identifier;
 
   /// 设备系统版本
-  String get systemVersion => _systemVersion;
+  String? get systemVersion => _systemVersion;
 
-  factory AppInfoManager() => _getInstance();
+  factory AppInfoManager() => _getInstance()!;
 
-  static AppInfoManager get instance => _getInstance();
-  static AppInfoManager _instance;
+  static AppInfoManager? get instance => _getInstance();
+  static AppInfoManager? _instance;
   static const String IMEI_KEY = "designUUID";
 
   AppInfoManager._internal() {
     initInfo();
   }
 
-  static AppInfoManager _getInstance() {
+  static AppInfoManager? _getInstance() {
     if (_instance == null) {
       _instance = new AppInfoManager._internal();
     }
@@ -46,7 +47,7 @@ class AppInfoManager {
   Future<String> getImei() async {
     var content = await FlutterKeychain.get(key: IMEI_KEY);
     if (!content.isEmptyOrNull) {
-      content = content.replaceAll("\n", "");
+      content = content!.replaceAll("\n", "");
       return content.toLowerCase();
     }
     return "";
@@ -67,7 +68,7 @@ class AppInfoManager {
       _imei = await getImei();
       _identifier = iosInfo.identifierForVendor;
       if (_imei.isEmptyOrNull) {
-        _setImei(iosInfo.identifierForVendor);
+        _setImei(iosInfo.identifierForVendor!);
         _imei = iosInfo.identifierForVendor;
       }
       _systemVersion = iosInfo.systemVersion;
@@ -85,8 +86,8 @@ class AppInfoManager {
     }
   }
 
-  String generateUUID(String androidId) {
-    var androidId = Utf8Encoder().convert(_identifier);
+  String generateUUID(String? androidId) {
+    var androidId = Utf8Encoder().convert(_identifier!);
     String uuid = md5.convert(androidId).toString();
     if (uuid.length != 32) return "";
     StringBuffer sb = StringBuffer();
@@ -107,22 +108,22 @@ class AppInfoManager {
         " version_code/$versionCode" +
         " clients/${Platform.isIOS ? "iOS" : "Android"}" +
         " imei/$imei" +
-        " model/${mode.replaceAll(" ", "-").toLowerCase()}" +
-        " system/${_systemVersion.replaceAll(" ", "-")}" +
+        " model/${mode!.replaceAll(" ", "-").toLowerCase()}" +
+        " system/${_systemVersion!.replaceAll(" ", "-")}" +
         " framework/flutter" +
         " image/webp";
   }
 
-  String _mode = "";
+  String? _mode = "";
   String _version = "";
   String _versionCode = "";
-  String _imei = "";
-  String _identifier = "";
-  String _systemVersion = "";
+  String? _imei = "";
+  String? _identifier = "";
+  String? _systemVersion = "";
 }
 
 class DeviceMode {
-  static String transform(String mode) {
+  static String? transform(String? mode) {
     if (Platform.isIOS) {
       switch (mode) {
         case "iPhone4,1":

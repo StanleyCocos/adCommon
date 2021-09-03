@@ -1,5 +1,8 @@
-import 'package:ad_common/ad_common.dart';
+import 'package:ad_common/common/extension/list_extension.dart';
+import 'package:ad_common/common/extension/string_extension.dart';
 import 'package:ad_common/network/http_request.dart';
+import 'package:ad_common/network/http_request_setting.dart';
+import 'package:ad_common/network/log_interceptor.dart';
 import 'package:ad_common/network/test_interceptor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +11,7 @@ import 'test_Interceptor.dart';
 void main() {
   test('isEmptyOrNull', () {
     String value = '';
-    List temp;
+    List? temp;
     print('test value isEmpty=${value.isEmptyOrNull}');
     print('test temp isEmpty=${temp.isEmptyOrNull}');
     print('test temp isEmpty=${temp?.isEmptyOrNull}');
@@ -31,7 +34,7 @@ void main() {
 
     String url = 'https://m.debug.8591.com.hk/node/mall/detail';
     var param = {'id': 3982052};
-    HttpRequest.getInstance().get(
+    HttpRequest.getInstance()!.get(
       url,
       params: param,
       callBack: (data) {

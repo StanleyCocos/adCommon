@@ -13,10 +13,10 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
         BaseControllerLifeCycle,
         BaseControllerCommonMethod {
   /// 模型 数据提供
-  T model;
+  T? model;
 
   /// 当前页面上下文
-  BuildContext context;
+  BuildContext? context;
 
   /// 是否加载中
   @override
@@ -95,8 +95,8 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
   }
 
   /// 获取页面间传递的参数
-  Object getArgument(Object key, {Object defaultValue}) {
-    final arguments = RouteManager().currentRoute.settings.arguments;
+  Object? getArgument(Object key, {Object? defaultValue}) {
+    final arguments = RouteManager().currentRoute!.settings.arguments;
     if (arguments == null) return defaultValue;
     if (arguments is Map) {
       final value = arguments[key];
@@ -108,9 +108,9 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
 }
 
 extension PageJump on BaseController {
-  Future<Object> push(
+  Future<Object?> push(
     Widget page, {
-    Object arguments,
+    Object? arguments,
     bool isReplace = false,
     PageTransitionType type = PageTransitionType.right,
   }) {
@@ -119,7 +119,7 @@ extension PageJump on BaseController {
         .pushRoute(route, arguments: arguments, isReplace: isReplace);
   }
 
-  void pop<T>({type, T result}) {
+  void pop<T>({type, T? result}) {
     return RouteManager().pop(type: type, result: result);
   }
 }
@@ -155,13 +155,13 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   Future<void> loadListData() async {
     loadBegin(isRefresh: true);
     _setPageParams();
-    await HttpRequest.getInstance().get(
+    await HttpRequest.getInstance()!.get(
       loadApi,
       params: params,
       options: _requestOptions,
       callBack: (data) {
         isLoadError = false;
-        final tempData = this.data;
+        final B tempData = this.data;
         tempData.initJsonData(data);
         try {
           // 由于切换不同状态时 可能会把refresh视图干掉 这时这里会报异常
@@ -189,13 +189,13 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   Future<void> loadListDataMore() async {
     loadBegin(isRefresh: false);
     _setPageParams(isMore: true);
-    await HttpRequest.getInstance().get(
+    await HttpRequest.getInstance()!.get(
       loadApi,
       params: params,
       options: _requestOptions,
       callBack: (data) {
         loadPage += 1;
-        final tempData = this.data;
+        final B tempData = this.data;
         tempData.initJsonData(data);
         refreshController.finishLoad(noMore: tempData.listData.isEmpty);
         loadSuccess(tempData);
@@ -215,7 +215,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   void loadSuccess(B data, {bool isRefresh = false}) {}
 
   /// 请求失败回调
-  void loadError(DioError error, {bool isRefresh = false}) {}
+  void loadError(DioError? error, {bool isRefresh = false}) {}
 
   /// 请求始终回调
   void loadCommon({bool isRefresh = false}) {}

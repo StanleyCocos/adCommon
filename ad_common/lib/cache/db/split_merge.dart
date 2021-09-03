@@ -6,19 +6,19 @@ class ColumnSplitMerge {
   static String combine(BaseColumn column, {String key = ""}) {
     switch (column.type) {
       case "text":
-        return "$key ${_combineText(column)}";
+        return "$key ${_combineText(column as STText)}";
       case "enum":
-        return "$key ${_combineEnum(column)}";
+        return "$key ${_combineEnum(column as STEnum)}";
       case "set":
-        return "$key ${_combineSet(column)}";
+        return "$key ${_combineSet(column as STSet)}";
       case "integer":
-        return "$key ${_combineInt(column)}";
+        return "$key ${_combineInt(column as STInt)}";
       case "double":
-        return "$key ${_combineDouble(column)}";
+        return "$key ${_combineDouble(column as STDouble)}";
       case "datetime":
-        return "$key ${_combineDatetime(column)}";
+        return "$key ${_combineDatetime(column as STDatetime)}";
       case "timestamp":
-        return "$key ${_combineTimestamp(column)}";
+        return "$key ${_combineTimestamp(column as STTimestamp)}";
     }
     return "";
   }

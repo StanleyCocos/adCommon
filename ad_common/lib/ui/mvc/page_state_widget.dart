@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 abstract class BasePageStateWidget extends StatelessWidget {
-  final Function onRetry;
+  final Function? onRetry;
   final String text;
-  final Widget image;
+  final Widget? image;
 
   BasePageStateWidget({
     this.onRetry,
@@ -24,7 +24,7 @@ abstract class BasePageStateWidget extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       child: InkWell(
-        onTap: () => onRetry(),
+        onTap: () => onRetry!(),
         child: CommonStatePage(
           image: image,
           text: text,
@@ -37,7 +37,7 @@ abstract class BasePageStateWidget extends StatelessWidget {
 /// 网络错误
 class PageStateNetWorkError extends BasePageStateWidget {
   PageStateNetWorkError(
-      {String text, Function onRetry, Object image, String path})
+      {String? text, Function? onRetry, Object? image, String? path})
       : super(
           onRetry: onRetry,
           text: text ?? "網路不順，請檢查後再重試",
@@ -55,7 +55,7 @@ class PageStateNetWorkError extends BasePageStateWidget {
 /// 请求错误
 class PageStateRequestError extends BasePageStateWidget {
   PageStateRequestError(
-      {String text, Function onRetry, Object image, String path})
+      {String? text, Function? onRetry, Object? image, String? path})
       : super(
           onRetry: onRetry,
           text: text ?? "請求錯誤，請重試",
@@ -71,7 +71,7 @@ class PageStateRequestError extends BasePageStateWidget {
 
 /// 空页面
 class PageStateEmpty extends BasePageStateWidget {
-  PageStateEmpty({String text, Function onRetry, Object image, String path})
+  PageStateEmpty({String? text, Function? onRetry, Object? image, String? path})
       : super(
           onRetry: onRetry,
           text: text ?? "暫無數據",

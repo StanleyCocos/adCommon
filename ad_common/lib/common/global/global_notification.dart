@@ -7,12 +7,12 @@ typedef void NotificationCallback(arg);
 
 /// 广播管理
 class NotificationManager {
-  factory NotificationManager() => _getInstance();
-  static NotificationManager get instance => _getInstance();
-  static NotificationManager _instance;
+  factory NotificationManager() => _getInstance()!;
+  static NotificationManager? get instance => _getInstance();
+  static NotificationManager? _instance;
   NotificationManager._internal();
 
-  static NotificationManager _getInstance() {
+  static NotificationManager? _getInstance() {
     if (_instance == null)_instance = new NotificationManager._internal();
     return _instance;
   }
@@ -21,18 +21,18 @@ class NotificationManager {
   var _notificationQueue = new Map<Object, List<NotificationObject>>();
 
   /// 添加订阅者
-  void add({Object name, Object bindObj,  NotificationCallback callback}) {
+  void add({Object? name, Object? bindObj,  NotificationCallback? callback}) {
     if (name == null || callback == null || bindObj == null) return;
     if(_containsObj(name, bindObj) == -1){
       // 不存在 添加(防止重复添加)
       NotificationObject object = NotificationObject(object: bindObj, callback: callback);
       _notificationQueue[name.toString()] ??= [];
-      _notificationQueue[name.toString()].add(object);
+      _notificationQueue[name.toString()]!.add(object);
     }
   }
 
   /// 移除订阅者
-  void remove({Object name, Object bindObj}) {
+  void remove({Object? name, Object? bindObj}) {
     if (bindObj == null || name == null) return;
     var list = _notificationQueue[name.toString()];
     if (name.toString() == null || list == null) return;
@@ -50,11 +50,11 @@ class NotificationManager {
   }
 
   /// 触发事件，事件触发后该事件所有订阅者会被调用
-  void send({Object name, arg}) {
+  void send({Object? name, arg}) {
     var list = _notificationQueue[name.toString()];
     if (list == null) return;
     list.forEach((element) {
-      element.callback(arg);
+      element.callback!(arg);
     });
   }
 
@@ -77,7 +77,7 @@ class NotificationManager {
 }
 
 class NotificationObject {
-  Object object;
-  NotificationCallback callback;
+  Object? object;
+  NotificationCallback? callback;
   NotificationObject({this.object, this.callback});
 }

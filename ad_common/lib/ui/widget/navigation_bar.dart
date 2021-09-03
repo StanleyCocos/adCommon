@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 const double kToolbarHeight = 50.0;
-const double _kLeadingWidth = kToolbarHeight; // So the leading button is square.
+const double _kLeadingWidth =
+    kToolbarHeight; // So the leading button is square.
 
 // Bottom justify the kToolbarHeight child which may overflow the top.
 class _ToolbarContainerLayout extends SingleChildLayoutDelegate {
@@ -37,7 +38,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   /// Typically used in the [Scaffold.appBar] property.
   NavigationBar({
-    Key key,
+    Key? key,
     this.leading,
     this.leadingConstrained = true,
     this.automaticallyImplyLeading = true,
@@ -56,13 +57,9 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
     this.titleSpacing = NavigationToolbar.kMiddleSpacing,
     this.toolbarOpacity = 1.0,
     this.bottomOpacity = 1.0,
-  })  : assert(automaticallyImplyLeading != null),
-        assert(elevation == null || elevation >= 0.0),
-        assert(primary != null),
-        assert(titleSpacing != null),
-        assert(toolbarOpacity != null),
-        assert(bottomOpacity != null),
-        preferredSize = Size.fromHeight(kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
+  })  : assert(elevation == null || elevation >= 0.0),
+        preferredSize = Size.fromHeight(
+            kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
         super(key: key);
 
   /// A widget to display before the [title].
@@ -110,7 +107,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   ///
   ///  * [Scaffold.appBar], in which an [AppBar] is usually placed.
   ///  * [Scaffold.drawer], in which the [Drawer] is usually placed.
-  final Widget leading;
+  final Widget? leading;
 
   final bool leadingConstrained;
 
@@ -129,13 +126,13 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   /// situations.
   ///
   /// Defaults to null.
-  final VoidCallback onBackTap;
+  final VoidCallback? onBackTap;
 
-  final String title;
-  final TextStyle style;
+  final String? title;
+  final TextStyle? style;
 
   /// Widget to replace Text to be displayed.
-  final Widget middle;
+  final Widget? middle;
 
   /// Widgets to display in a row after the [title] widget.
   ///
@@ -146,7 +143,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   /// The [actions] become the trailing component of the [NavigationToolBar] built
   /// by this widget. The height of each action is constrained to be no bigger
   /// than the toolbar's height, which is [kToolbarHeight].
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   /// This widget is stacked behind the toolbar and the tab bar. It's height will
   /// be the same as the app bar's overall height.
@@ -156,7 +153,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   /// changes the [AppBar]'s height when scrolled.
   ///
   /// Typically a [FlexibleSpaceBar]. See [FlexibleSpaceBar] for details.
-  final Widget flexibleSpace;
+  final Widget? flexibleSpace;
 
   /// This widget appears across the bottom of the app bar.
   ///
@@ -166,7 +163,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   /// See also:
   ///
   ///  * [PreferredSize], which can be used to give an arbitrary widget a preferred size.
-  final PreferredSizeWidget bottom;
+  final PreferredSizeWidget? bottom;
 
   /// The z-coordinate at which to place this app bar relative to its parent.
   ///
@@ -177,27 +174,27 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   /// If this property is null, then [ThemeData.appBarTheme.elevation] is used,
   /// if that is also null, the default value is 4, the appropriate elevation
   /// for app bars.
-  final double elevation;
+  final double? elevation;
 
   /// The material's shape as well its shadow.
   ///
   /// A shadow is only displayed if the [elevation] is greater than
   /// zero.
-  final ShapeBorder shape;
+  final ShapeBorder? shape;
 
   /// The color to use for the app bar's material. Typically this should be set
   /// along with [brightness], [iconTheme], [textTheme].
   ///
   /// If this property is null, then [ThemeData.appBarTheme.color] is used,
   /// if that is also null, then [ThemeData.primaryColor] is used.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// The brightness of the app bar's material. Typically this is set along
   /// with [backgroundColor], [iconTheme], [textTheme].
   ///
   /// If this property is null, then [ThemeData.appBarTheme.brightness] is used,
   /// if that is also null, then [ThemeData.primaryColorBrightness] is used.
-  final Brightness brightness;
+  final Brightness? brightness;
 
   /// Whether this app bar is being displayed at the top of the screen.
   ///
@@ -256,27 +253,40 @@ class _NavigationBarState extends State<NavigationBar> {
     assert(!widget.primary || debugCheckHasMediaQuery(context));
     assert(debugCheckHasMaterialLocalizations(context));
     final ScaffoldState scaffold = Scaffold.of(context);
-    final ModalRoute<dynamic> parentRoute = ModalRoute.of(context);
+    final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
 
-    final bool hasDrawer = scaffold?.hasDrawer ?? false;
-    final bool hasEndDrawer = scaffold?.hasEndDrawer ?? false;
+    final bool hasDrawer = scaffold.hasDrawer;
+    final bool hasEndDrawer = scaffold.hasEndDrawer;
     final bool canPop = parentRoute?.canPop ?? false;
-    final bool useCloseButton = parentRoute is PageRoute<dynamic> && parentRoute.fullscreenDialog;
+    final bool useCloseButton =
+        parentRoute is PageRoute<dynamic> && parentRoute.fullscreenDialog;
 
-    IconThemeData overallIconTheme = IconThemeData(color: Colors.black, opacity: 1, size: 16);
-    IconThemeData actionsIconTheme = IconThemeData(color: Colors.black, opacity: 1, size: 16);
-    TextStyle centerStyle = widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
-    TextStyle sideStyle = widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
+    IconThemeData overallIconTheme =
+        IconThemeData(color: Colors.black, opacity: 1, size: 16);
+    IconThemeData actionsIconTheme =
+        IconThemeData(color: Colors.black, opacity: 1, size: 16);
+    TextStyle centerStyle =
+        widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
+    TextStyle sideStyle =
+        widget.style ?? TextStyle(color: Colors.black, fontSize: 18);
 
     if (widget.toolbarOpacity != 1.0) {
-      final double opacity = const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn).transform(widget.toolbarOpacity);
-      if (centerStyle?.color != null) centerStyle = centerStyle.copyWith(color: centerStyle.color.withOpacity(opacity));
-      if (sideStyle?.color != null) sideStyle = sideStyle.copyWith(color: sideStyle.color.withOpacity(opacity));
-      overallIconTheme = overallIconTheme.copyWith(opacity: opacity * (overallIconTheme.opacity ?? 1.0));
-      actionsIconTheme = actionsIconTheme.copyWith(opacity: opacity * (actionsIconTheme.opacity ?? 1.0));
+      final double opacity =
+          const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn)
+              .transform(widget.toolbarOpacity);
+      if (centerStyle.color != null)
+        centerStyle = centerStyle.copyWith(
+            color: centerStyle.color!.withOpacity(opacity));
+      if (sideStyle.color != null)
+        sideStyle =
+            sideStyle.copyWith(color: sideStyle.color!.withOpacity(opacity));
+      overallIconTheme = overallIconTheme.copyWith(
+          opacity: opacity * (overallIconTheme.opacity ?? 1.0));
+      actionsIconTheme = actionsIconTheme.copyWith(
+          opacity: opacity * (actionsIconTheme.opacity ?? 1.0));
     }
 
-    Widget leading = widget.leading;
+    Widget? leading = widget.leading;
     if (leading == null && widget.automaticallyImplyLeading) {
       if (hasDrawer) {
         leading = IconButton(
@@ -289,11 +299,14 @@ class _NavigationBarState extends State<NavigationBar> {
           leading = useCloseButton
               ? const CloseButton()
               : IconButton(
-                  icon: ImageIcon(AssetImage("assets/icon_arrow_left.png", package: 'ad_common'),
-                      color: ColorManager.gray33, size: 20),
+                  icon: ImageIcon(
+                      AssetImage("assets/icon_arrow_left.png",
+                          package: 'ad_common'),
+                      color: ColorManager.gray33,
+                      size: 20),
                   onPressed: () {
                     if (widget.onBackTap != null) {
-                      widget.onBackTap();
+                      widget.onBackTap!();
                     } else {
                       Navigator.maybePop(context);
                     }
@@ -310,25 +323,23 @@ class _NavigationBarState extends State<NavigationBar> {
           : leading;
     }
 
-    Widget title = Text(widget.title ?? "");
-    if (title != null) {
-      title = DefaultTextStyle(
-        style: centerStyle,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-        child: title,
-      );
-    }
+    Widget? title = Text(widget.title ?? "");
+    title = DefaultTextStyle(
+      style: centerStyle,
+      softWrap: false,
+      overflow: TextOverflow.ellipsis,
+      child: title,
+    );
     if (widget.middle != null) {
       title = widget.middle;
     }
 
-    Widget actions;
-    if (widget.actions != null && widget.actions.isNotEmpty) {
+    Widget? actions;
+    if (widget.actions != null && widget.actions!.isNotEmpty) {
       actions = Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: widget.actions,
+        children: widget.actions!,
       );
     } else if (hasEndDrawer) {
       actions = IconButton(
@@ -379,9 +390,11 @@ class _NavigationBarState extends State<NavigationBar> {
             ),
           ),
           widget.bottomOpacity == 1.0
-              ? widget.bottom
+              ? widget.bottom!
               : Opacity(
-                  opacity: const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn).transform(widget.bottomOpacity),
+                  opacity:
+                      const Interval(0.25, 1.0, curve: Curves.fastOutSlowIn)
+                          .transform(widget.bottomOpacity),
                   child: widget.bottom,
                 ),
         ],
@@ -406,14 +419,15 @@ class _NavigationBarState extends State<NavigationBar> {
       appBar = Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
-          widget.flexibleSpace,
+          widget.flexibleSpace!,
           appBar,
         ],
       );
     }
     final Brightness brightness = widget.brightness ?? Brightness.dark;
-    final SystemUiOverlayStyle overlayStyle =
-        brightness == Brightness.light ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark;
+    final SystemUiOverlayStyle overlayStyle = brightness == Brightness.light
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
 
     return Semantics(
       container: true,

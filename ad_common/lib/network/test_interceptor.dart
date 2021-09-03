@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:crypto/crypto.dart';
-import 'package:ad_common/ad_common.dart';
+
+import 'package:ad_common/common/global/app_info.dart';
+import 'package:dio/dio.dart';
+
+import 'http_request.dart';
 
 class ApiTestInterceptor extends InterceptorsWrapper {
   String get baseUrl => "http://101.133.142.11:8080";
@@ -35,18 +38,18 @@ class ApiTestInterceptor extends InterceptorsWrapper {
   }
 
   void uploadToApiTest({
-    String url,
-    String method,
-    Map<String, dynamic> params,
-    Map<String, dynamic> header,
-    int responseCode,
+    required String url,
+    String? method,
+    Map<String, dynamic>? params,
+    Map<String, dynamic>? header,
+    int? responseCode,
     dynamic responseBody,
   }) {
     if (url.startsWith(baseUrl)) return;
 
     // 将header转化为json可解析类型
     Map<String, dynamic> headerMap = {};
-    header.forEach((key, value) {
+    header!.forEach((key, value) {
       headerMap[key] = value.toString();
     });
 
@@ -59,7 +62,7 @@ class ApiTestInterceptor extends InterceptorsWrapper {
       responseBodyStr = jsonEncode(responseBody);
     } catch (JsonUnsupportedObjectError) {}
 
-    HttpRequest.getInstance().post(
+    HttpRequest.getInstance()!.post(
       "$baseUrl$uploadUrl",
       params: {
         "url": url,

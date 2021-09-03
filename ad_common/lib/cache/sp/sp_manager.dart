@@ -6,7 +6,7 @@ import 'package:ad_common/common/extension/string_extension.dart';
 /// 偏好设置存储管理类
 class SpManager {
   static Lock _lock = Lock();
-  static SharedPreferences _sharedPreferences;
+  static SharedPreferences? _sharedPreferences;
 
   /// 不同环境存储不同字段
   static bool _isDebug = false;
@@ -69,7 +69,7 @@ class SpManager {
     }
   }
 
-  static List<String> getStringList(name) {
+  static List<String>? getStringList(name) {
     if (name is String && name.isNull) return [];
     try {
       return _sharedPreferences?.getStringList(_realName(name));

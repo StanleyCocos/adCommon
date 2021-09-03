@@ -1,5 +1,5 @@
 
-import 'package:ad_common/ad_common.dart';
+import 'package:ad_common/ui/util/color_manager.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -18,22 +18,22 @@ class OwnEasyRefresh extends StatelessWidget {
   final bool bottomBouncing;
 
   /// 控制器
-  final EasyRefreshController controller;
+  final EasyRefreshController? controller;
 
   /// 刷新回调(null为不开启刷新)
-  final Function onRefresh;
+  final Function? onRefresh;
 
   /// 加载回调(null为不开启加载)
-  final Function onLoad;
+  final Function? onLoad;
 
   /// 子组件
   final Widget child;
 
   /// Header
-  final Header header;
+  final Header? header;
 
   /// Footer
-  final Footer footer;
+  final Footer? footer;
 
   /// 默认构造器
   /// 将child转换为CustomScrollView可用的slivers
@@ -48,7 +48,7 @@ class OwnEasyRefresh extends StatelessWidget {
     this.onLoad,
     this.header,
     this.footer,
-    @required this.child,
+    required this.child,
   });
 
   @override
@@ -71,12 +71,12 @@ class OwnEasyRefresh extends StatelessWidget {
       onRefresh: onRefresh == null
           ? null
           : () async {
-              onRefresh();
+              onRefresh!();
             },
       onLoad: onLoad == null
           ? null
           : () async {
-              onLoad();
+              onLoad!();
             },
       child: child,
     );

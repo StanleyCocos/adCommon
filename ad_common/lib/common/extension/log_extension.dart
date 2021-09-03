@@ -3,7 +3,7 @@ import 'package:ad_common/common/extension/date_extension.dart';
 
 const bool isDebug = !kReleaseMode;
 
-stLog(Object message, {StackTrace current}) {
+stLog(Object message, {StackTrace? current}) {
   if (isDebug) {
     if (current != null) {
       HYCustomTrace programInfo = HYCustomTrace(current);
@@ -18,9 +18,9 @@ stLog(Object message, {StackTrace current}) {
 class HYCustomTrace {
   final StackTrace _trace;
 
-  String fileName;
-  int lineNumber;
-  int columnNumber;
+  String? fileName;
+  int? lineNumber;
+  int? columnNumber;
 
   HYCustomTrace(this._trace) {
     _parseTrace();
