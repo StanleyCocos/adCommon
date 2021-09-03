@@ -330,7 +330,7 @@ class HttpRequest {
       switch (method) {
         case GET:
           // 组合GET请求的参数
-          if (newParams != null && newParams.isNotEmpty) {
+          if (newParams.isNotEmpty) {
             response = await _client!.get(
               url,
               options: options,
@@ -346,7 +346,7 @@ class HttpRequest {
           }
           break;
         case POST:
-          if (newParams != null && newParams.isNotEmpty) {
+          if (newParams.isNotEmpty) {
             response = await _client!.post(
               url,
               data: newParams,
@@ -371,7 +371,7 @@ class HttpRequest {
           }
           break;
         case DELETE:
-          if (newParams != null && newParams.isNotEmpty) {
+          if (newParams.isNotEmpty) {
             response = await _client!.delete(
               url,
               options: options,
@@ -387,7 +387,7 @@ class HttpRequest {
           }
           break;
         case PUT:
-          if (newParams != null && newParams.isNotEmpty) {
+          if (newParams.isNotEmpty) {
             response = await _client!.put(
               url,
               options: options,
@@ -403,7 +403,7 @@ class HttpRequest {
           }
           break;
         case PATCH:
-          if (newParams != null && newParams.isNotEmpty) {
+          if (newParams.isNotEmpty) {
             response = await _client!.patch(
               url,
               options: options,
@@ -427,11 +427,11 @@ class HttpRequest {
         callBack(response.data);
       }
       Map<String, dynamic> tempHeader = {};
-      if (_client?.options?.headers != null &&
+      if (_client?.options.headers != null &&
           _client!.options.headers.length > 0) {
         tempHeader.addAll(_client!.options.headers);
       }
-      if (options?.headers != null && options.headers!.length > 0) {
+      if (options.headers != null && options.headers!.length > 0) {
         tempHeader.addAll(options.headers!);
       }
       // 请求成功返回 true
@@ -483,12 +483,12 @@ class HttpRequest {
 
     // 是否显示错误提示
     bool singleShowErrorToast =
-        error!.requestOptions.extra[singleShowErrorToastKey] ?? false;
+        error?.requestOptions.extra[singleShowErrorToastKey] ?? false;
     if (errorCallback != null) {
       if (error?.response?.statusCode == null) {
         errorCallback(error, 0);
       } else {
-        errorCallback(error, error.response!.statusCode);
+        errorCallback(error, error?.response?.statusCode);
       }
     } else if (singleShowErrorToast) {
       ToastManager.show(errorOutput);

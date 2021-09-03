@@ -26,8 +26,7 @@ T? asT<T>(Map<String, dynamic> json, String key, {T? defaultValue}) {
     else
       return defaultValue;
   } else if ('' is T) {
-    defaultValue = '' as T;
-    return (value.toString() ?? defaultValue) as T?;
+    return value.toString() as T;
   } else if (false is T) {
     defaultValue = false as T;
     String valueS = value.toString();

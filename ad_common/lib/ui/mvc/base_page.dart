@@ -49,12 +49,10 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
       case PageStateType.empty:
         return empty;
     }
-    return content;
   }
 
   @override
   Widget get empty => PageStateEmpty(onRetry: controller!.loadRetry);
-
 
   @override
   Widget get error {
@@ -136,7 +134,6 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
       case PageStateType.loading:
         return load;
     }
-    return content;
   }
 
   @override

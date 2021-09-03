@@ -63,7 +63,7 @@ class ColumnSplitMerge {
   }
 
   static String _toString(List<String> list){
-    if(list == null || list.length <= 0) return "";
+    if(list.length <= 0) return "";
     var values = "";
     list.forEach((element) {
       values += values.length > 0 ? ",'$element'" : "'$element'";

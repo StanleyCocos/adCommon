@@ -54,14 +54,15 @@ class RouteManager extends NavigatorObserver {
     bool isRemoveUntil = false,
   }) {
     if (isRemoveUntil) {
-     return navigator!.pushNamedAndRemoveUntil(routeName.toString(), (route) => false,
+      return navigator!.pushNamedAndRemoveUntil(
+          routeName.toString(), (route) => false,
           arguments: arguments ?? "");
     } else if (isReplace) {
       return navigator!.pushReplacementNamed(routeName.toString(),
           arguments: arguments ?? "");
     } else {
-      return navigator!.pushNamed(routeName.toString(),
-          arguments: arguments ?? "");
+      return navigator!
+          .pushNamed(routeName.toString(), arguments: arguments ?? "");
     }
   }
 
@@ -73,7 +74,8 @@ class RouteManager extends NavigatorObserver {
     bool isRemoveUntil = false,
   }) {
     if (isRemoveUntil) {
-      return navigator!.pushAndRemoveUntil(route as Route<Object>, (route) => false);
+      return navigator!
+          .pushAndRemoveUntil(route as Route<Object>, (route) => false);
     } else if (isReplace) {
       return navigator!.pushReplacement(route as Route<Object>);
     } else {
@@ -174,13 +176,6 @@ class RouteManager extends NavigatorObserver {
           ),
         );
     }
-    return MaterialPageRoute(
-      builder: (context) => page!,
-      settings: RouteSettings(
-        name: page.runtimeType.toString(),
-        arguments: arguments,
-      ),
-    );
   }
 
   bool isCurrentRoute(String pageType) {
@@ -219,7 +214,8 @@ class RouteManager extends NavigatorObserver {
   }
 
   @override
-  void didStartUserGesture(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didStartUserGesture(
+      Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didStartUserGesture(route, previousRoute);
     PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didStartUserGesture(route, previousRoute));

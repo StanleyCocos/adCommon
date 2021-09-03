@@ -59,7 +59,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
     this.bottomOpacity = 1.0,
   })  : assert(elevation == null || elevation >= 0.0),
         preferredSize = Size.fromHeight(
-            kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
+            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
         super(key: key);
 
   /// A widget to display before the [title].

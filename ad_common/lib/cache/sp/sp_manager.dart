@@ -79,27 +79,27 @@ class SpManager {
   }
 
   static void setBool(name, bool value) {
-    if ((name is String && name.isNull) || value == null) return;
+    if ((name is String && name.isNull)) return;
     _sharedPreferences?.setBool(_realName(name), value);
   }
 
   static void setInt(name, int value) {
-    if ((name is String && name.isNull) || value == null) return;
+    if ((name is String && name.isNull)) return;
     _sharedPreferences?.setInt(_realName(name), value);
   }
 
   static void setDouble(name, double value) {
-    if ((name is String && name.isNull) || value == null) return;
+    if ((name is String && name.isNull)) return;
     _sharedPreferences?.setDouble(_realName(name), value);
   }
 
   static void setString(name, String value) {
-    if ((name is String && name.isNull) || value == null) return;
+    if ((name is String && name.isNull)) return;
     _sharedPreferences?.setString(_realName(name), value);
   }
 
   static void setStringList(name, List<String> value) {
-    if ((name is String && name.isNull) || value == null) return;
+    if ((name is String && name.isNull)) return;
     _sharedPreferences?.setStringList(_realName(name), value);
   }
 

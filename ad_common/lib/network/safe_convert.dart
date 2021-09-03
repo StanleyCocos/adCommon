@@ -13,9 +13,7 @@ class SafeManager {
       if (value is double) return value.toInt();
       if (value is bool) return value ? 1 : 0;
       if (value is String) {
-        var temp = int.tryParse(value) ?? double.tryParse(value)!.toInt();
-        if (temp == null) return defaultValue;
-        return temp;
+        return int.tryParse(value) ?? double.tryParse(value)!.toInt();
       }
       return defaultValue;
     } catch (error) {
@@ -146,7 +144,6 @@ class SafeManager {
       Map<String, dynamic> data, String key) {
     try {
       var value = Map<String, dynamic>.from(data[key]);
-      if (value == null) return null;
       if (value is String) return null;
       if (value is int) return null;
       if (value is bool) return null;
@@ -165,7 +162,6 @@ class SafeManager {
   static Map<String, dynamic> parseMap(Map<String, dynamic> data, String key) {
     try {
       var value = Map<String, dynamic>.from(data[key]);
-      if (value == null) return {};
       if (value is String) return {};
       if (value is int) return {};
       if (value is bool) return {};

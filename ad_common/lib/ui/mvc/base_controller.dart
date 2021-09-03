@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+
 import 'base_model.dart';
 
 abstract class BaseController<T extends BaseModel> extends ChangeNotifier
@@ -114,7 +115,8 @@ extension PageJump on BaseController {
     bool isReplace = false,
     PageTransitionType type = PageTransitionType.right,
   }) {
-    var route = RouteManager().routeBuild(page: page, type: type, arguments: arguments);
+    var route =
+        RouteManager().routeBuild(page: page, type: type, arguments: arguments);
     return RouteManager()
         .pushRoute(route, arguments: arguments, isReplace: isReplace);
   }
@@ -225,7 +227,6 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
 
   /// 添加参数
   void addParams(Map<String, Object> params) {
-    if (params == null) return;
     this.params.clear();
     this.params.addAll(params);
   }
