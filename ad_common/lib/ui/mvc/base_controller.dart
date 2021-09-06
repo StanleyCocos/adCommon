@@ -1,3 +1,4 @@
+import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/http_request.dart';
 import 'package:ad_common/ui/route/animation.dart';
 import 'package:ad_common/ui/route/route.dart';
@@ -104,6 +105,7 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
       if (value == null) return defaultValue;
       return arguments[key];
     }
+    if (defaultValue == null) return asObject<T>();
     return defaultValue;
   }
 }
