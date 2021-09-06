@@ -11,25 +11,25 @@ import 'base_controller.dart';
 
 abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
     extends State<T> implements PageInterface {
-  C? controller;
+  late C controller;
 
   @override
   void initState() {
-    controller!.initLoad();
+    controller.initLoad();
     WidgetsBinding.instance!
-        .addPostFrameCallback((_) => controller!.widgetDidLoad());
+        .addPostFrameCallback((_) => controller.widgetDidLoad());
     super.initState();
   }
 
   @override
   void dispose() {
-    controller!.widgetDispose();
+    controller.widgetDispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    controller!.context = context;
+    controller.context = context;
     return renderLayout();
   }
 
@@ -38,7 +38,7 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
   }
 
   Widget get statePage {
-    final state = controller!.switchState();
+    final state = controller.switchState();
     switch (state) {
       case PageStateType.content:
         return content;
@@ -52,17 +52,17 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
   }
 
   @override
-  Widget get empty => PageStateEmpty(onRetry: controller!.loadRetry);
+  Widget get empty => PageStateEmpty(onRetry: controller.loadRetry);
 
   @override
   Widget get error {
     if (NetworkState().state == ConnectivityResult.none) {
       return PageStateNetWorkError(
-        onRetry: controller!.loadRetry,
+        onRetry: controller.loadRetry,
       );
     } else {
       return PageStateRequestError(
-        onRetry: controller!.loadRetry,
+        onRetry: controller.loadRetry,
       );
     }
   }
@@ -104,11 +104,11 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
 // ignore: must_be_immutable
 abstract class BasePage<T extends BaseController> extends StatelessWidget
     implements PageInterface {
-  T? controller;
+  late T controller;
 
   @override
   Widget build(BuildContext context) {
-    controller!.context = context;
+    controller.context = context;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: style,
       child: ChangeNotifierProvider.value(
@@ -138,18 +138,18 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
 
   @override
   Widget get empty => PageStateEmpty(
-        onRetry: controller!.loadRetry,
+        onRetry: controller.loadRetry,
       );
 
   @override
   Widget get error {
     if (NetworkState().state == ConnectivityResult.none) {
       return PageStateNetWorkError(
-        onRetry: controller!.loadRetry,
+        onRetry: controller.loadRetry,
       );
     } else {
       return PageStateRequestError(
-        onRetry: controller!.loadRetry,
+        onRetry: controller.loadRetry,
       );
     }
   }
@@ -169,7 +169,7 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
       backgroundColor: backgroundColor,
       appBar: navigation as PreferredSizeWidget?,
       body: GestureDetector(
-        onTap: controller!.onScreenClick,
+        onTap: controller.onScreenClick,
         child: body,
       ),
     );

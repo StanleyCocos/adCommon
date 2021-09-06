@@ -14,7 +14,7 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
         BaseControllerLifeCycle,
         BaseControllerCommonMethod {
   /// 模型 数据提供
-  T? model;
+  late T model;
 
   /// 当前页面上下文
   BuildContext? context;
@@ -96,7 +96,7 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
   }
 
   /// 获取页面间传递的参数
-  Object? getArgument(Object key, {Object? defaultValue}) {
+  T? getArgument(Object key, {T? defaultValue}) {
     final arguments = RouteManager().currentRoute!.settings.arguments;
     if (arguments == null) return defaultValue;
     if (arguments is Map) {
