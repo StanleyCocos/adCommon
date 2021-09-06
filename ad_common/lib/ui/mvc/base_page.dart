@@ -71,7 +71,7 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
   Widget get load => PageStateLoad();
 
   @override
-  Widget get navigation => NavigationBar();
+  Widget? get navigation => NavigationBar();
 
   Color get backgroundColor => Colors.white;
 
@@ -255,7 +255,7 @@ abstract class PageInterface {
 
   Widget get load;
 
-  Widget get navigation;
+  Widget? get navigation;
 
   Widget get body;
 }
