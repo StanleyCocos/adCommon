@@ -8,16 +8,16 @@ enum RouteAction { PUSH, REPLACE, POP, REMOVE }
 
 class RouteManager extends NavigatorObserver {
   /// 工厂模式创建单例
-  factory RouteManager() => _getInstance()!;
+  factory RouteManager() => _getInstance();
 
-  static RouteManager? get instance => _getInstance();
+  static RouteManager get instance => _getInstance();
   static RouteManager? _instance;
 
   RouteManager._internal();
 
-  static RouteManager? _getInstance() {
+  static RouteManager _getInstance() {
     if (_instance == null) _instance = RouteManager._internal();
-    return _instance;
+    return _instance!;
   }
 
   /// 当前路由栈

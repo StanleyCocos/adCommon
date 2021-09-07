@@ -178,7 +178,7 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
 
 abstract class BaseBottomSheetDialog<T extends StatefulWidget,
     C extends BaseController> extends State<T> {
-  C? controller;
+  late C controller;
 
   Color? get backgroundColor => Colors.grey[700];
 
@@ -189,21 +189,21 @@ abstract class BaseBottomSheetDialog<T extends StatefulWidget,
 
   @override
   void initState() {
-    controller!.initLoad();
+    controller.initLoad();
     WidgetsBinding.instance!
-        .addPostFrameCallback((_) => controller!.widgetDidLoad());
+        .addPostFrameCallback((_) => controller.widgetDidLoad());
     super.initState();
   }
 
   @override
   void dispose() {
-    controller!.widgetDispose();
+    controller.widgetDispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    controller!.context = context;
+    controller.context = context;
     return renderLayout();
   }
 

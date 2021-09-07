@@ -103,9 +103,8 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
     if (arguments is Map) {
       final value = arguments[key];
       if (value == null) return defaultValue;
-      return arguments[key];
+      return value;
     }
-    if (defaultValue == null) return asObject<T>();
     return defaultValue;
   }
 }
