@@ -159,7 +159,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   Future<void> loadListData() async {
     loadBegin(isRefresh: true);
     _setPageParams();
-    await HttpRequest.getInstance()!.get(
+    await HttpRequest.getInstance().get(
       loadApi,
       params: params,
       options: _requestOptions,
@@ -193,7 +193,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   Future<void> loadListDataMore() async {
     loadBegin(isRefresh: false);
     _setPageParams(isMore: true);
-    await HttpRequest.getInstance()!.get(
+    await HttpRequest.getInstance().get(
       loadApi,
       params: params,
       options: _requestOptions,

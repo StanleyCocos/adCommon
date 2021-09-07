@@ -32,13 +32,13 @@ class HttpRequest {
   static const String PATCH = 'patch';
   static const String DELETE = 'delete';
 
-  factory HttpRequest() => getInstance()!;
+  factory HttpRequest() => getInstance();
 
-  static HttpRequest? getInstance() {
+  static HttpRequest getInstance() {
     if (_instance == null) {
       _instance = HttpRequest._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
   Dio? _client;

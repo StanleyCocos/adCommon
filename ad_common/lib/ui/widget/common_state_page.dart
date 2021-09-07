@@ -30,7 +30,7 @@ class CommonStatePage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: 15),
             child: Text(
-              text ?? "",
+              text,
               style: TextStyle(
                 color: Color(0xFF999999),
                 fontSize: textSize ?? 16,

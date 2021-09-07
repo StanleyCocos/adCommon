@@ -124,7 +124,7 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
 
   @override
   Widget get body {
-    switch (controller!.switchState()) {
+    switch (controller.switchState()) {
       case PageStateType.content:
         return content;
       case PageStateType.error:
