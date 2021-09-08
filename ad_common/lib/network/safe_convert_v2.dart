@@ -21,9 +21,11 @@ T asT<T>(Map<String, dynamic>? json, String key, {T? defaultValue}) {
   } else if ([] is T) {
     return asList(json, key: key, defaultValue: defaultValue != null ? defaultValue as List<Object> : []) as T;
   } else if ({} is T) {
-    return asMap(json, key: key, defaultValue: defaultValue != null ? defaultValue as Map : {}) as T;
+    return asMap(json, key: key, defaultValue: defaultValue != null ? defaultValue as Map<String, dynamic> : <String, dynamic>{}) as T;
   }
   return Object() as T;
+
+
 }
 
 T? asObject<T>() {
@@ -97,15 +99,15 @@ String asString(Map<String, dynamic>? json, {required String key, String default
   }
 }
 
-Map asMap(Map<String, dynamic>? json, {required String key, Map? defaultValue}){
+Map<String, dynamic> asMap(Map<String, dynamic>? json, {required String key, Map<String, dynamic>? defaultValue}){
   try{
-    if(json == null || !json.containsKey(key)) return defaultValue ?? {};
+    if(json == null || !json.containsKey(key)) return defaultValue ?? <String, dynamic>{};
     var value = json[key];
-    if(value == null) return defaultValue ?? {};
-    if(value is Map) return value;
+    if(value == null) return defaultValue ?? <String, dynamic>{};
+    if(value is Map<String, dynamic>) return value;
     return defaultValue ?? {};
   } catch(e){
-    return defaultValue ?? {};
+    return defaultValue ?? <String, dynamic>{};
   }
 }
 

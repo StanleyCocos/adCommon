@@ -74,8 +74,7 @@ class RouteManager extends NavigatorObserver {
     bool isRemoveUntil = false,
   }) {
     if (isRemoveUntil) {
-      return navigator!
-          .pushAndRemoveUntil(route as Route<Object>, (route) => false);
+      return navigator!.pushAndRemoveUntil(route as Route<Object>, (route) => false);
     } else if (isReplace) {
       return navigator!.pushReplacement(route as Route<Object>);
     } else {
@@ -90,13 +89,15 @@ class RouteManager extends NavigatorObserver {
     if (type == null) {
       navigator!.pop(result);
     } else {
-      navigator!.popUntil((Route<dynamic> route) {
-        if (route.settings.name == homePageType) {
-          return true;
-        } else {
-          return type.toString() == route.settings.name;
-        }
-      });
+      navigator!.popUntil(
+        (Route<dynamic> route) {
+          if (route.settings.name == homePageType) {
+            return true;
+          } else {
+            return type.toString() == route.settings.name;
+          }
+        },
+      );
     }
   }
 
@@ -106,7 +107,7 @@ class RouteManager extends NavigatorObserver {
       Object? arguments}) {
     switch (type) {
       case PageTransitionType.scale:
-        return ScaleRouter(
+        return ScaleRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -115,7 +116,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.fade:
-        return FadeRouter(
+        return FadeRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -124,7 +125,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.rotate:
-        return RotateRouter(
+        return RotateRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -133,7 +134,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.top:
-        return TopBottomRouter(
+        return TopBottomRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -142,7 +143,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.left:
-        return LeftRightRouter(
+        return LeftRightRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -151,7 +152,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.bottom:
-        return BottomTopRouter(
+        return BottomTopRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -160,7 +161,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.right:
-        return RightLeftRouter(
+        return RightLeftRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -168,7 +169,7 @@ class RouteManager extends NavigatorObserver {
           ),
         );
       case PageTransitionType.none:
-        return NoAnimRouter(
+        return NoAnimRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
