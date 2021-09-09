@@ -227,7 +227,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   void onItemClick<M>(M model, int index) {}
 
   /// 添加参数
-  void addParams(Map<String, Object> params) {
+  void addParams(Map<String, dynamic> params) {
     this.params.clear();
     this.params.addAll(params);
   }
