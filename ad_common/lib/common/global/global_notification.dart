@@ -3,16 +3,16 @@ typedef void NotificationCallback(arg);
 
 /// 广播管理
 class NotificationManager {
-  factory NotificationManager() => _getInstance()!;
+  factory NotificationManager() => _getInstance();
 
-  static NotificationManager? get instance => _getInstance();
+  static NotificationManager get instance => _getInstance();
   static NotificationManager? _instance;
 
   NotificationManager._internal();
 
-  static NotificationManager? _getInstance() {
+  static NotificationManager _getInstance() {
     if (_instance == null) _instance = new NotificationManager._internal();
-    return _instance;
+    return _instance!;
   }
 
   /// 保存事件订阅者队列，key:事件名(id)，value: 对应事件的订阅者队列

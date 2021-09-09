@@ -142,7 +142,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   String get loadApi;
 
   /// 请求参数
-  Map<String, Object> params = {"page": "1"};
+  Map<String, dynamic> params = {"page": "1"};
 
   /// 是否v2接口
   bool get isV2Api => false;
