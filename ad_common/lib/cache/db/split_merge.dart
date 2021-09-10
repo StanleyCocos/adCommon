@@ -61,13 +61,4 @@ class ColumnSplitMerge {
     value += obj.defaultValue == null ? '' : "default '${obj.defaultValue}'";
     return value;
   }
-
-  static String _toString(List<String> list){
-    if(list.length <= 0) return "";
-    var values = "";
-    list.forEach((element) {
-      values += values.length > 0 ? ",'$element'" : "'$element'";
-    });
-    return values;
-  }
 }

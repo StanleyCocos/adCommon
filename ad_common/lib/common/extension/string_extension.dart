@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:ad_common/common/extension/int_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:crypto/crypto.dart';
+
 
 /*
 * 字符串常规操作

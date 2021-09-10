@@ -27,6 +27,9 @@ abstract class BaseTableModel {
   * */
   STInt id = STInt(primaryKey: true, autoIncrement: true);
 
+
+
+
   /*
   * 执行相应的sql
   * */
@@ -53,7 +56,7 @@ abstract class BaseTableModel {
     try {
       await create();
       Database? db = await DBManager.getDatabase();
-      return (await db?.insert("$runtimeType", contentMap))!;
+      return (await db?.insert("$runtimeType", contentMap)) ?? 0;
     } catch (e) {
       return 0;
     }
@@ -65,9 +68,9 @@ abstract class BaseTableModel {
   Future<int> saveBatch<T extends BaseTableModel>(List<T> list) async {
     try {
       await create();
-      Database db = await (DBManager.getDatabase() as FutureOr<Database>);
+      Database? db = await DBManager.getDatabase();
       var count = 0;
-      await db.transaction((txn) async {
+      await db?.transaction((txn) async {
         list.forEach((element) async {
           var state = await txn.insert("$runtimeType", element.contentMap);
           if (state > 0) count++;
@@ -86,7 +89,7 @@ abstract class BaseTableModel {
     try {
       Database? db = await DBManager.getDatabase();
       return (await db?.update("$runtimeType", contentMap,
-          where: where == null ? "id = ${id.content}" : where))!;
+          where: where == null ? "id = ${id.content}" : where)) ?? 0;
     } catch (e) {
       return 0;
     }
@@ -99,7 +102,7 @@ abstract class BaseTableModel {
     try {
       Database? db = await DBManager.getDatabase();
       return (await db?.delete("$runtimeType",
-          where: where == null ? "id = ${id.content}" : where))!;
+          where: where == null ? "id = ${id.content}" : where)) ?? 0;
     } catch (e) {
       return 0;
     }
@@ -110,8 +113,8 @@ abstract class BaseTableModel {
   * */
   Future<int> clear() async {
     try {
-      Database db = await (DBManager.getDatabase() as FutureOr<Database>);
-      return await db.rawDelete("DELETE FROM $runtimeType");
+      Database? db = await DBManager.getDatabase();
+      return await db?.rawDelete("DELETE FROM $runtimeType") ?? 0;
     } catch (e) {
       return 0;
     }
@@ -122,13 +125,13 @@ abstract class BaseTableModel {
   * */
   Future<bool> contain({String where = ""}) async {
     try {
-      Database db = await (DBManager.getDatabase() as FutureOr<Database>);
+      Database? db = await DBManager.getDatabase();
       List<String> columns = List.from(map.keys);
-      List<Map> data = await db.query(
+      List<Map> data = await db?.query(
         "$runtimeType",
         where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
         columns: columns,
-      );
+      ) ?? <Map>[];
       return data.isNotEmpty;
     } catch (e) {
       return false;
@@ -140,13 +143,13 @@ abstract class BaseTableModel {
   * */
   Future<BaseTableModel?> one({String where = ""}) async {
     try {
-      Database db = await (DBManager.getDatabase() as FutureOr<Database>);
+      Database? db = await DBManager.getDatabase();
       List<String> columns = List.from(map.keys);
-      List<Map> data = await db.query(
+      List<Map> data = await db?.query(
         "$runtimeType",
         where: where.isNotEmpty ? where : "id=(select last_insert_rowid())",
         columns: columns,
-      );
+      ) ?? <Map>[];
       if (data.length <= 0) return null;
       setRowContent(rowData: data.first as Map<String, Object?>?);
       return this;
@@ -160,10 +163,10 @@ abstract class BaseTableModel {
   * */
   Future<List<T>> all<T extends BaseTableModel>() async {
     try {
-      var db = await (DBManager.getDatabase() as FutureOr<Database>);
-      List<Map> maps = await db.query(
+      Database? db = await DBManager.getDatabase();
+      List<Map> maps = await db?.query(
         "$runtimeType",
-      );
+      ) ?? <Map>[];
       if (maps.length == 0) return [];
       List<T> list = [];
       maps.forEach((element) {
