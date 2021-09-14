@@ -6,40 +6,40 @@
 
 
 
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+//
+// T asT<T>(Map<String, dynamic>? json, String key, {T? defaultValue}) {
+//   if (json != null && json[key] is T) return json[key];
+//   if (0 is T) {
+//     return asInt(json, key: key, defaultValue: defaultValue != null ? defaultValue as int : 0) as T;
+//   } else if (0.0 is T) {
+//     return asDouble(json, key: key, defaultValue: defaultValue != null ? defaultValue as double: 0.0) as T;
+//   } else if ('' is T) {
+//     return asString(json, key: key, defaultValue: defaultValue != null ? defaultValue as String : "") as T;
+//   } else if (false is T) {
+//     return asBool(json, key: key, defaultValue: defaultValue != null ? defaultValue as bool : false) as T;
+//   } else if ([] is T) {
+//     return asList(json, key: key, defaultValue: defaultValue != null ? defaultValue as List<Object> : []) as T;
+//   } else if ({} is T) {
+//     return asMap(json, key: key, defaultValue: defaultValue != null ? defaultValue as Map<String, dynamic> : <String, dynamic>{}) as T;
+//   }
+//   return Object() as T;
+// }
+//
+//
+//
+// T? asObject<T>() {
+//   if (0 is T) return 0 as T;
+//   if (0.0 is T) return 0.0 as T;
+//   if ('' is T) return '' as T;
+//   if (false is T) return false as T;
+//   if (List is T) return [] as T;
+//   if (Map is T) return Map() as T;
+//   return null;
+// }
 
-T asT<T>(Map<String, dynamic>? json, String key, {T? defaultValue}) {
-  if (json != null && json[key] is T) return json[key];
-  if (0 is T) {
-    return asInt(json, key: key, defaultValue: defaultValue != null ? defaultValue as int : 0) as T;
-  } else if (0.0 is T) {
-    return asDouble(json, key: key, defaultValue: defaultValue != null ? defaultValue as double: 0.0) as T;
-  } else if ('' is T) {
-    return asString(json, key: key, defaultValue: defaultValue != null ? defaultValue as String : "") as T;
-  } else if (false is T) {
-    return asBool(json, key: key, defaultValue: defaultValue != null ? defaultValue as bool : false) as T;
-  } else if ([] is T) {
-    return asList(json, key: key, defaultValue: defaultValue != null ? defaultValue as List<Object> : []) as T;
-  } else if ({} is T) {
-    return asMap(json, key: key, defaultValue: defaultValue != null ? defaultValue as Map<String, dynamic> : <String, dynamic>{}) as T;
-  }
-  return Object() as T;
 
-
-}
-
-T? asObject<T>() {
-  if (0 is T) return 0 as T;
-  if (0.0 is T) return 0.0 as T;
-  if ('' is T) return '' as T;
-  if (false is T) return false as T;
-  if (List is T) return [] as T;
-  if (Map is T) return Map() as T;
-  return null;
-}
-
-
-int asInt(Map<String, dynamic>? json, {required String key, int defaultValue = 0}){
+int asInt(Map<String, dynamic>? json, String key, {int defaultValue = 0}){
   try{
     if(json == null || !json.containsKey(key)) return defaultValue;
     var value = json[key];
@@ -54,7 +54,7 @@ int asInt(Map<String, dynamic>? json, {required String key, int defaultValue = 0
   }
 }
 
-double asDouble(Map<String, dynamic>? json, {required String key, double defaultValue = 0.0}){
+double asDouble(Map<String, dynamic>? json,  String key, { double defaultValue = 0.0}){
   try{
     if(json == null|| !json.containsKey(key)) return defaultValue;
     var value = json[key];
@@ -69,7 +69,7 @@ double asDouble(Map<String, dynamic>? json, {required String key, double default
   }
 }
 
-bool asBool(Map<String, dynamic>? json, {required String key, bool defaultValue = false}){
+bool asBool(Map<String, dynamic>? json, String key, {bool defaultValue = false}){
   try{
     if(json == null || !json.containsKey(key)) return defaultValue;
     var value = json[key];
@@ -84,7 +84,7 @@ bool asBool(Map<String, dynamic>? json, {required String key, bool defaultValue 
   }
 }
 
-String asString(Map<String, dynamic>? json, {required String key, String defaultValue = ""}){
+String asString(Map<String, dynamic>? json, String key, {String defaultValue = ""}){
   try{
     if(json == null || !json.containsKey(key)) return defaultValue;
     var value = json[key];
@@ -99,7 +99,7 @@ String asString(Map<String, dynamic>? json, {required String key, String default
   }
 }
 
-Map<String, dynamic> asMap(Map<String, dynamic>? json, {required String key, Map<String, dynamic>? defaultValue}){
+Map<String, dynamic> asMap(Map<String, dynamic>? json, String key, { Map<String, dynamic>? defaultValue}){
   try{
     if(json == null || !json.containsKey(key)) return defaultValue ?? <String, dynamic>{};
     var value = json[key];
@@ -112,7 +112,7 @@ Map<String, dynamic> asMap(Map<String, dynamic>? json, {required String key, Map
 }
 
 
-List asList(Map<String, dynamic>? json, {required String key, List? defaultValue}){
+List asList(Map<String, dynamic>? json, String key, {List? defaultValue}){
   try{
     if(json == null || !json.containsKey(key)) return defaultValue ?? [];
     var value = json[key];
@@ -124,7 +124,7 @@ List asList(Map<String, dynamic>? json, {required String key, List? defaultValue
   }
 }
 
-List<String> asListStr(Map<String, dynamic>? json, {required String key, List<String>? defaultValue}){
+List<String> asListStr(Map<String, dynamic>? json, String key, {List<String>? defaultValue}){
   try{
     if(json == null || !json.containsKey(key)) return defaultValue ?? [];
     var value = json[key];

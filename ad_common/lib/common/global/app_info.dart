@@ -27,9 +27,9 @@ class AppInfoManager {
   /// 设备系统版本
   String? get systemVersion => _systemVersion;
 
-  factory AppInfoManager() => _getInstance()!;
+  factory AppInfoManager() => _getInstance();
 
-  static AppInfoManager? get instance => _getInstance();
+  static AppInfoManager get instance => _getInstance();
   static AppInfoManager? _instance;
   static const String IMEI_KEY = "designUUID";
 
@@ -37,11 +37,11 @@ class AppInfoManager {
     initInfo();
   }
 
-  static AppInfoManager? _getInstance() {
+  static AppInfoManager _getInstance() {
     if (_instance == null) {
       _instance = new AppInfoManager._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
   Future<String> getImei() async {

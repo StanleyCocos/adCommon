@@ -18,8 +18,8 @@ void main(){
   Map<String, Object> json = {"testInt": false, "testInt1": "1",};
 
 
-  var value = asT<Map>(json, "testInt2");
-  print(value);
+  // var value = asT<Map>(json, "testInt2");
+  // print(value);
 
 
 }
