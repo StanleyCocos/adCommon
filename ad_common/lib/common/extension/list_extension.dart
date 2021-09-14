@@ -1,6 +1,6 @@
 import 'dart:math';
 
-extension ListOption<E> on List? {
+extension ListOption<E> on List<E>? {
   /*
   * 是否为null
   * */
@@ -31,9 +31,50 @@ extension ListOption<E> on List? {
   /*
   * 获取指定元素
   * */
-  E? item(int index) {
+  E? stItem(int index) {
     if (isEmptyOrNull) return null;
     if (this!.length <= index || index < 0) return null;
     return this![index];
   }
+
+  /*
+  * 删除指定元素
+  * */
+  void stRemove(int index){
+    if (isEmptyOrNull) return;
+    if (this!.length <= index || index < 0) return;
+    this!.removeAt(index);
+  }
+
+
+  /*
+  * 插入指定元素
+  * */
+  bool stInsert(int index, E? element){
+    if(element == null) return false;
+    if (isEmptyOrNull) return false;
+    if (this!.length <= index || index < 0) return false;
+    this!.insert(index, element);
+    return true;
+  }
+
+
+  /*
+  * 插入指定元素到开始
+  * */
+  void stInsertStart(E? element){
+    if(element == null) return;
+    if (isNull) return;
+    this!.insert(0, element);
+  }
+
+  /*
+  * 插入指定元素到结尾
+  * */
+  void stInsertEnd(E? element){
+    if(element == null) return;
+    if (isNull) return;
+    this!.insert(this!.length, element);
+  }
+
 }

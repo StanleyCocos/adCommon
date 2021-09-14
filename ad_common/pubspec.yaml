@@ -28,6 +28,8 @@ dependencies:
   synchronized: 3.0.0
   sqflite: 2.0.0+4
   uuid: 3.0.4
+  convert: 3.0.1
+  intl: 0.17.0
 
   flutter_keychain:
     git:

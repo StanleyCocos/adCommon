@@ -52,7 +52,6 @@ export 'package:dio/dio.dart';
 export 'package:sqflite/sqflite.dart';
 export 'package:connectivity/connectivity.dart';
 export 'package:device_info_plus/device_info_plus.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 export 'package:flutter_easyrefresh/easy_refresh.dart';
 export 'package:provider/provider.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,5 +62,7 @@ export 'package:crypto/crypto.dart';
 export 'package:cookie_jar/cookie_jar.dart';
 export 'package:dio/dio.dart';
 export 'package:path_provider/path_provider.dart';
+export 'package:intl/intl.dart';
+export 'package:convert/convert.dart';
 
 
