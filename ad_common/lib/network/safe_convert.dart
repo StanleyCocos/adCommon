@@ -1,177 +1,138 @@
-/// 类型安全转换工具
-class SafeManager {
-  /// 将不确定的类型转换为int类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的int类型 <br>
-  static int parseInt(Map<String, dynamic> data, String key,
-      {int defaultValue = 0}) {
-    try {
-      Object? value = data[key];
-      if (value == null) return defaultValue;
-      if (value is int) return value;
-      if (value is double) return value.toInt();
-      if (value is bool) return value ? 1 : 0;
-      if (value is String) {
-        return int.tryParse(value) ?? double.tryParse(value)!.toInt();
-      }
-      return defaultValue;
-    } catch (error) {
-      return defaultValue;
-    }
-  }
 
-  /// 将不确定的类型转换为double类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的double类型 <br>
-  static double parseDouble(Map<String, dynamic> data, String key,
-      {double defaultValue = 0.0}) {
-    try {
-      Object? value = data[key];
-      if (value == null) return defaultValue;
-      if (value is double) return value;
-      if (value is int) return value.toDouble();
-      if (value is bool) return value ? 1.0 : 0.0;
-      if (value is String) {
-        var temp = double.tryParse(value);
-        if (temp == null) return defaultValue;
-        return temp;
-      }
-      return defaultValue;
-    } catch (error) {
-      return defaultValue;
-    }
-  }
 
-  /// 将不确定的类型转换为String类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的String类型 <br>
-  static String parseString(Map<String, dynamic> data, String key,
-      {String defaultValue = ""}) {
-    try {
-      Object? value = data[key];
-      if (value == null) return defaultValue;
-      if (value is String) return value;
-      if (value is int) return value.toString();
-      if (value is bool) return value ? "true" : "false";
-      if (value is double) return value.toString();
-      return defaultValue;
-    } catch (error) {
-      return defaultValue;
-    }
-  }
 
-  /// 将不确定的类型转换为bool类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的bool类型 <br>
-  static bool parseBoolean(Map<String, dynamic> data, String key,
-      {bool defaultValue = false}) {
-    try {
-      Object? value = data[key];
-      if (value == null) return defaultValue;
-      if (value is bool) return value;
-      if (value is int) {
-        if (value == 1) return true;
-        if (value == 0) return false;
-        return false;
-      }
-      if (value is double) {
-        if (value == 1.0) return true;
-        if (value == 0.0) return false;
-        return false;
-      }
-      if (value is String) {
-        if (value.toLowerCase() == 'true') return true;
-        if (value.toLowerCase() == '1') return true;
-        if (value.toLowerCase() == 'false') return false;
-        if (value.toLowerCase() == '0') return false;
-        return defaultValue;
-      }
-      return defaultValue;
-    } catch (error) {
-      return defaultValue;
-    }
-  }
 
-  /// 将不确定的类型转换为List类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的List类型 <br>
-  static List parseList(Map<String, dynamic> data, String key) {
-    try {
-      Object? value = data[key];
-      if (value == null) return [];
-      if (value is List) return value;
-      return [];
-    } catch (error) {
-      return [];
-    }
-  }
 
-  /// 将不确定的类型转换为List<String>类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的List<String>类型 <br>
-  static List<String> parseStrList(Map<String, dynamic> data, String key) {
-    try {
-      Object? value = data[key];
-      if (value == null) return [];
-      if (value is List) {
-        List<String> listArray = [];
-        for (var obj in value) {
-          if (obj != null && obj != "null") {
-            if (obj is String) {
-              listArray.add(obj);
-            }
-          }
-        }
-        return listArray;
-      }
-      return [];
-    } catch (error) {
-      return [];
-    }
-  }
 
-  /// 将不确定的类型转换为Object类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的Object类型 <br>
-  static Map<String, dynamic> parseObject(
-      Map<String, dynamic> data, String key) {
-    try {
-      var value = Map<String, dynamic>.from(data[key]);
-      if (value is String) return {};
-      if (value is int) return {};
-      if (value is bool) return {};
-      if (value is double) return {};
-      if (value is List) return {};
-      if (value is Map<String, dynamic>) return value;
-      return {};
-    } catch (error) {
-      return {};
-    }
-  }
 
-  /// 将不确定的类型转换为Object类型 <br>
-  ///
-  /// @param value ：待转换的类型 <br>
-  /// @return 转换后的Object类型 <br>
-  static Map<String, dynamic> parseMap(Map<String, dynamic> data, String key) {
-    try {
-      var value = Map<String, dynamic>.from(data[key]);
-      if (value is String) return {};
-      if (value is int) return {};
-      if (value is bool) return {};
-      if (value is double) return {};
-      if (value is List) return {};
-      if (value is Map<String, dynamic>) return value;
-      return {};
-    } catch (error) {
-      return {};
-    }
+
+// import 'package:flutter/material.dart';
+//
+// T asT<T>(Map<String, dynamic>? json, String key, {T? defaultValue}) {
+//   if (json != null && json[key] is T) return json[key];
+//   if (0 is T) {
+//     return asInt(json, key: key, defaultValue: defaultValue != null ? defaultValue as int : 0) as T;
+//   } else if (0.0 is T) {
+//     return asDouble(json, key: key, defaultValue: defaultValue != null ? defaultValue as double: 0.0) as T;
+//   } else if ('' is T) {
+//     return asString(json, key: key, defaultValue: defaultValue != null ? defaultValue as String : "") as T;
+//   } else if (false is T) {
+//     return asBool(json, key: key, defaultValue: defaultValue != null ? defaultValue as bool : false) as T;
+//   } else if ([] is T) {
+//     return asList(json, key: key, defaultValue: defaultValue != null ? defaultValue as List<Object> : []) as T;
+//   } else if ({} is T) {
+//     return asMap(json, key: key, defaultValue: defaultValue != null ? defaultValue as Map<String, dynamic> : <String, dynamic>{}) as T;
+//   }
+//   return Object() as T;
+// }
+//
+//
+//
+// T? asObject<T>() {
+//   if (0 is T) return 0 as T;
+//   if (0.0 is T) return 0.0 as T;
+//   if ('' is T) return '' as T;
+//   if (false is T) return false as T;
+//   if (List is T) return [] as T;
+//   if (Map is T) return Map() as T;
+//   return null;
+// }
+
+
+int asInt(Map<String, dynamic>? json, String key, {int defaultValue = 0}){
+  try{
+    if(json == null || !json.containsKey(key)) return defaultValue;
+    var value = json[key];
+    if(value == null) return defaultValue;
+    if(value is double) return value.toInt();
+    if(value is bool) return value ? 1 : 0;
+    if(value is String) return (int.parse(value) is int) ? int.parse(value) : defaultValue;
+    if(value is int) return value;
+    return defaultValue;
+  }catch(e){
+    return defaultValue;
   }
 }
+
+double asDouble(Map<String, dynamic>? json,  String key, { double defaultValue = 0.0}){
+  try{
+    if(json == null|| !json.containsKey(key)) return defaultValue;
+    var value = json[key];
+    if(value == null) return defaultValue;
+    if(value is int) return value.toDouble();
+    if(value is bool) return value ? 1.0 : 0.0;
+    if(value is String) return (double.parse(value) is double) ? double.parse(value) : defaultValue;
+    if(value is double) return value;
+    return defaultValue;
+  } catch(e){
+    return defaultValue;
+  }
+}
+
+bool asBool(Map<String, dynamic>? json, String key, {bool defaultValue = false}){
+  try{
+    if(json == null || !json.containsKey(key)) return defaultValue;
+    var value = json[key];
+    if(value == null) return defaultValue;
+    if(value is int) return value == 0 ? false : true;
+    if(value is String) return value == "true";
+    if(value is double) return value == 0 ? false : true;
+    if(value is bool) return value;
+    return defaultValue;
+  } catch(e){
+    return defaultValue;
+  }
+}
+
+String asString(Map<String, dynamic>? json, String key, {String defaultValue = ""}){
+  try{
+    if(json == null || !json.containsKey(key)) return defaultValue;
+    var value = json[key];
+    if(value == null) return defaultValue;
+    if(value is int) return value.toString();
+    if(value is double) return value.toString();
+    if(value is bool) return value ? "true" : "false";
+    if(value is String) return value;
+    return defaultValue;
+  } catch(e){
+    return defaultValue;
+  }
+}
+
+Map<String, dynamic> asMap(Map<String, dynamic>? json, String key, { Map<String, dynamic>? defaultValue}){
+  try{
+    if(json == null || !json.containsKey(key)) return defaultValue ?? <String, dynamic>{};
+    var value = json[key];
+    if(value == null) return defaultValue ?? <String, dynamic>{};
+    if(value is Map<String, dynamic>) return value;
+    return defaultValue ?? {};
+  } catch(e){
+    return defaultValue ?? <String, dynamic>{};
+  }
+}
+
+
+List asList(Map<String, dynamic>? json, String key, {List? defaultValue}){
+  try{
+    if(json == null || !json.containsKey(key)) return defaultValue ?? [];
+    var value = json[key];
+    if(value == null) return defaultValue ?? [];
+    if(value is List) return value;
+    return defaultValue ?? [];
+  } catch (e){
+    return defaultValue ?? [];
+  }
+}
+
+List<String> asListStr(Map<String, dynamic>? json, String key, {List<String>? defaultValue}){
+  try{
+    if(json == null || !json.containsKey(key)) return defaultValue ?? [];
+    var value = json[key];
+    if(value == null) return defaultValue ?? [];
+    if(value is List<String>) return value;
+    return defaultValue ?? [];
+  } catch(e){
+    return defaultValue ?? [];
+  }
+}
+

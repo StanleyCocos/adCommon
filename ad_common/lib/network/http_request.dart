@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 
 import 'http_request_setting.dart';
 
-typedef HttpRequestSuccessCallback = void Function(dynamic data);
+typedef HttpRequestSuccessCallback = void Function(Map<String, dynamic> data);
 typedef HttpRequestErrorCallback = void Function(DioError? error, int? stateCode);
 typedef HttpRequestCommonCallback = void Function();
 
@@ -325,7 +325,7 @@ class HttpRequest {
       singleShowErrorToastKey: extra.singleErrorToastKey,
     };
 
-    late Response response;
+    late Response<Map<String,dynamic>> response;
     try {
       switch (method) {
         case GET:
@@ -424,7 +424,7 @@ class HttpRequest {
 
       // 请求成功的回调
       if (callBack != null) {
-        callBack(response.data);
+        callBack(response.data ?? {});
       }
       Map<String, dynamic> tempHeader = {};
       if (_client?.options.headers != null &&
