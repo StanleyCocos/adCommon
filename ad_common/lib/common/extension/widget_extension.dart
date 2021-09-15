@@ -153,6 +153,7 @@ extension STPositionExtension on Widget {
 
 
 extension STSizeExtension on Widget {
+
   Widget size({Size? size}){
     size ??= Size(double.infinity, double.infinity);
     return SizedBox(
@@ -161,7 +162,6 @@ extension STSizeExtension on Widget {
       child: this,
     );
   }
-
 
   Widget sizeW(double width){
     return SizedBox(
@@ -178,7 +178,6 @@ extension STSizeExtension on Widget {
       child: this,
     );
   }
-
 }
 
 

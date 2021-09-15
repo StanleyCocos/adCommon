@@ -13,19 +13,27 @@ class AppInfoManager {
   String get version => _version;
 
   /// 设备类型
-  String? get mode => _mode;
+  String get mode => _mode;
 
   /// 版本号
   String get versionCode => _versionCode;
 
   /// 唯一标识
-  String? get imei => _imei;
+  String get imei => _imei;
 
   ///设备标识
-  String? get identifier => _identifier;
+  String get identifier => _identifier;
 
   /// 设备系统版本
-  String? get systemVersion => _systemVersion;
+  String get systemVersion => _systemVersion;
+
+
+  String _mode = "";
+  String _version = "";
+  String _versionCode = "";
+  String _imei = "";
+  String _identifier = "";
+  String _systemVersion = "";
 
   factory AppInfoManager() => _getInstance();
 
@@ -38,9 +46,7 @@ class AppInfoManager {
   }
 
   static AppInfoManager _getInstance() {
-    if (_instance == null) {
-      _instance = new AppInfoManager._internal();
-    }
+    _instance ??= AppInfoManager._internal();
     return _instance!;
   }
 
@@ -62,24 +68,24 @@ class AppInfoManager {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      _mode = DeviceMode.transform(iosInfo.utsname.machine);
+      _mode = DeviceMode.transform(iosInfo.utsname.machine ?? "") ?? "";
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
       _imei = await getImei();
-      _identifier = iosInfo.identifierForVendor;
+      _identifier = iosInfo.identifierForVendor ?? "";
       if (_imei.isEmptyOrNull) {
         _setImei(iosInfo.identifierForVendor!);
-        _imei = iosInfo.identifierForVendor;
+        _imei = iosInfo.identifierForVendor ?? "";
       }
-      _systemVersion = iosInfo.systemVersion;
+      _systemVersion = iosInfo.systemVersion ?? "";
     } else if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      _mode = androidInfo.model;
+      _mode = androidInfo.model ?? "";
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
-      _systemVersion = androidInfo.version.release;
+      _systemVersion = androidInfo.version.release ?? "";
       _imei = await getImei();
-      _identifier = androidInfo.androidId;
+      _identifier = androidInfo.androidId ?? "";
       if (_imei.isEmptyOrNull) {
         _imei = generateUUID(androidInfo.androidId);
       }
@@ -87,7 +93,7 @@ class AppInfoManager {
   }
 
   String generateUUID(String? androidId) {
-    var androidId = Utf8Encoder().convert(_identifier!);
+    var androidId = Utf8Encoder().convert(_identifier);
     String uuid = md5.convert(androidId).toString();
     if (uuid.length != 32) return "";
     StringBuffer sb = StringBuffer();
@@ -108,22 +114,16 @@ class AppInfoManager {
         " version_code/$versionCode" +
         " clients/${Platform.isIOS ? "iOS" : "Android"}" +
         " imei/$imei" +
-        " model/${mode!.replaceAll(" ", "-").toLowerCase()}" +
-        " system/${_systemVersion!.replaceAll(" ", "-")}" +
+        " model/${mode.replaceAll(" ", "-").toLowerCase()}" +
+        " system/${_systemVersion.replaceAll(" ", "-")}" +
         " framework/flutter" +
         " image/webp";
   }
 
-  String? _mode = "";
-  String _version = "";
-  String _versionCode = "";
-  String? _imei = "";
-  String? _identifier = "";
-  String? _systemVersion = "";
 }
 
 class DeviceMode {
-  static String? transform(String? mode) {
+  static String? transform(String mode) {
     if (Platform.isIOS) {
       switch (mode) {
         case "iPhone4,1":
