@@ -153,13 +153,32 @@ extension STPositionExtension on Widget {
 
 
 extension STSizeExtension on Widget {
-  Widget size(Size size){
+  Widget size({Size? size}){
+    size ??= Size(double.infinity, double.infinity);
     return SizedBox(
       width: size.width,
       height: size.height,
       child: this,
     );
   }
+
+
+  Widget sizeW(double width){
+    return SizedBox(
+      width: width,
+      height: double.infinity,
+      child: this,
+    );
+  }
+
+  Widget sizeH(double height){
+    return SizedBox(
+      width: double.infinity,
+      height: height,
+      child: this,
+    );
+  }
+
 }
 
 
