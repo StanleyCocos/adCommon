@@ -9,6 +9,7 @@ export 'common/extension/list_extension.dart';
 export 'common/extension/log_extension.dart';
 export 'common/extension/map_extension.dart';
 export 'common/extension/string_extension.dart';
+export 'common/extension/widget_extension.dart';
 
 export 'common/global/app_info.dart';
 export 'common/global/network_state_listener.dart';

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 extension IntOption on int {
   /*
   * 加千分号
@@ -19,4 +21,11 @@ extension IntOption on int {
       return "$this";
     }
   }
+
+
+  /*
+  * 生产当前数以内的随机数
+  * */
+  int get random => Random().nextInt(this);
+
 }
