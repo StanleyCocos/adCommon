@@ -97,6 +97,7 @@ class TagTextItem extends StatelessWidget {
     return TextButton(
       onPressed: onTap,
       style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all(Size.zero),
         padding: MaterialStateProperty.all(padding),
         backgroundColor: MaterialStateProperty.all(
           backgroundColor ?? ColorManager.grayDD,
