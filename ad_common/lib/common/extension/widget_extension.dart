@@ -136,10 +136,10 @@ extension STOffsetExtension on Widget {
 
 extension STPositionExtension on Widget {
   Widget position({
-    double left = 0,
-    double top = 0,
-    double right = 0,
-    double bottom = 0,
+    double? left,
+    double? top,
+    double? right,
+    double? bottom,
   }) {
     return Positioned(
       left: left,
