@@ -82,7 +82,7 @@ extension STPaddingExtension on Widget {
 }
 
 extension STTapExtension on Widget {
-  Widget onTap(GestureTapCallback? callback) {
+  Widget onTap(GestureTapCallback callback) {
     return GestureDetector(
       onTap: callback,
       behavior: HitTestBehavior.opaque,
@@ -151,9 +151,8 @@ extension STPositionExtension on Widget {
   }
 }
 
-
 extension STSizeExtension on Widget {
-  Widget size(Size size){
+  Widget size(Size size) {
     return SizedBox(
       width: size.width,
       height: size.height,
@@ -162,10 +161,8 @@ extension STSizeExtension on Widget {
   }
 }
 
-
 extension STColorExtension on Widget {
-
-  Widget color(Color color){
+  Widget color(Color color) {
     return Container(
       child: this,
       color: color,
@@ -174,8 +171,7 @@ extension STColorExtension on Widget {
 }
 
 extension STRadiusWidgetExtension on Widget {
-
-  Widget radius(double radius){
+  Widget radius(double radius) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: radius.bAll,
@@ -184,8 +180,8 @@ extension STRadiusWidgetExtension on Widget {
     );
   }
 
-  Widget border(double border, {Color? color}){
-    color ??=  ColorManager.hexColor(0xEEEEEE);
+  Widget border(double border, {Color color}) {
+    color ??= ColorManager.hexColor(0xEEEEEE);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: border, color: color),
@@ -195,15 +191,11 @@ extension STRadiusWidgetExtension on Widget {
   }
 }
 
-
 extension STRadiusExtension on double {
-
   Radius get r => Radius.circular(this);
-
 }
 
 extension STBorderRadiusExtension on double {
-
   BorderRadiusGeometry get bAll => BorderRadius.all(this.r);
 
   BorderRadiusGeometry get bBL => BorderRadius.only(bottomLeft: this.r);
@@ -214,16 +206,15 @@ extension STBorderRadiusExtension on double {
 
   BorderRadiusGeometry get bTR => BorderRadius.only(topRight: this.r);
 
-  BorderRadiusGeometry get bT => BorderRadius.only(topRight: this.r, topLeft: this.r);
+  BorderRadiusGeometry get bT =>
+      BorderRadius.only(topRight: this.r, topLeft: this.r);
 
-  BorderRadiusGeometry get bB => BorderRadius.only(bottomRight: this.r, bottomLeft: this.r);
+  BorderRadiusGeometry get bB =>
+      BorderRadius.only(bottomRight: this.r, bottomLeft: this.r);
 
-  BorderRadiusGeometry get bL => BorderRadius.only(topLeft: this.r, bottomLeft: this.r);
+  BorderRadiusGeometry get bL =>
+      BorderRadius.only(topLeft: this.r, bottomLeft: this.r);
 
-  BorderRadiusGeometry get bR => BorderRadius.only(topRight: this.r, bottomRight: this.r);
+  BorderRadiusGeometry get bR =>
+      BorderRadius.only(topRight: this.r, bottomRight: this.r);
 }
-
-
-
-
-

@@ -1,7 +1,3 @@
-
-
-import 'package:ad_common/ad_common.dart';
-
 /// 订阅者回调签名
 typedef void NotificationCallback(arg);
 

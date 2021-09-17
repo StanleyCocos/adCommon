@@ -1,15 +1,7 @@
 import 'dart:math';
-
 import 'package:ad_common/common/extension/int_extension.dart';
-<<<<<<< Updated upstream
-=======
-import 'package:collection/collection.dart' show IterableExtension;
-import 'package:crypto/crypto.dart' as crypto;
-import 'package:convert/convert.dart' as convert;
 import 'package:flutter/foundation.dart';
 import 'package:ad_common/common/extension/date_extension.dart';
-
->>>>>>> Stashed changes
 
 /*
 * 字符串常规操作
@@ -225,11 +217,9 @@ extension StringEncryption on String {
   }
 }
 
-
 extension debugTest on String {
-
-  void log(){
-    if(kReleaseMode) return;
+  void log() {
+    if (kReleaseMode) return;
     print("${DateTime.now().string(format: "HH:mm:ss")}: $this");
   }
 }

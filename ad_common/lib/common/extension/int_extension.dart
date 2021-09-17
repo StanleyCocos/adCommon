@@ -22,13 +22,8 @@ extension IntOption on int {
     }
   }
 
-
-<<<<<<< Updated upstream
-=======
   /*
   * 生产当前数以内的随机数
   * */
   int get random => Random().nextInt(this);
-
->>>>>>> Stashed changes
 }

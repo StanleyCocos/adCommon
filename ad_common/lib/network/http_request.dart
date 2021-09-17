@@ -1,11 +1,9 @@
 import 'dart:collection';
 import 'dart:io';
-
 import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'http_request_setting.dart';
 
 typedef HttpRequestSuccessCallback = void Function(dynamic data);
