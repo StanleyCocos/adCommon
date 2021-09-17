@@ -79,6 +79,21 @@ extension STPaddingExtension on Widget {
       child: this,
     );
   }
+
+  Widget paddingSH(double padding) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: padding),
+      child: this,
+    );
+  }
+
+
+  Widget paddingSV(double padding) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: padding),
+      child: this,
+    );
+  }
 }
 
 extension STTapExtension on Widget {
