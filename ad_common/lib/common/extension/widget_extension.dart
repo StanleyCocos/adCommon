@@ -109,6 +109,13 @@ extension STTapExtension on Widget {
       child: this,
     );
   }
+
+  Widget inkWell(GestureTapCallback? callback) {
+    return InkWell(
+      onTap: callback,
+      child: this,
+    );
+  }
 }
 
 extension STMarginExtension on Widget {

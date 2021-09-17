@@ -43,7 +43,7 @@ class HttpRequest {
 
   Dio? _client;
 
-  Dio? get client => _client;
+  Dio get client => _client!;
 
   HttpRequest._internal();
 
@@ -325,7 +325,7 @@ class HttpRequest {
       singleShowErrorToastKey: extra.singleErrorToastKey,
     };
 
-    late Response<Map<String,dynamic>> response;
+    late Response<dynamic> response;
     try {
       switch (method) {
         case GET:
@@ -419,29 +419,14 @@ class HttpRequest {
           }
           break;
       }
-      // 请求回调公共处理方法
-      if (commonCallBack != null) commonCallBack();
 
-      // 请求成功的回调
-      if (callBack != null) {
-        callBack(response.data ?? {});
-      }
-      Map<String, dynamic> tempHeader = {};
-      if (_client?.options.headers != null &&
-          _client!.options.headers.length > 0) {
-        tempHeader.addAll(_client!.options.headers);
-      }
-      if (options.headers != null && options.headers!.length > 0) {
-        tempHeader.addAll(options.headers!);
-      }
-      // 请求成功返回 true
+      commonCallBack?.call();
+      callBack?.call(_resultToMap(response.data));
       return true;
     } on DioError catch (e) {
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
-      // 请求回调公共处理方法s
-      if (commonCallBack != null) commonCallBack();
+      commonCallBack?.call();
       _handleError(errorCallBack, error: e);
-      // 请求失败返回 false
       return false;
     }
   }
@@ -493,5 +478,17 @@ class HttpRequest {
     } else if (singleShowErrorToast) {
       ToastManager.show(errorOutput);
     }
+  }
+
+
+  Map<String, dynamic> _resultToMap(Response<dynamic> response){
+    if(response.data == null) return {};
+    var result = response.data;
+    if(result is Map) return response.data;
+    if(result is String) return {"result": result};
+    if(result is int) return {"result": result};
+    if(result is bool) return {"result": result};
+    if(result is double) return {"result": result};
+    return {};
   }
 }
