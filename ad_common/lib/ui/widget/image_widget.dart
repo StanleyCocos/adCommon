@@ -14,6 +14,7 @@ class ImageManager {
         String path = "",
         double width = 24.0,
         double height = 24.0,
+        double? size,
         String type = ".png",
         BoxFit fit = BoxFit.contain,
       }) {
@@ -21,8 +22,8 @@ class ImageManager {
         _root + path + _transformName(name) + type;
     return Image.asset(
       imagePath,
-      width: width,
-      height: height,
+      width: size ?? width,
+      height: size ?? height,
       fit: fit,
     );
   }

@@ -39,6 +39,11 @@ extension STDoubleExtension on double {
       thickness: this,
     );
   }
+
+  Widget get boxW => SizedBox(width: this);
+
+  Widget get boxH => SizedBox(height: this);
+
 }
 
 extension STListExtension on List<Widget> {
