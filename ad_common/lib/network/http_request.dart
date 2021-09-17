@@ -325,7 +325,7 @@ class HttpRequest {
       singleShowErrorToastKey: extra.singleErrorToastKey,
     };
 
-    late Response<dynamic> response;
+    late Response response;
     try {
       switch (method) {
         case GET:
@@ -421,7 +421,7 @@ class HttpRequest {
       }
 
       commonCallBack?.call();
-      callBack?.call(_resultToMap(response.data));
+      callBack?.call(_resultToMap(response));
       return true;
     } on DioError catch (e) {
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
@@ -460,6 +460,8 @@ class HttpRequest {
           errorOutput = "請求錯誤: ${error.response!.statusMessage}";
           break;
       }
+
+
     } else if (errorMsg!.isNotEmpty) {
       errorOutput = "網絡不順，請檢查網絡後再重新整理";
     } else {
@@ -489,6 +491,6 @@ class HttpRequest {
     if(result is int) return {"result": result};
     if(result is bool) return {"result": result};
     if(result is double) return {"result": result};
-    return {};
+    return response.data;
   }
 }
