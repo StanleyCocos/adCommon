@@ -33,7 +33,7 @@ dependencies:
 
   flutter_keychain:
     git:
-      url: https://github.com/windows7lake/flutter_keychain.git
+      url: https://github.com/StanleyCocos/flutter_keychain.git
 
   # 定制化插件需求 null-safety
   screenshot_callback:
