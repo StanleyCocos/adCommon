@@ -1,3 +1,5 @@
+
+
 import 'package:ad_common/ad_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +41,11 @@ extension STDoubleExtension on double {
       thickness: this,
     );
   }
+
+  Widget get boxW => SizedBox(width: this);
+
+  Widget get boxH => SizedBox(height: this);
+
 }
 
 extension STListExtension on List<Widget> {
@@ -79,6 +86,49 @@ extension STPaddingExtension on Widget {
       child: this,
     );
   }
+
+  Widget paddingSH(double padding) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: padding),
+      child: this,
+    );
+  }
+
+
+  Widget paddingSV(double padding) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: padding),
+      child: this,
+    );
+  }
+
+  Widget paddingTop(double padding) {
+    return Padding(
+      padding: EdgeInsets.only(top: padding),
+      child: this,
+    );
+  }
+
+  Widget paddingLeft(double padding) {
+    return Padding(
+      padding: EdgeInsets.only(left: padding),
+      child: this,
+    );
+  }
+
+  Widget paddingBottom(double padding) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: padding),
+      child: this,
+    );
+  }
+
+  Widget paddingRight(double padding) {
+    return Padding(
+      padding: EdgeInsets.only(right: padding),
+      child: this,
+    );
+  }
 }
 
 extension STTapExtension on Widget {
@@ -86,6 +136,13 @@ extension STTapExtension on Widget {
     return GestureDetector(
       onTap: callback,
       behavior: HitTestBehavior.opaque,
+      child: this,
+    );
+  }
+
+  Widget inkWell(GestureTapCallback callback) {
+    return InkWell(
+      onTap: callback,
       child: this,
     );
   }
@@ -136,10 +193,10 @@ extension STOffsetExtension on Widget {
 
 extension STPositionExtension on Widget {
   Widget position({
-    double left = 0,
-    double top = 0,
-    double right = 0,
-    double bottom = 0,
+    double left,
+    double top,
+    double right,
+    double bottom,
   }) {
     return Positioned(
       left: left,
@@ -151,18 +208,39 @@ extension STPositionExtension on Widget {
   }
 }
 
+
 extension STSizeExtension on Widget {
-  Widget size(Size size) {
+
+  Widget size({Size size}){
+    size ??= Size(double.infinity, double.infinity);
     return SizedBox(
       width: size.width,
       height: size.height,
       child: this,
     );
   }
+
+  Widget sizeW(double width){
+    return SizedBox(
+      width: width,
+      height: double.infinity,
+      child: this,
+    );
+  }
+
+  Widget sizeH(double height){
+    return SizedBox(
+      width: double.infinity,
+      height: height,
+      child: this,
+    );
+  }
 }
 
+
 extension STColorExtension on Widget {
-  Widget color(Color color) {
+
+  Widget color(Color color){
     return Container(
       child: this,
       color: color,
@@ -171,7 +249,8 @@ extension STColorExtension on Widget {
 }
 
 extension STRadiusWidgetExtension on Widget {
-  Widget radius(double radius) {
+
+  Widget radius(double radius){
     return Container(
       decoration: BoxDecoration(
         borderRadius: radius.bAll,
@@ -180,8 +259,8 @@ extension STRadiusWidgetExtension on Widget {
     );
   }
 
-  Widget border(double border, {Color color}) {
-    color ??= ColorManager.hexColor(0xEEEEEE);
+  Widget border(double border, {Color color}){
+    color ??=  ColorManager.hexColor(0xEEEEEE);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: border, color: color),
@@ -191,11 +270,15 @@ extension STRadiusWidgetExtension on Widget {
   }
 }
 
+
 extension STRadiusExtension on double {
+
   Radius get r => Radius.circular(this);
+
 }
 
 extension STBorderRadiusExtension on double {
+
   BorderRadiusGeometry get bAll => BorderRadius.all(this.r);
 
   BorderRadiusGeometry get bBL => BorderRadius.only(bottomLeft: this.r);
@@ -206,15 +289,11 @@ extension STBorderRadiusExtension on double {
 
   BorderRadiusGeometry get bTR => BorderRadius.only(topRight: this.r);
 
-  BorderRadiusGeometry get bT =>
-      BorderRadius.only(topRight: this.r, topLeft: this.r);
+  BorderRadiusGeometry get bT => BorderRadius.only(topRight: this.r, topLeft: this.r);
 
-  BorderRadiusGeometry get bB =>
-      BorderRadius.only(bottomRight: this.r, bottomLeft: this.r);
+  BorderRadiusGeometry get bB => BorderRadius.only(bottomRight: this.r, bottomLeft: this.r);
 
-  BorderRadiusGeometry get bL =>
-      BorderRadius.only(topLeft: this.r, bottomLeft: this.r);
+  BorderRadiusGeometry get bL => BorderRadius.only(topLeft: this.r, bottomLeft: this.r);
 
-  BorderRadiusGeometry get bR =>
-      BorderRadius.only(topRight: this.r, bottomRight: this.r);
+  BorderRadiusGeometry get bR => BorderRadius.only(topRight: this.r, bottomRight: this.r);
 }
