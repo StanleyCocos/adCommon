@@ -11,7 +11,8 @@ import 'package:dio/dio.dart';
 import 'http_request_setting.dart';
 
 typedef HttpRequestSuccessCallback = void Function(Map<String, dynamic> data);
-typedef HttpRequestErrorCallback = void Function(DioError? error, int? stateCode);
+typedef HttpRequestErrorCallback = void Function(
+    DioError? error, int? stateCode);
 typedef HttpRequestCommonCallback = void Function();
 
 /// 可支持 restful 请求和普通API请求
@@ -460,8 +461,6 @@ class HttpRequest {
           errorOutput = "請求錯誤: ${error.response!.statusMessage}";
           break;
       }
-
-
     } else if (errorMsg!.isNotEmpty) {
       errorOutput = "網絡不順，請檢查網絡後再重新整理";
     } else {
@@ -482,15 +481,15 @@ class HttpRequest {
     }
   }
 
-
-  Map<String, dynamic> _resultToMap(Response<dynamic> response){
-    if(response.data == null) return {};
+  Map<String, dynamic> _resultToMap(Response<dynamic> response) {
+    if (response.data == null) return {};
     var result = response.data;
-    if(result is Map) return response.data;
-    if(result is String) return {"result": result};
-    if(result is int) return {"result": result};
-    if(result is bool) return {"result": result};
-    if(result is double) return {"result": result};
+    if (result is Map) return response.data;
+    if (result is List) return {"result": result.toString()};
+    if (result is String) return {"result": result};
+    if (result is int) return {"result": result};
+    if (result is bool) return {"result": result};
+    if (result is double) return {"result": result};
     return response.data;
   }
 }
