@@ -65,6 +65,17 @@ List<String> asListStr(Map<String, dynamic>? json, String key, {List<String>? de
   if (json == null || !json.containsKey(key)) return defaultValue ?? [];
   var value = json[key];
   if (value == null) return defaultValue ?? [];
-  if (value is List<String>) return value;
+  if (value is List){
+    List<String> list = [];
+    for (var obj in value) {
+      var tempObj = "";
+      if (value is String) tempObj = obj;
+      if (value is int) tempObj = obj.toString();
+      if (value is bool) tempObj = obj ? "true" : "false";
+      if (value is double) tempObj = obj.toString();
+      list.add(tempObj);
+    }
+    return list;
+  }
   return defaultValue ?? [];
 }
