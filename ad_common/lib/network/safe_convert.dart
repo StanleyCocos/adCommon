@@ -69,10 +69,10 @@ List<String> asListStr(Map<String, dynamic>? json, String key, {List<String>? de
     List<String> list = [];
     for (var obj in value) {
       var tempObj = "";
-      if (value is String) tempObj = obj;
-      if (value is int) tempObj = obj.toString();
-      if (value is bool) tempObj = obj ? "true" : "false";
-      if (value is double) tempObj = obj.toString();
+      if (obj is String) tempObj = obj;
+      if (obj is int) tempObj = obj.toString();
+      if (obj is bool) tempObj = obj ? "true" : "false";
+      if (obj is double) tempObj = obj.toString();
       list.add(tempObj);
     }
     return list;
