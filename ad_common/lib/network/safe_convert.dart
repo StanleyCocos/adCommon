@@ -47,10 +47,8 @@ String asString(Map<String, dynamic>? json, String key, {String defaultValue = "
 
 Map<String, dynamic> asMap(Map<String, dynamic>? json, String key, {Map<String, dynamic>? defaultValue}) {
   if (json == null || !json.containsKey(key)) return defaultValue ?? <String, dynamic>{};
-  var value = json[key];
-  if (value == null) return defaultValue ?? <String, dynamic>{};
-  if (value is Map<String, dynamic>) return value;
-  return defaultValue ?? <String, dynamic>{};
+  var value = Map<String, dynamic>.from(json[key]);
+  return value;
 }
 
 List asList(Map<String, dynamic>? json, String key, {List? defaultValue}) {
