@@ -1,4 +1,5 @@
 import 'package:ad_common/common/extension/log_extension.dart';
+import 'package:flutter/cupertino.dart';
 
 int asInt(Map<String, dynamic>? json, String key, {int defaultValue = 0}) {
   try{
@@ -11,7 +12,7 @@ int asInt(Map<String, dynamic>? json, String key, {int defaultValue = 0}) {
     if (value is String) return int.tryParse(value) ?? defaultValue;
     return defaultValue;
   } catch(e){
-    stLog("❎❎❎❎ error: $e", current: StackTrace.current);
+    stLog("❎❎❎❎ key: $key error: $e ", current: StackTrace.current);
     return defaultValue;
   }
 }
@@ -27,7 +28,7 @@ double asDouble(Map<String, dynamic>? json, String key, {double defaultValue = 0
     if (value is String) return double.tryParse(value) ?? defaultValue;
     return defaultValue;
   } catch(e){
-    stLog("❎❎❎❎ error: $e", current: StackTrace.current);
+    stLog("❎❎❎❎ key: $key  error: $e", current: StackTrace.current);
     return defaultValue;
   }
 }
@@ -46,7 +47,7 @@ bool asBool(Map<String, dynamic>? json, String key, {bool defaultValue = false})
     }
     return defaultValue;
   } catch(e){
-    stLog("❎❎❎❎ error: $e", current: StackTrace.current);
+    stLog("❎❎❎❎ key: $key  error: $e", current: StackTrace.current);
     return defaultValue;
   }
 }
@@ -62,7 +63,7 @@ String asString(Map<String, dynamic>? json, String key, {String defaultValue = "
     if (value is bool) return value ? "true" : "false";
     return defaultValue;
   } catch(e){
-    stLog("\x1B[1;31m error: $e", current: StackTrace.current);
+    stLog("❎❎❎❎ key: $key  $e", current: StackTrace.current);
     return defaultValue;
   }
 }
@@ -70,11 +71,12 @@ String asString(Map<String, dynamic>? json, String key, {String defaultValue = "
 Map<String, dynamic> asMap(Map<String, dynamic>? json, String key, {Map<String, dynamic>? defaultValue}) {
   try{
     if (json == null || !json.containsKey(key)) return defaultValue ?? <String, dynamic>{};
-    // var value = json[key];
-    var value = Map<String, dynamic>.from(json[key]);
+    var tempValue = json[key];
+    if(tempValue == null) return defaultValue ?? <String, dynamic>{};
+    var value = Map<String, dynamic>.from(tempValue);
     return value;
   } catch(e){
-    stLog("❎❎❎❎ error: $e", current: StackTrace.current);
+    stLog("❎❎❎❎ key: $key  error: $e", current: StackTrace.current);
     return defaultValue ?? <String, dynamic>{};
   }
 }
@@ -87,7 +89,7 @@ List asList(Map<String, dynamic>? json, String key, {List? defaultValue}) {
     if (value is List) return value;
     return defaultValue ?? [];
   }catch(e){
-    stLog("❎❎❎❎ error: $e", current: StackTrace.current);
+    stLog("❎❎❎❎ key: $key  error: $e", current: StackTrace.current);
     return defaultValue ?? [];
   }
 }
@@ -112,7 +114,7 @@ List<String> asListStr(Map<String, dynamic>? json, String key, {List<String>? de
     }
     return defaultValue ?? [];
   } catch(e){
-    stLog("❎❎❎❎ error: $e", current: StackTrace.current);
+    stLog("error error: $e", current: StackTrace.current);
     return defaultValue ?? [];
   }
 }
