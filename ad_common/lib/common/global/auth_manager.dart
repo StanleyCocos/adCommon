@@ -150,10 +150,10 @@ class Auth {
     AuthErrorCallback? errorCallback,
   }) async {
     PermissionStatus status = await request(type: type);
-    if (status.isGranted) {
-      if (callback != null) callback(status);
-    } else {
+    if (status.isDenied || status.isPermanentlyDenied || status.isRestricted) {
       if (errorCallback != null) errorCallback(status);
+    } else {
+      if (callback != null) callback(status);
     }
   }
 }
