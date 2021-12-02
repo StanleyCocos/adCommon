@@ -51,12 +51,17 @@ class AppInfoManager {
   }
 
   Future<String> getImei() async {
-    var content = await FlutterKeychain.get(key: IMEI_KEY);
-    if (!content.isEmptyOrNull) {
-      content = content!.replaceAll("\n", "");
-      return content.toLowerCase();
+    try{
+      var content = await FlutterKeychain.get(key: IMEI_KEY);
+      if (!content.isEmptyOrNull) {
+        content = content!.replaceAll("\n", "");
+        return content.toLowerCase();
+      }
+      return "";
+    } catch (e){
+      return "";
     }
-    return "";
+
   }
 
   Future<void> _setImei(String imei) async {
@@ -72,10 +77,10 @@ class AppInfoManager {
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
       _imei = await getImei();
-      _identifier = iosInfo.identifierForVendor ?? "";
       if (_imei.isEmptyOrNull) {
-        _setImei(iosInfo.identifierForVendor!);
-        _imei = iosInfo.identifierForVendor ?? "";
+        _identifier = iosInfo.identifierForVendor ?? "";
+        _setImei(_identifier);
+        _imei = _identifier;
       }
       _systemVersion = iosInfo.systemVersion ?? "";
     } else if (Platform.isAndroid) {
@@ -85,14 +90,15 @@ class AppInfoManager {
       _version = packageInfo.version;
       _systemVersion = androidInfo.version.release ?? "";
       _imei = await getImei();
-      _identifier = androidInfo.androidId ?? "";
       if (_imei.isEmptyOrNull) {
-        _imei = generateUUID(androidInfo.androidId);
+        _identifier = androidInfo.androidId ?? "";
+        _imei = generateUUID();
+        _setImei(_imei);
       }
     }
   }
 
-  String generateUUID(String? androidId) {
+  String generateUUID() {
     var androidId = Utf8Encoder().convert(_identifier);
     String uuid = md5.convert(androidId).toString();
     if (uuid.length != 32) return "";
