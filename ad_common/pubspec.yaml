@@ -27,6 +27,7 @@ dependencies:
   dio_cookie_manager: 2.0.0
   crypto: 3.0.1
   path_provider: 2.0.2
+  flutter_easyloading: 3.0.3            # 加载圈
 
   screenshot_callback:
     git:

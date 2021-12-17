@@ -4,6 +4,7 @@ import 'package:ad_common/ui/route/route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'base_model.dart';
 
@@ -105,6 +106,28 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
     }
     return defaultValue;
   }
+
+  ///隐藏加载圈
+  void hideLoading() {
+    if (EasyLoading.isShow) {
+      EasyLoading.dismiss();
+    }
+  }
+
+  ///显示加载圈
+  void showLoading({message = '加載中...'}) {
+    if (!EasyLoading.isShow) {
+      EasyLoading.show(status: message);
+    }
+  }
+
+  ///显示提示
+  void toast(String message,
+      {EasyLoadingToastPosition position = EasyLoadingToastPosition.center}) {
+    if (message != null) {
+      EasyLoading.showToast(message, toastPosition: position);
+    }
+  }
 }
 
 extension PageJump on BaseController {
@@ -114,9 +137,16 @@ extension PageJump on BaseController {
     bool isReplace = false,
     PageTransitionType type = PageTransitionType.right,
   }) {
-    var route = RouteManager().routeBuild(page: page, type: type, arguments: arguments);
-    return RouteManager()
-        .pushRoute(route, arguments: arguments, isReplace: isReplace);
+    var route = RouteManager().routeBuild(
+      page: page,
+      type: type,
+      arguments: arguments,
+    );
+    return RouteManager().pushRoute(
+      route,
+      arguments: arguments,
+      isReplace: isReplace,
+    );
   }
 
   void pop<T>({type, T result}) {
