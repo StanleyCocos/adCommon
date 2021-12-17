@@ -169,17 +169,23 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
   @override
   Widget get navigation => NavigationBar();
 
+  @override
+  Widget get bottomNavigationBar => null;
+
   Color get backgroundColor => Colors.white;
 
   SystemUiOverlayStyle get style => SystemUiOverlayStyle.dark;
 
   Widget renderLayout() {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: navigation,
-      body: GestureDetector(
-        onTap: controller.onScreenClick,
-        child: body,
+    return WillPopScope(
+      onWillPop: controller.onWillPop,
+      child: Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: navigation,
+        body: GestureDetector(
+          onTap: controller.onScreenClick,
+          child: body,
+        ),
       ),
     );
   }
