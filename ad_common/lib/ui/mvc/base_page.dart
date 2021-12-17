@@ -191,6 +191,106 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
   }
 }
 
+abstract class BaseBodyPageState<T extends StatefulWidget, C extends BaseController>
+    extends State<T> implements PageInterface {
+  C controller;
+
+  @override
+  void initState() {
+    controller.initLoad();
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => controller.widgetDidLoad());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.widgetDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    controller.context = context;
+    return renderLayout();
+  }
+
+  Widget get body {
+    return statePage;
+  }
+
+  Widget get statePage {
+    final state = controller.switchState();
+    switch (state) {
+      case PageStateType.content:
+        return content;
+      case PageStateType.loading:
+        return load;
+      case PageStateType.error:
+        return error;
+      case PageStateType.empty:
+        return empty;
+    }
+    return content;
+  }
+
+  @override
+  Widget get empty => PageStateEmpty(onRetry: controller.loadRetry);
+
+  @override
+  Widget get error {
+    if (NetworkState().state == ConnectivityResult.none) {
+      return PageStateNetWorkError(
+        onRetry: controller.loadRetry,
+      );
+    } else {
+      return PageStateRequestError(
+        onRetry: controller.loadRetry,
+      );
+    }
+  }
+
+  @override
+  Widget get load => PageStateLoad();
+
+  @override
+  Widget get navigation => NavigationBar();
+
+  @override
+  Widget get bottomNavigationBar => null;
+
+  Color get backgroundColor => Colors.white;
+
+  bool get extendBodyBehindAppBar => false;
+
+  /// 状态栏颜色
+  SystemUiOverlayStyle get style => SystemUiOverlayStyle.dark;
+
+  /// 渲染视图
+  Widget renderLayout() {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: style,
+      child: ChangeNotifierProvider.value(
+        value: controller,
+        child: Consumer<C>(
+          builder: (context, controller, _) {
+            return WillPopScope(
+              onWillPop: controller.onWillPop,
+              child: Scaffold(
+                backgroundColor: backgroundColor,
+                extendBodyBehindAppBar: extendBodyBehindAppBar,
+                appBar: navigation,
+                body: body,
+                bottomNavigationBar: bottomNavigationBar,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
 // ignore: must_be_immutable
 abstract class BaseBodyPage<T extends BaseController> extends StatelessWidget
     implements PageInterface {
