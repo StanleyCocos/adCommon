@@ -254,7 +254,7 @@ abstract class BaseBodyPageState<T extends StatefulWidget, C extends BaseControl
   Widget get load => PageStateLoad();
 
   @override
-  Widget get navigation => NavigationBar();
+  Widget get navigation => null;
 
   @override
   Widget get bottomNavigationBar => null;
@@ -276,13 +276,7 @@ abstract class BaseBodyPageState<T extends StatefulWidget, C extends BaseControl
           builder: (context, controller, _) {
             return WillPopScope(
               onWillPop: controller.onWillPop,
-              child: Scaffold(
-                backgroundColor: backgroundColor,
-                extendBodyBehindAppBar: extendBodyBehindAppBar,
-                appBar: navigation,
-                body: body,
-                bottomNavigationBar: bottomNavigationBar,
-              ),
+              child: body,
             );
           },
         ),
