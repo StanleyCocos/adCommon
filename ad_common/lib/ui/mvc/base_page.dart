@@ -92,12 +92,15 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
         value: controller,
         child: Consumer<C>(
           builder: (context, controller, _) {
-            return Scaffold(
-              backgroundColor: backgroundColor,
-              extendBodyBehindAppBar: extendBodyBehindAppBar,
-              appBar: navigation,
-              body: body,
-              bottomNavigationBar: bottomNavigationBar,
+            return WillPopScope(
+              onWillPop: controller.onWillPop,
+              child: Scaffold(
+                backgroundColor: backgroundColor,
+                extendBodyBehindAppBar: extendBodyBehindAppBar,
+                appBar: navigation,
+                body: body,
+                bottomNavigationBar: bottomNavigationBar,
+              ),
             );
           },
         ),

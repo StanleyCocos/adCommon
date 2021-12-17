@@ -84,6 +84,11 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
     if (isHideKeyboard) hideKeyboard();
   }
 
+  @override
+  Future<bool> onWillPop() {
+    return Future.value(true);
+  }
+
   /// 点击重新请求
   void loadRetry() {}
 
@@ -335,4 +340,7 @@ abstract class BaseControllerCommonMethod {
 
   /// 页面body任意位置点击
   void onScreenClick();
+
+  /// 物理返回
+  Future<bool> onWillPop();
 }
