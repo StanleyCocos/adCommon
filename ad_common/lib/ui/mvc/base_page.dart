@@ -249,7 +249,7 @@ abstract class BaseBodyPage<T extends BaseController> extends StatelessWidget
   Widget get load => PageStateLoad();
 
   @override
-  Widget get navigation => NavigationBar();
+  Widget get navigation => null;
 
   @override
   Widget get bottomNavigationBar => null;
