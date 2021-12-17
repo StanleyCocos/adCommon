@@ -55,7 +55,6 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
   @override
   Widget get empty => PageStateEmpty(onRetry: controller.loadRetry);
 
-
   @override
   Widget get error {
     if (NetworkState().state == ConnectivityResult.none) {
@@ -74,6 +73,9 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
 
   @override
   Widget get navigation => NavigationBar();
+
+  @override
+  Widget get bottomNavigationBar => null;
 
   Color get backgroundColor => Colors.white;
 
@@ -95,6 +97,7 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
               extendBodyBehindAppBar: extendBodyBehindAppBar,
               appBar: navigation,
               body: body,
+              bottomNavigationBar: bottomNavigationBar,
             );
           },
         ),
@@ -261,4 +264,6 @@ abstract class PageInterface {
   Widget get navigation;
 
   Widget get body;
+
+  Widget get bottomNavigationBar;
 }
