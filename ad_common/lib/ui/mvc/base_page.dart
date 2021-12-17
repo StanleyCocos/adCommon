@@ -191,6 +191,84 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
   }
 }
 
+// ignore: must_be_immutable
+abstract class BaseBodyPage<T extends BaseController> extends StatelessWidget
+    implements PageInterface {
+  T controller;
+
+  @override
+  Widget build(BuildContext context) {
+    controller.context = context;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: style,
+      child: ChangeNotifierProvider.value(
+        value: controller,
+        child: Consumer<T>(
+          builder: (context, controller, _) {
+            return renderLayout();
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget get body {
+    switch (controller.switchState()) {
+      case PageStateType.content:
+        return content;
+      case PageStateType.error:
+        return error;
+      case PageStateType.empty:
+        return empty;
+      case PageStateType.loading:
+        return load;
+    }
+    return content;
+  }
+
+  @override
+  Widget get empty => PageStateEmpty(
+        onRetry: controller.loadRetry,
+      );
+
+  @override
+  Widget get error {
+    if (NetworkState().state == ConnectivityResult.none) {
+      return PageStateNetWorkError(
+        onRetry: controller.loadRetry,
+      );
+    } else {
+      return PageStateRequestError(
+        onRetry: controller.loadRetry,
+      );
+    }
+  }
+
+  @override
+  Widget get load => PageStateLoad();
+
+  @override
+  Widget get navigation => NavigationBar();
+
+  @override
+  Widget get bottomNavigationBar => null;
+
+  Color get backgroundColor => Colors.white;
+
+  SystemUiOverlayStyle get style => SystemUiOverlayStyle.dark;
+
+  Widget renderLayout() {
+    return WillPopScope(
+      onWillPop: controller.onWillPop,
+      child: GestureDetector(
+        onTap: controller.onScreenClick,
+        child: body,
+      ),
+    );
+  }
+}
+
 abstract class BaseBottomSheetDialog<T extends StatefulWidget,
     C extends BaseController> extends State<T> {
   C controller;
