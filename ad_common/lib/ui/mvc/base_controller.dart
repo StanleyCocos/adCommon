@@ -64,8 +64,12 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
 
   /// 当前路由点击后退
   @override
-  void onNavigationBackClick() {
-    RouteManager().pop();
+  void onNavigationBackClick({bool rootNavigator = false, var result}) {
+    if (rootNavigator) {
+      Navigator.of(context, rootNavigator: true).pop(result);
+    } else {
+      RouteManager().pop(result: result);
+    }
   }
 
   /// 隐藏键盘
