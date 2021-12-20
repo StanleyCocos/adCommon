@@ -1,7 +1,4 @@
-
 import 'package:ad_common/ad_common.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-
 import 'package:flutter/cupertino.dart';
 
 class OwnEasyRefresh extends StatelessWidget {

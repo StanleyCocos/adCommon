@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/adapter.dart';
-import 'package:dio/dio.dart';
-import 'http_request_setting.dart';
 
 typedef HttpRequestSuccessCallback = void Function(dynamic data);
 typedef HttpRequestErrorCallback = void Function(DioError error, int stateCode);

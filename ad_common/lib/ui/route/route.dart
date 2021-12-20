@@ -1,5 +1,4 @@
 import 'package:ad_common/ui/route/route_state_option.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'animation.dart';

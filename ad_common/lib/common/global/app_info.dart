@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:ad_common/ad_common.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter_keychain/flutter_keychain.dart';
-import 'package:package_info/package_info.dart';
 
 ///app信息管理类
 class AppInfoManager {

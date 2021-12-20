@@ -1,5 +1,3 @@
-
-
 import 'column.dart';
 
 class ColumnSplitMerge {

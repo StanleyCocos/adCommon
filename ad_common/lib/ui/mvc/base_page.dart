@@ -1,8 +1,7 @@
 import 'package:ad_common/common/global/network_state_listener.dart';
 import 'package:ad_common/ui/mvc/page_state_widget.dart';
-import 'package:ad_common/ui/widget/navigation_bar.dart';
+import 'package:ad_common/ui/widget/nav_bar.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +71,7 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
   Widget get load => PageStateLoad();
 
   @override
-  Widget get navigation => NavigationBar();
+  Widget get navigation => NavBar();
 
   @override
   Widget get bottomNavigationBar => null;
@@ -167,7 +166,7 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
   Widget get load => PageStateLoad();
 
   @override
-  Widget get navigation => NavigationBar();
+  Widget get navigation => NavBar();
 
   @override
   Widget get bottomNavigationBar => null;

@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/options_extra.dart';
-import 'package:dio/dio.dart';
 
 /// [LogPrintInterceptor] is used to print logs during network requests.
 /// It's better to add [LogPrintInterceptor] to the tail of the interceptor queue,

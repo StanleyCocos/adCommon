@@ -1,6 +1,4 @@
 import 'package:ad_common/ad_common.dart';
-import 'package:ad_common/network/http_request.dart';
-import 'package:ad_common/network/test_interceptor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_Interceptor.dart';

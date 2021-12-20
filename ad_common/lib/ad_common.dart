@@ -43,7 +43,7 @@ export 'ui/util/screen_info.dart';
 export 'ui/widget/base_list_item_widget.dart';
 export 'ui/widget/common_state_page.dart';
 export 'ui/widget/image_widget.dart';
-export 'ui/widget/navigation_bar.dart';
+export 'ui/widget/nav_bar.dart';
 export 'ui/widget/provider_widget.dart';
 export 'ui/widget/toast_manager.dart';
 export 'ui/widget/refresh/own_easy_refresh.dart';
