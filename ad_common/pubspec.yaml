@@ -17,16 +17,16 @@ dependencies:
   package_info: 2.0.2
   uuid: 3.0.4
   flutter_easyrefresh: 2.2.1
-  provider: 5.0.0
-  flutter_screenutil: 5.0.0+2
+  provider: 6.0.1
+  flutter_screenutil: 5.0.1+2
   fluttertoast: 8.0.7
-  shared_preferences: 2.0.6
+  shared_preferences: 2.0.11
   synchronized: 3.0.0
   sqflite: 2.0.0+3
   permission_handler: 8.2.2
   dio_cookie_manager: 2.0.0
   crypto: 3.0.1
-  path_provider: 2.0.2
+  path_provider: 2.0.8
   flutter_easyloading: 3.0.3            # 加载圈
 
   screenshot_callback:
