@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:ad_common/common/extension/string_extension.dart';
 import 'package:crypto/crypto.dart';
@@ -27,7 +28,6 @@ class AppInfoManager {
   /// 设备系统版本
   String get systemVersion => _systemVersion;
 
-
   String _mode = "";
   String _version = "";
   String _versionCode = "";
@@ -51,17 +51,16 @@ class AppInfoManager {
   }
 
   Future<String> getImei() async {
-    try{
+    try {
       var content = await FlutterKeychain.get(key: IMEI_KEY);
       if (!content.isEmptyOrNull) {
         content = content!.replaceAll("\n", "");
         return content.toLowerCase();
       }
       return "";
-    } catch (e){
+    } catch (e) {
       return "";
     }
-
   }
 
   Future<void> _setImei(String imei) async {
@@ -78,9 +77,9 @@ class AppInfoManager {
       _version = packageInfo.version;
       _imei = await getImei();
       if (_imei.isEmptyOrNull) {
-        _identifier = iosInfo.identifierForVendor ?? "";
-        _setImei(_identifier);
-        _imei = _identifier;
+        _identifier = iosInfo.identifierForVendor ?? _imeiBuilder();
+        _imei = _identifier.toLowerCase();
+        _setImei(_imei);
       }
       _systemVersion = iosInfo.systemVersion ?? "";
     } else if (Platform.isAndroid) {
@@ -92,16 +91,19 @@ class AppInfoManager {
       _imei = await getImei();
       if (_imei.isEmptyOrNull) {
         _identifier = androidInfo.androidId ?? "";
-        _imei = generateUUID();
+        _imei = _generateUUID() ?? _imeiBuilder();
+        _imei = _imei.toLowerCase();
         _setImei(_imei);
       }
+
     }
   }
 
-  String generateUUID() {
+  String? _generateUUID() {
+    if (_identifier.length <= 0) return null;
     var androidId = Utf8Encoder().convert(_identifier);
     String uuid = md5.convert(androidId).toString();
-    if (uuid.length != 32) return "";
+    if (uuid.length != 32) return null;
     StringBuffer sb = StringBuffer();
     sb.write(uuid.substring(0, 8));
     sb.write("-");
@@ -115,17 +117,64 @@ class AppInfoManager {
     return sb.toString();
   }
 
-  String userAgent() {
-    return "version/$version" +
-        " version_code/$versionCode" +
-        " clients/${Platform.isIOS ? "iOS" : "Android"}" +
-        " imei/$imei" +
-        " model/${mode.replaceAll(" ", "-").toLowerCase()}" +
-        " system/${_systemVersion.replaceAll(" ", "-")}" +
-        " framework/flutter" +
-        " image/webp";
+
+  // String generateUUID1() {
+  //   var androidId = Utf8Encoder().convert("");
+  //   print(md5.convert([]).toString());
+  //   String uuid = md5.convert(androidId).toString();
+  //   if (uuid.length != 32) return "";
+  //   StringBuffer sb = StringBuffer();
+  //   sb.write(uuid.substring(0, 8));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(8, 12));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(12, 16));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(16, 20));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(20, 32));
+  //   return sb.toString();
+  // }
+
+  // 6670dc63-0cbf-4f80-820d-51f7951e8484
+  // b0ea7c92-e93c-4ca6-8fb7-c4d6987ce2d3
+
+  // String userAgent() {
+  //   return "version/$version" +
+  //       " version_code/$versionCode" +
+  //       " clients/${Platform.isIOS ? "iOS" : "Android"}" +
+  //       " imei/$imei" +
+  //       " model/${mode.replaceAll(" ", "-").toLowerCase()}" +
+  //       " system/${_systemVersion.replaceAll(" ", "-")}" +
+  //       " framework/flutter" +
+  //       " image/webp";
+  // }
+
+  String _imeiBuilder() {
+    StringBuffer sb = StringBuffer();
+    sb.write(_builderRandom(8));
+    sb.write("-");
+    sb.write(_builderRandom(4));
+    sb.write("-");
+    sb.write(_builderRandom(4));
+    sb.write("-");
+    sb.write(_builderRandom(4));
+    sb.write("-");
+    sb.write(_builderRandom(12));
+    return sb.toString();
   }
 
+  String _builderRandom(int length) {
+    var _chars = "abcdef0123456789";
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => _chars.codeUnitAt(
+          Random().nextInt(_chars.length),
+        ),
+      ),
+    );
+  }
 }
 
 class DeviceMode {
