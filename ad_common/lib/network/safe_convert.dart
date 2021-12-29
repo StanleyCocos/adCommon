@@ -118,3 +118,27 @@ List<String> asListStr(Map<String, dynamic>? json, String key, {List<String>? de
     return defaultValue ?? [];
   }
 }
+
+List<int> asListInt(Map<String, dynamic>? json, String key, {List<int>? defaultValue}) {
+  try{
+    if (json == null || !json.containsKey(key)) return defaultValue ?? [];
+    var value = json[key];
+    if (value == null) return defaultValue ?? [];
+    if (value is List){
+      List<int> list = [];
+      for (var obj in value) {
+        int tempObj = 0;
+        if (value is int) tempObj= obj;
+        if (value is double) tempObj= obj.toInt();
+        if (value is bool) tempObj= obj ? 1 : 0;
+        if (value is String) tempObj= int.tryParse(obj) ?? 0;
+        list.add(tempObj);
+      }
+      return list;
+    }
+    return defaultValue ?? [];
+  } catch(e){
+    stLog("error error: $e", current: StackTrace.current);
+    return defaultValue ?? [];
+  }
+}

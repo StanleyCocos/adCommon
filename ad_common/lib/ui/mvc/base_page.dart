@@ -73,7 +73,7 @@ abstract class BasePageState<T extends StatefulWidget, C extends BaseController>
   Widget? get navigation => NavBar();
 
   @override
-  Widget? get bottomNavigationBar;
+  Widget? get bottomNavigationBar => null;
 
   Color get backgroundColor => Colors.white;
 
@@ -164,7 +164,10 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
   Widget get load => PageStateLoad();
 
   @override
-  Widget get navigation => NavBar();
+  Widget? get navigation => NavBar();
+
+  @override
+  Widget? get bottomNavigationBar => null;
 
   Color get backgroundColor => Colors.white;
 
@@ -185,9 +188,8 @@ abstract class BasePage<T extends BaseController> extends StatelessWidget
   }
 }
 
-
-abstract class BaseBodyPageState<T extends StatefulWidget, C extends BaseController>
-    extends State<T> implements PageInterface {
+abstract class BaseBodyPageState<T extends StatefulWidget,
+    C extends BaseController> extends State<T> implements PageInterface {
   late C controller;
 
   @override
@@ -248,6 +250,12 @@ abstract class BaseBodyPageState<T extends StatefulWidget, C extends BaseControl
   Widget get load => PageStateLoad();
 
   Color get backgroundColor => Colors.white;
+
+  @override
+  Widget? get navigation => null;
+
+  @override
+  Widget? get bottomNavigationBar => null;
 
   bool get extendBodyBehindAppBar => false;
 
@@ -310,8 +318,8 @@ abstract class BaseBodyPage<T extends BaseController> extends StatelessWidget
 
   @override
   Widget get empty => PageStateEmpty(
-    onRetry: controller.loadRetry,
-  );
+        onRetry: controller.loadRetry,
+      );
 
   @override
   Widget get error {
@@ -329,6 +337,11 @@ abstract class BaseBodyPage<T extends BaseController> extends StatelessWidget
   @override
   Widget get load => PageStateLoad();
 
+  @override
+  Widget? get navigation => null;
+
+  @override
+  Widget? get bottomNavigationBar => null;
 
   Color get backgroundColor => Colors.white;
 
