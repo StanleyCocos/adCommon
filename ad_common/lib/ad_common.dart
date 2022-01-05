@@ -9,6 +9,7 @@ export 'common/extension/list_extension.dart';
 export 'common/extension/log_extension.dart';
 export 'common/extension/map_extension.dart';
 export 'common/extension/string_extension.dart';
+export 'common/extension/widget_extension.dart';
 
 export 'common/global/app_info.dart';
 export 'common/global/network_state_listener.dart';
@@ -23,8 +24,8 @@ export 'network/header_interceptor.dart';
 export 'network/http_request_setting.dart';
 export 'network/log_interceptor.dart';
 export 'network/test_interceptor.dart';
+// export 'network/safe_convert_expired.dart';
 export 'network/safe_convert.dart';
-export 'network/safe_convert_v2.dart';
 
 export 'ui/mvc/base_controller.dart';
 export 'ui/mvc/base_model.dart';
@@ -52,7 +53,6 @@ export 'package:dio/dio.dart';
 export 'package:sqflite/sqflite.dart';
 export 'package:connectivity/connectivity.dart';
 export 'package:device_info_plus/device_info_plus.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 export 'package:flutter_easyrefresh/easy_refresh.dart';
 export 'package:provider/provider.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,5 +63,7 @@ export 'package:crypto/crypto.dart';
 export 'package:cookie_jar/cookie_jar.dart';
 export 'package:dio/dio.dart';
 export 'package:path_provider/path_provider.dart';
+export 'package:intl/intl.dart';
+export 'package:convert/convert.dart';
 
 

@@ -12,7 +12,6 @@ Future<T?> showAnimationDialog<T>(
   RouteSettings? routeSettings,
   PageTransitionType transitionType = PageTransitionType.scale,
 }) {
-  assert(useRootNavigator != null);
   assert(debugCheckHasMaterialLocalizations(context));
 
   return showGeneralDialog(

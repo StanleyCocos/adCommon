@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:ad_common/common/extension/string_extension.dart';
 import 'package:crypto/crypto.dart';
@@ -13,23 +14,30 @@ class AppInfoManager {
   String get version => _version;
 
   /// 设备类型
-  String? get mode => _mode;
+  String get mode => _mode;
 
   /// 版本号
   String get versionCode => _versionCode;
 
   /// 唯一标识
-  String? get imei => _imei;
+  String get imei => _imei;
 
   ///设备标识
-  String? get identifier => _identifier;
+  String get identifier => _identifier;
 
   /// 设备系统版本
-  String? get systemVersion => _systemVersion;
+  String get systemVersion => _systemVersion;
 
-  factory AppInfoManager() => _getInstance()!;
+  String _mode = "";
+  String _version = "";
+  String _versionCode = "";
+  String _imei = "";
+  String _identifier = "";
+  String _systemVersion = "";
 
-  static AppInfoManager? get instance => _getInstance();
+  factory AppInfoManager() => _getInstance();
+
+  static AppInfoManager get instance => _getInstance();
   static AppInfoManager? _instance;
   static const String IMEI_KEY = "designUUID";
 
@@ -37,20 +45,22 @@ class AppInfoManager {
     initInfo();
   }
 
-  static AppInfoManager? _getInstance() {
-    if (_instance == null) {
-      _instance = new AppInfoManager._internal();
-    }
-    return _instance;
+  static AppInfoManager _getInstance() {
+    _instance ??= AppInfoManager._internal();
+    return _instance!;
   }
 
   Future<String> getImei() async {
-    var content = await FlutterKeychain.get(key: IMEI_KEY);
-    if (!content.isEmptyOrNull) {
-      content = content!.replaceAll("\n", "");
-      return content.toLowerCase();
+    try {
+      var content = await FlutterKeychain.get(key: IMEI_KEY);
+      if (!content.isEmptyOrNull) {
+        content = content!.replaceAll("\n", "");
+        return content.toLowerCase();
+      }
+      return "";
+    } catch (e) {
+      return "";
     }
-    return "";
   }
 
   Future<void> _setImei(String imei) async {
@@ -62,34 +72,38 @@ class AppInfoManager {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      _mode = DeviceMode.transform(iosInfo.utsname.machine);
+      _mode = DeviceMode.transform(iosInfo.utsname.machine ?? "") ?? "";
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
       _imei = await getImei();
-      _identifier = iosInfo.identifierForVendor;
       if (_imei.isEmptyOrNull) {
-        _setImei(iosInfo.identifierForVendor!);
-        _imei = iosInfo.identifierForVendor;
+        _identifier = iosInfo.identifierForVendor ?? _imeiBuilder();
+        _imei = _identifier.toLowerCase();
+        _setImei(_imei);
       }
-      _systemVersion = iosInfo.systemVersion;
+      _systemVersion = iosInfo.systemVersion ?? "";
     } else if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      _mode = androidInfo.model;
+      _mode = androidInfo.model ?? "";
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
-      _systemVersion = androidInfo.version.release;
+      _systemVersion = androidInfo.version.release ?? "";
       _imei = await getImei();
-      _identifier = androidInfo.androidId;
       if (_imei.isEmptyOrNull) {
-        _imei = generateUUID(androidInfo.androidId);
+        _identifier = androidInfo.androidId ?? "";
+        _imei = _generateUUID() ?? _imeiBuilder();
+        _imei = _imei.toLowerCase();
+        _setImei(_imei);
       }
+
     }
   }
 
-  String generateUUID(String? androidId) {
-    var androidId = Utf8Encoder().convert(_identifier!);
+  String? _generateUUID() {
+    if (_identifier.length <= 0) return null;
+    var androidId = Utf8Encoder().convert(_identifier);
     String uuid = md5.convert(androidId).toString();
-    if (uuid.length != 32) return "";
+    if (uuid.length != 32) return null;
     StringBuffer sb = StringBuffer();
     sb.write(uuid.substring(0, 8));
     sb.write("-");
@@ -103,27 +117,68 @@ class AppInfoManager {
     return sb.toString();
   }
 
-  String userAgent() {
-    return "version/$version" +
-        " version_code/$versionCode" +
-        " clients/${Platform.isIOS ? "iOS" : "Android"}" +
-        " imei/$imei" +
-        " model/${mode!.replaceAll(" ", "-").toLowerCase()}" +
-        " system/${_systemVersion!.replaceAll(" ", "-")}" +
-        " framework/flutter" +
-        " image/webp";
+
+  // String generateUUID1() {
+  //   var androidId = Utf8Encoder().convert("");
+  //   print(md5.convert([]).toString());
+  //   String uuid = md5.convert(androidId).toString();
+  //   if (uuid.length != 32) return "";
+  //   StringBuffer sb = StringBuffer();
+  //   sb.write(uuid.substring(0, 8));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(8, 12));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(12, 16));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(16, 20));
+  //   sb.write("-");
+  //   sb.write(uuid.substring(20, 32));
+  //   return sb.toString();
+  // }
+
+  // 6670dc63-0cbf-4f80-820d-51f7951e8484
+  // b0ea7c92-e93c-4ca6-8fb7-c4d6987ce2d3
+
+  // String userAgent() {
+  //   return "version/$version" +
+  //       " version_code/$versionCode" +
+  //       " clients/${Platform.isIOS ? "iOS" : "Android"}" +
+  //       " imei/$imei" +
+  //       " model/${mode.replaceAll(" ", "-").toLowerCase()}" +
+  //       " system/${_systemVersion.replaceAll(" ", "-")}" +
+  //       " framework/flutter" +
+  //       " image/webp";
+  // }
+
+  String _imeiBuilder() {
+    StringBuffer sb = StringBuffer();
+    sb.write(_builderRandom(8));
+    sb.write("-");
+    sb.write(_builderRandom(4));
+    sb.write("-");
+    sb.write(_builderRandom(4));
+    sb.write("-");
+    sb.write(_builderRandom(4));
+    sb.write("-");
+    sb.write(_builderRandom(12));
+    return sb.toString();
   }
 
-  String? _mode = "";
-  String _version = "";
-  String _versionCode = "";
-  String? _imei = "";
-  String? _identifier = "";
-  String? _systemVersion = "";
+  String _builderRandom(int length) {
+    var _chars = "abcdef0123456789";
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => _chars.codeUnitAt(
+          Random().nextInt(_chars.length),
+        ),
+      ),
+    );
+  }
 }
 
 class DeviceMode {
-  static String? transform(String? mode) {
+  static String? transform(String mode) {
     if (Platform.isIOS) {
       switch (mode) {
         case "iPhone4,1":

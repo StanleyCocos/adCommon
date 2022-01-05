@@ -1,7 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:ad_common/common/extension/int_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:crypto/crypto.dart' as crypto;
+import 'package:convert/convert.dart' as convert;
+import 'package:flutter/foundation.dart';
+import 'package:ad_common/common/extension/date_extension.dart';
+
 
 /*
 * 字符串常规操作
@@ -191,16 +197,25 @@ extension StringOption on String? {
 * 字符串加密
 * */
 extension StringEncryption on String {
+
   String md5() {
-    return "";
+    if(isEmptyOrNull) return "";
+    var bytes = new Utf8Encoder().convert(this);
+    var value = crypto.md5.convert(bytes);
+    return convert.hex.encode(value.bytes);
   }
 
   String base64() {
-    return "";
+    if(isEmptyOrNull) return "";
+    var bytes = new Utf8Encoder().convert(this);
+    return base64Encode(bytes);
   }
 
   String sha1() {
-    return "";
+    if(isEmptyOrNull) return "";
+    var data = new Utf8Encoder().convert(this);
+    var digest = crypto.sha1.convert(data);
+    return convert.hex.encode(digest.bytes);
   }
 
   String rsa() {
@@ -213,5 +228,14 @@ extension StringEncryption on String {
 
   String des() {
     return "";
+  }
+}
+
+
+extension debugTest on String {
+
+  void log(){
+    if(kReleaseMode) return;
+    print("${DateTime.now().string(format: "HH:mm:ss")}: $this");
   }
 }

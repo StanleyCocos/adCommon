@@ -20,7 +20,7 @@ enum PageTransitionType {
 }
 
 //缩放路由动画
-class ScaleRouter extends PageRouteBuilder {
+class ScaleRouter<T> extends PageRouteBuilder<T> {
   final Widget? page;
   final int duration;
   final Curve curve;
@@ -43,7 +43,7 @@ class ScaleRouter extends PageRouteBuilder {
 }
 
 //渐变透明路由动画
-class FadeRouter extends PageRouteBuilder {
+class FadeRouter<T> extends PageRouteBuilder<T>  {
   final Widget? page;
   final int duration;
   final Curve curve;
@@ -69,7 +69,7 @@ class FadeRouter extends PageRouteBuilder {
 }
 
 //旋转路由动画
-class RotateRouter extends PageRouteBuilder {
+class RotateRouter<T>  extends PageRouteBuilder<T>  {
   final Widget? page;
   final int duration;
   final Curve curve;
@@ -95,7 +95,7 @@ class RotateRouter extends PageRouteBuilder {
 }
 
 //上--->下
-class TopBottomRouter extends PageRouteBuilder {
+class TopBottomRouter<T>  extends PageRouteBuilder<T>  {
   final Widget? page;
   final int duration;
   final Curve curve;
@@ -129,7 +129,7 @@ class TopBottomRouter extends PageRouteBuilder {
 }
 
 //左--->右
-class LeftRightRouter extends PageRouteBuilder {
+class LeftRightRouter<T> extends PageRouteBuilder<T> {
   final Widget? page;
   final int duration;
   final Curve curve;
@@ -164,7 +164,7 @@ class LeftRightRouter extends PageRouteBuilder {
 }
 
 //下--->上
-class BottomTopRouter extends PageRouteBuilder {
+class BottomTopRouter<T>  extends PageRouteBuilder<T>  {
   final Widget? page;
   final int duration;
   final Curve curve;
@@ -198,7 +198,7 @@ class BottomTopRouter extends PageRouteBuilder {
 }
 
 //右--->左
-class RightLeftRouter extends PageRouteBuilder {
+class RightLeftRouter<T> extends PageRouteBuilder<T> {
   final Widget? page;
   final int duration;
   final Curve curve;
@@ -232,7 +232,7 @@ class RightLeftRouter extends PageRouteBuilder {
 }
 
 //缩放+透明+旋转路由动画
-class ScaleFadeRotateRouter extends PageRouteBuilder {
+class ScaleFadeRotateRouter<T> extends PageRouteBuilder<T> {
   final Widget? page;
   final int duration;
   final Curve curve;

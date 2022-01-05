@@ -62,7 +62,7 @@ class ApiTestInterceptor extends InterceptorsWrapper {
       responseBodyStr = jsonEncode(responseBody);
     } catch (JsonUnsupportedObjectError) {}
 
-    HttpRequest.getInstance()!.post(
+    HttpRequest.getInstance().post(
       "$baseUrl$uploadUrl",
       params: {
         "url": url,

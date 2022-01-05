@@ -1,10 +1,13 @@
+import 'package:ad_common/ad_common.dart';
 import 'package:ad_common/network/http_request.dart';
 import 'package:ad_common/ui/route/animation.dart';
 import 'package:ad_common/ui/route/route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+
 import 'base_model.dart';
 
 abstract class BaseController<T extends BaseModel> extends ChangeNotifier
@@ -13,7 +16,7 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
         BaseControllerLifeCycle,
         BaseControllerCommonMethod {
   /// 模型 数据提供
-  T? model;
+  late T model;
 
   /// 当前页面上下文
   BuildContext? context;
@@ -63,8 +66,12 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
 
   /// 当前路由点击后退
   @override
-  void onNavigationBackClick() {
-    RouteManager().pop();
+  void onNavigationBackClick({bool rootNavigator = false, var result}) {
+    if (rootNavigator) {
+      Navigator.of(context!, rootNavigator: true).pop(result);
+    } else {
+      RouteManager().pop(result: result);
+    }
   }
 
   /// 隐藏键盘
@@ -77,6 +84,12 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
   @override
   void onScreenClick() {
     if (isHideKeyboard) hideKeyboard();
+  }
+
+  /// 监听物理返回
+  @override
+  Future<bool> onWillPop() {
+    return Future.value(true);
   }
 
   /// 点击重新请求
@@ -95,15 +108,35 @@ abstract class BaseController<T extends BaseModel> extends ChangeNotifier
   }
 
   /// 获取页面间传递的参数
-  Object? getArgument(Object key, {Object? defaultValue}) {
+  T? getArgument<T>(Object key, {T? defaultValue}) {
     final arguments = RouteManager().currentRoute!.settings.arguments;
     if (arguments == null) return defaultValue;
     if (arguments is Map) {
       final value = arguments[key];
       if (value == null) return defaultValue;
-      return arguments[key];
+      return value;
     }
     return defaultValue;
+  }
+
+  ///隐藏加载圈
+  void hideLoading() {
+    if (EasyLoading.isShow) {
+      EasyLoading.dismiss();
+    }
+  }
+
+  ///显示加载圈
+  void showLoading({message = '加載中...'}) {
+    if (!EasyLoading.isShow) {
+      EasyLoading.show(status: message);
+    }
+  }
+
+  ///显示提示
+  void toast(String message,
+      {EasyLoadingToastPosition position = EasyLoadingToastPosition.center}) {
+    EasyLoading.showToast(message, toastPosition: position);
   }
 }
 
@@ -114,7 +147,8 @@ extension PageJump on BaseController {
     bool isReplace = false,
     PageTransitionType type = PageTransitionType.right,
   }) {
-    var route = RouteManager().routeBuild(page: page, type: type, arguments: arguments);
+    var route =
+        RouteManager().routeBuild(page: page, type: type, arguments: arguments);
     return RouteManager()
         .pushRoute(route, arguments: arguments, isReplace: isReplace);
   }
@@ -139,7 +173,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   String get loadApi;
 
   /// 请求参数
-  Map<String, Object> params = {"page": "1"};
+  Map<String, dynamic> params = {"page": "1"};
 
   /// 是否v2接口
   bool get isV2Api => false;
@@ -155,7 +189,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   Future<void> loadListData() async {
     loadBegin(isRefresh: true);
     _setPageParams();
-    await HttpRequest.getInstance()!.get(
+    await HttpRequest.getInstance().get(
       loadApi,
       params: params,
       options: _requestOptions,
@@ -189,7 +223,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   Future<void> loadListDataMore() async {
     loadBegin(isRefresh: false);
     _setPageParams(isMore: true);
-    await HttpRequest.getInstance()!.get(
+    await HttpRequest.getInstance().get(
       loadApi,
       params: params,
       options: _requestOptions,
@@ -224,8 +258,7 @@ abstract class BaseStateController<T extends BaseModel, B extends BaseBean>
   void onItemClick<M>(M model, int index) {}
 
   /// 添加参数
-  void addParams(Map<String, Object> params) {
-    if (params == null) return;
+  void addParams(Map<String, dynamic> params) {
     this.params.clear();
     this.params.addAll(params);
   }
@@ -301,4 +334,7 @@ abstract class BaseControllerCommonMethod {
 
   /// 页面body任意位置点击
   void onScreenClick();
+
+  /// 物理返回
+  Future<bool> onWillPop();
 }

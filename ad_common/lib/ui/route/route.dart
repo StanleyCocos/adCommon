@@ -8,16 +8,16 @@ enum RouteAction { PUSH, REPLACE, POP, REMOVE }
 
 class RouteManager extends NavigatorObserver {
   /// 工厂模式创建单例
-  factory RouteManager() => _getInstance()!;
+  factory RouteManager() => _getInstance();
 
-  static RouteManager? get instance => _getInstance();
+  static RouteManager get instance => _getInstance();
   static RouteManager? _instance;
 
   RouteManager._internal();
 
-  static RouteManager? _getInstance() {
+  static RouteManager _getInstance() {
     if (_instance == null) _instance = RouteManager._internal();
-    return _instance;
+    return _instance!;
   }
 
   /// 当前路由栈
@@ -54,14 +54,15 @@ class RouteManager extends NavigatorObserver {
     bool isRemoveUntil = false,
   }) {
     if (isRemoveUntil) {
-     return navigator!.pushNamedAndRemoveUntil(routeName.toString(), (route) => false,
+      return navigator!.pushNamedAndRemoveUntil(
+          routeName.toString(), (route) => false,
           arguments: arguments ?? "");
     } else if (isReplace) {
       return navigator!.pushReplacementNamed(routeName.toString(),
           arguments: arguments ?? "");
     } else {
-      return navigator!.pushNamed(routeName.toString(),
-          arguments: arguments ?? "");
+      return navigator!
+          .pushNamed(routeName.toString(), arguments: arguments ?? "");
     }
   }
 
@@ -88,13 +89,15 @@ class RouteManager extends NavigatorObserver {
     if (type == null) {
       navigator!.pop(result);
     } else {
-      navigator!.popUntil((Route<dynamic> route) {
-        if (route.settings.name == homePageType) {
-          return true;
-        } else {
-          return type.toString() == route.settings.name;
-        }
-      });
+      navigator!.popUntil(
+        (Route<dynamic> route) {
+          if (route.settings.name == homePageType) {
+            return true;
+          } else {
+            return type.toString() == route.settings.name;
+          }
+        },
+      );
     }
   }
 
@@ -104,7 +107,7 @@ class RouteManager extends NavigatorObserver {
       Object? arguments}) {
     switch (type) {
       case PageTransitionType.scale:
-        return ScaleRouter(
+        return ScaleRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -113,7 +116,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.fade:
-        return FadeRouter(
+        return FadeRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -122,7 +125,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.rotate:
-        return RotateRouter(
+        return RotateRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -131,7 +134,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.top:
-        return TopBottomRouter(
+        return TopBottomRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -140,7 +143,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.left:
-        return LeftRightRouter(
+        return LeftRightRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -149,7 +152,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.bottom:
-        return BottomTopRouter(
+        return BottomTopRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -158,7 +161,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.right:
-        return RightLeftRouter(
+        return RightLeftRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -166,7 +169,7 @@ class RouteManager extends NavigatorObserver {
           ),
         );
       case PageTransitionType.none:
-        return NoAnimRouter(
+        return NoAnimRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -174,13 +177,6 @@ class RouteManager extends NavigatorObserver {
           ),
         );
     }
-    return MaterialPageRoute(
-      builder: (context) => page!,
-      settings: RouteSettings(
-        name: page.runtimeType.toString(),
-        arguments: arguments,
-      ),
-    );
   }
 
   bool isCurrentRoute(String pageType) {
@@ -219,7 +215,8 @@ class RouteManager extends NavigatorObserver {
   }
 
   @override
-  void didStartUserGesture(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didStartUserGesture(
+      Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didStartUserGesture(route, previousRoute);
     PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didStartUserGesture(route, previousRoute));

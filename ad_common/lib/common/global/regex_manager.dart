@@ -2,7 +2,7 @@
 class RegexManager {
   /// 校验函数
   static bool verify(String content, String regex) {
-    if (content == null || content.isEmpty) return false;
+    if (content.isEmpty) return false;
     return RegExp(regex).hasMatch(content);
   }
 

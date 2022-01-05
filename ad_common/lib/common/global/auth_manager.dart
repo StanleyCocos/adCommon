@@ -95,7 +95,7 @@ class Auth {
         status = await Permission.storage.request();
         break;
     }
-    if (status.isGranted) {
+    if (status.isGranted || status.isLimited) {
       if (callback != null) callback(status);
     } else {
       if (errorCallback != null) errorCallback(status);
@@ -140,8 +140,10 @@ class Auth {
         status = await Permission.storage.status;
         break;
     }
-    if (callback != null) callback(status.isGranted);
-    return status.isGranted;
+
+    final state = status.isGranted || status.isLimited;
+    if (callback != null) callback(state);
+    return state;
   }
 
   static Future use({
@@ -150,7 +152,7 @@ class Auth {
     AuthErrorCallback? errorCallback,
   }) async {
     PermissionStatus status = await request(type: type);
-    if (status.isGranted) {
+    if (status.isGranted || status.isLimited) {
       if (callback != null) callback(status);
     } else {
       if (errorCallback != null) errorCallback(status);

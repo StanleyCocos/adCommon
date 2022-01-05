@@ -29,7 +29,7 @@ class _ToolbarContainerLayout extends SingleChildLayoutDelegate {
   bool shouldRelayout(_ToolbarContainerLayout oldDelegate) => false;
 }
 
-class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
+class NavBar extends StatefulWidget implements PreferredSizeWidget {
   /// Creates a material design app bar.
   ///
   /// The arguments [primary], [toolbarOpacity], [bottomOpacity]
@@ -37,7 +37,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   /// [elevation] is specified, it must be non-negative.
   ///
   /// Typically used in the [Scaffold.appBar] property.
-  NavigationBar({
+  NavBar({
     Key? key,
     this.leading,
     this.leadingConstrained = true,
@@ -59,7 +59,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
     this.bottomOpacity = 1.0,
   })  : assert(elevation == null || elevation >= 0.0),
         preferredSize = Size.fromHeight(
-            kToolbarHeight + (bottom?.preferredSize?.height ?? 0.0)),
+            kToolbarHeight + (bottom?.preferredSize.height ?? 0.0)),
         super(key: key);
 
   /// A widget to display before the [title].
@@ -239,7 +239,7 @@ class NavigationBar extends StatefulWidget implements PreferredSizeWidget {
   _NavigationBarState createState() => _NavigationBarState();
 }
 
-class _NavigationBarState extends State<NavigationBar> {
+class _NavigationBarState extends State<NavBar> {
   void _handleDrawerButton() {
     Scaffold.of(context).openDrawer();
   }

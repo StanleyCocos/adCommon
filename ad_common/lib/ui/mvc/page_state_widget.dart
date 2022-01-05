@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:ad_common/ui/util/color_manager.dart';
 import 'package:ad_common/ui/widget/common_state_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,12 +9,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 abstract class BasePageStateWidget extends StatelessWidget {
   final Function? onRetry;
   final String text;
-  final Widget? image;
+  final Widget image;
 
   BasePageStateWidget({
+    required this.image,
     this.onRetry,
     this.text = "",
-    this.image,
   });
 
   @override
@@ -50,7 +51,6 @@ class PageStateNetWorkError extends BasePageStateWidget {
           ),
         );
 }
-
 
 /// 请求错误
 class PageStateRequestError extends BasePageStateWidget {
