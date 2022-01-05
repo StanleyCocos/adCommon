@@ -5,7 +5,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import 'base_controller.dart';
 
 abstract class BasePageState<T extends StatefulWidget, C extends BaseController>

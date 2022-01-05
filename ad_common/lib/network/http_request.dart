@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:ad_common/common/extension/log_extension.dart';
@@ -485,7 +486,7 @@ class HttpRequest {
     if (response.data == null) return {};
     var result = response.data;
     if (result is Map) return response.data;
-    if (result is List) return {"result": result.toString()};
+    if (result is List) return {"result": json.encode(result)};
     if (result is String) return {"result": result};
     if (result is int) return {"result": result};
     if (result is bool) return {"result": result};
