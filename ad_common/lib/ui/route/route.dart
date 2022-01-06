@@ -52,11 +52,12 @@ class RouteManager extends NavigatorObserver {
     Object? arguments,
     bool isReplace = false,
     bool isRemoveUntil = false,
+    RoutePredicate? predicate,
   }) {
     if (isRemoveUntil) {
       return navigator!.pushNamedAndRemoveUntil(
         routeName.toString(),
-        (route) => false,
+        predicate ?? (route) => false,
         arguments: arguments ?? "",
       );
     } else if (isReplace) {
@@ -77,11 +78,12 @@ class RouteManager extends NavigatorObserver {
     Route route, {
     bool isReplace = false,
     bool isRemoveUntil = false,
+    RoutePredicate? predicate,
   }) {
     if (isRemoveUntil) {
       return navigator!.pushAndRemoveUntil(
         route as Route<Object>,
-        (route) => false,
+        predicate ?? (route) => false,
       );
     } else if (isReplace) {
       return navigator!.pushReplacement(route as Route<Object>);
@@ -242,12 +244,13 @@ class RouteManager extends NavigatorObserver {
 /// 路由扩展
 extension RoutePush on RouteManager {
   Future<Object?> pushPage(
-      Widget page, {
-        Object? arguments,
-        bool isReplace = false,
-        PageTransitionType type = PageTransitionType.right,
-        bool isRemoveUntil = false,
-      }) {
+    Widget page, {
+    Object? arguments,
+    bool isReplace = false,
+    PageTransitionType type = PageTransitionType.right,
+    bool isRemoveUntil = false,
+    RoutePredicate? predicate,
+  }) {
     var route = RouteManager().routeBuild(
       page: page,
       type: type,
@@ -257,6 +260,7 @@ extension RoutePush on RouteManager {
       route,
       isReplace: isReplace,
       isRemoveUntil: isRemoveUntil,
+      predicate: predicate,
     );
   }
 
