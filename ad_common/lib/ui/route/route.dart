@@ -55,26 +55,34 @@ class RouteManager extends NavigatorObserver {
   }) {
     if (isRemoveUntil) {
       return navigator!.pushNamedAndRemoveUntil(
-          routeName.toString(), (route) => false,
-          arguments: arguments ?? "");
+        routeName.toString(),
+        (route) => false,
+        arguments: arguments ?? "",
+      );
     } else if (isReplace) {
-      return navigator!.pushReplacementNamed(routeName.toString(),
-          arguments: arguments ?? "");
+      return navigator!.pushReplacementNamed(
+        routeName.toString(),
+        arguments: arguments ?? "",
+      );
     } else {
-      return navigator!
-          .pushNamed(routeName.toString(), arguments: arguments ?? "");
+      return navigator!.pushNamed(
+        routeName.toString(),
+        arguments: arguments ?? "",
+      );
     }
   }
 
   /// 跳转页面
   Future<Object?> pushRoute(
     Route route, {
-    Object? arguments,
     bool isReplace = false,
     bool isRemoveUntil = false,
   }) {
     if (isRemoveUntil) {
-      return navigator!.pushAndRemoveUntil(route as Route<Object>, (route) => false);
+      return navigator!.pushAndRemoveUntil(
+        route as Route<Object>,
+        (route) => false,
+      );
     } else if (isReplace) {
       return navigator!.pushReplacement(route as Route<Object>);
     } else {
@@ -101,10 +109,11 @@ class RouteManager extends NavigatorObserver {
     }
   }
 
-  Route routeBuild(
-      {Widget? page,
-      PageTransitionType type = PageTransitionType.right,
-      Object? arguments}) {
+  Route routeBuild({
+    Widget? page,
+    PageTransitionType type = PageTransitionType.right,
+    Object? arguments,
+  }) {
     switch (type) {
       case PageTransitionType.scale:
         return ScaleRouter<Object>(

@@ -146,11 +146,18 @@ extension PageJump on BaseController {
     Object? arguments,
     bool isReplace = false,
     PageTransitionType type = PageTransitionType.right,
+    bool isRemoveUntil = false,
   }) {
-    var route =
-        RouteManager().routeBuild(page: page, type: type, arguments: arguments);
-    return RouteManager()
-        .pushRoute(route, arguments: arguments, isReplace: isReplace);
+    var route = RouteManager().routeBuild(
+      page: page,
+      type: type,
+      arguments: arguments,
+    );
+    return RouteManager().pushRoute(
+      route,
+      isReplace: isReplace,
+      isRemoveUntil: isRemoveUntil,
+    );
   }
 
   void pop<T>({type, T? result}) {
