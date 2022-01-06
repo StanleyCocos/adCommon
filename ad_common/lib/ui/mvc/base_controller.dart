@@ -1,14 +1,8 @@
 import 'package:ad_common/ad_common.dart';
-import 'package:ad_common/network/http_request.dart';
 import 'package:ad_common/ui/route/animation.dart';
-import 'package:ad_common/ui/route/route.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-
-import 'base_model.dart';
 
 abstract class BaseController<T extends BaseModel> extends ChangeNotifier
     implements
@@ -148,20 +142,17 @@ extension PageJump on BaseController {
     PageTransitionType type = PageTransitionType.right,
     bool isRemoveUntil = false,
   }) {
-    var route = RouteManager().routeBuild(
-      page: page,
-      type: type,
+    return RouteManager().pushPage(
+      page,
       arguments: arguments,
-    );
-    return RouteManager().pushRoute(
-      route,
       isReplace: isReplace,
       isRemoveUntil: isRemoveUntil,
+      type: type,
     );
   }
 
   void pop<T>({type, T? result}) {
-    return RouteManager().pop(type: type, result: result);
+    return RouteManager().popPage(type: type, result: result);
   }
 }
 

@@ -238,3 +238,29 @@ class RouteManager extends NavigatorObserver {
     option.forEach((e) => e.didStopUserGesture());
   }
 }
+
+/// 路由扩展
+extension RoutePush on RouteManager {
+  Future<Object?> pushPage(
+      Widget page, {
+        Object? arguments,
+        bool isReplace = false,
+        PageTransitionType type = PageTransitionType.right,
+        bool isRemoveUntil = false,
+      }) {
+    var route = RouteManager().routeBuild(
+      page: page,
+      type: type,
+      arguments: arguments,
+    );
+    return RouteManager().pushRoute(
+      route,
+      isReplace: isReplace,
+      isRemoveUntil: isRemoveUntil,
+    );
+  }
+
+  void popPage<T>({type, T? result}) {
+    return RouteManager().pop(type: type, result: result);
+  }
+}
