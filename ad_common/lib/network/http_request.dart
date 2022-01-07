@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:ad_common/common/extension/log_extension.dart';
@@ -84,7 +85,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> get(
+  Future<Map<String, dynamic>?> get(
     String url, {
     Options? options,
     Map<String, dynamic>? params,
@@ -116,7 +117,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> post(
+  Future<Map<String, dynamic>?> post(
     String url, {
     Options? options,
     Map<String, dynamic>? params,
@@ -150,7 +151,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> delete(
+  Future<Map<String, dynamic>?> delete(
     String url, {
     Options? options,
     Map<String, dynamic>? params,
@@ -182,7 +183,7 @@ class HttpRequest {
   /// @param [errorCallBack] 出错回调（可选） <br/>
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> patch(
+  Future<Map<String, dynamic>?> patch(
     String url, {
     Options? options,
     Map<String, dynamic>? params,
@@ -216,7 +217,7 @@ class HttpRequest {
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [onReceiveProgress] 接收进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> put(
+  Future<Map<String, dynamic>?> put(
     String url, {
     Options? options,
     Map<String, dynamic>? params,
@@ -251,7 +252,7 @@ class HttpRequest {
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法 <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> postUpload(
+  Future<Map<String, dynamic>?> postUpload(
     String url, {
     Options? options,
     Map<String, dynamic>? formData,
@@ -288,7 +289,7 @@ class HttpRequest {
   /// @param [commonCallBack] 公共回调方法，成功和失败都会调用（可选） <br/>
   /// @param [progressCallBack] 请求进度回调方法（可选） <br/>
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
-  Future<bool> _request(
+  Future<Map<String, dynamic>?> _request(
     String url, {
     String? method,
     Options? options,
@@ -423,12 +424,12 @@ class HttpRequest {
 
       commonCallBack?.call();
       callBack?.call(_resultToMap(response));
-      return true;
+      return _resultToMap(response);
     } on DioError catch (e) {
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
       commonCallBack?.call();
       _handleError(errorCallBack, error: e);
-      return false;
+      return null;
     }
   }
 
@@ -485,7 +486,7 @@ class HttpRequest {
     if (response.data == null) return {};
     var result = response.data;
     if (result is Map) return response.data;
-    if (result is List) return {"result": result.toString()};
+    if (result is List) return {"result": result};
     if (result is String) return {"result": result};
     if (result is int) return {"result": result};
     if (result is bool) return {"result": result};
