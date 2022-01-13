@@ -28,8 +28,6 @@ abstract class BaseTableModel {
   STInt id = STInt(primaryKey: true, autoIncrement: true);
 
 
-
-
   /*
   * 执行相应的sql
   * */
