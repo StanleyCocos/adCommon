@@ -19,7 +19,6 @@ class DBManager {
   /// 初始化数据库并创建对应的表
   static Future<void> init({
     int version = 1,
-    String name = DB_NAME,
     OnDatabaseVersionChangeFn? changeCallback,
   }) async {
     // 获取数据库文件的存储路径

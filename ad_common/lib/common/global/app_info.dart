@@ -36,21 +36,17 @@ class AppInfoManager {
   String _systemVersion = "";
 
   factory AppInfoManager() => _getInstance();
-
-  static AppInfoManager get instance => _getInstance();
   static AppInfoManager? _instance;
   static const String IMEI_KEY = "designUUID";
 
-  AppInfoManager._internal() {
-    initInfo();
-  }
+  AppInfoManager._internal();
 
   static AppInfoManager _getInstance() {
     _instance ??= AppInfoManager._internal();
     return _instance!;
   }
 
-  Future<String> getImei() async {
+  Future<String> _getImei() async {
     try {
       var content = await FlutterKeychain.get(key: IMEI_KEY);
       if (!content.isEmptyOrNull) {
@@ -64,7 +60,7 @@ class AppInfoManager {
   }
 
   Future<void> _setImei(String imei) async {
-    FlutterKeychain.put(key: IMEI_KEY, value: imei);
+    return FlutterKeychain.put(key: IMEI_KEY, value: imei);
   }
 
   Future initInfo() async {
@@ -75,9 +71,11 @@ class AppInfoManager {
       _mode = DeviceMode.transform(iosInfo.utsname.machine ?? "") ?? "";
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
-      _imei = await getImei();
-      if (_imei.isEmptyOrNull) {
+      _imei = await _getImei();
+      if (_imei.isEmptyOrNull || _imei.length <= 10) {
+        // 修复之前可能存在字符串 null的imei
         _identifier = iosInfo.identifierForVendor ?? _imeiBuilder();
+        if(_identifier.length <= 10) _identifier = _imeiBuilder();
         _imei = _identifier.toLowerCase();
         _setImei(_imei);
       }
@@ -88,14 +86,15 @@ class AppInfoManager {
       _versionCode = packageInfo.buildNumber;
       _version = packageInfo.version;
       _systemVersion = androidInfo.version.release ?? "";
-      _imei = await getImei();
-      if (_imei.isEmptyOrNull) {
+      _imei = await _getImei();
+      if (_imei.isEmptyOrNull || _imei.length <= 10) {
+        // 修复之前可能存在字符串 null的imei
         _identifier = androidInfo.androidId ?? "";
         _imei = _generateUUID() ?? _imeiBuilder();
+        if(_imei.length <= 10) _imei = _imeiBuilder();
         _imei = _imei.toLowerCase();
         _setImei(_imei);
       }
-
     }
   }
 
@@ -117,39 +116,6 @@ class AppInfoManager {
     return sb.toString();
   }
 
-
-  // String generateUUID1() {
-  //   var androidId = Utf8Encoder().convert("");
-  //   print(md5.convert([]).toString());
-  //   String uuid = md5.convert(androidId).toString();
-  //   if (uuid.length != 32) return "";
-  //   StringBuffer sb = StringBuffer();
-  //   sb.write(uuid.substring(0, 8));
-  //   sb.write("-");
-  //   sb.write(uuid.substring(8, 12));
-  //   sb.write("-");
-  //   sb.write(uuid.substring(12, 16));
-  //   sb.write("-");
-  //   sb.write(uuid.substring(16, 20));
-  //   sb.write("-");
-  //   sb.write(uuid.substring(20, 32));
-  //   return sb.toString();
-  // }
-
-  // 6670dc63-0cbf-4f80-820d-51f7951e8484
-  // b0ea7c92-e93c-4ca6-8fb7-c4d6987ce2d3
-
-  // String userAgent() {
-  //   return "version/$version" +
-  //       " version_code/$versionCode" +
-  //       " clients/${Platform.isIOS ? "iOS" : "Android"}" +
-  //       " imei/$imei" +
-  //       " model/${mode.replaceAll(" ", "-").toLowerCase()}" +
-  //       " system/${_systemVersion.replaceAll(" ", "-")}" +
-  //       " framework/flutter" +
-  //       " image/webp";
-  // }
-
   String _imeiBuilder() {
     StringBuffer sb = StringBuffer();
     sb.write(_builderRandom(8));
@@ -166,14 +132,17 @@ class AppInfoManager {
 
   String _builderRandom(int length) {
     var _chars = "abcdef0123456789";
-    return String.fromCharCodes(
+    var imei = String.fromCharCodes(
       Iterable.generate(
         length,
-        (_) => _chars.codeUnitAt(
-          Random().nextInt(_chars.length),
-        ),
+        (_){
+          return _chars.codeUnitAt(
+            Random().nextInt(_chars.length),
+          );
+        },
       ),
     );
+    return imei.replaceRange(0, 1, "x");
   }
 }
 
@@ -233,6 +202,30 @@ class DeviceMode {
           return "iPhone XS Max";
         case "iPhone11,4":
           return "iPhone XS Max";
+        case "iPhone12,1":
+          return "iPhone 11";
+        case "iPhone12,3":
+          return "iPhone 11 Pro";
+        case "iPhone12,5":
+          return "iPhone 11 Pro Max";
+        case "iPhone12,8":
+          return "iPhone SE";
+        case "iPhone13,1":
+          return "iPhone 12 mini";
+        case "iPhone13,2":
+          return "iPhone 12";
+        case "iPhone13,3":
+          return "iPhone 12 Pro";
+        case "iPhone13,4":
+          return "iPhone 12 Pro Max";
+        case "iPhone14,4":
+          return "iPhone 13 mini";
+        case "iPhone14,5":
+          return "iPhone 13";
+        case "iPhone14,2":
+          return "iPhone 13 Pro";
+        case "iPhone14,3":
+          return "iPhone 13 Pro Max";
         default:
           return mode;
       }

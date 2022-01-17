@@ -153,21 +153,3 @@ class STDouble extends BaseColumn<double> {
     autoIncrement: autoIncrement,
   );
 }
-
-
-class STBool extends BaseColumn<bool> {
-
-  STBool({
-    bool canNull = true,
-    Object? defaultValue,
-    bool primaryKey = false,
-    bool autoIncrement = false,
-    String comment = "",
-  }) : super(
-    type: "double",
-    canNull: canNull,
-    defaultValue: defaultValue,
-    primaryKey: primaryKey,
-    autoIncrement: autoIncrement,
-  );
-}
