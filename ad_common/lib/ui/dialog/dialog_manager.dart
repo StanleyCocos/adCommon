@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 /*
 * 自定义动画展示dialog
 * */
-Future<T> showAnimationDialog<T>(
+Future<T?> showAnimationDialog<T>(
   BuildContext context, {
-  @required Widget child,
+  required Widget child,
   bool barrierDismissible = true,
   bool useRootNavigator = true,
-  RouteSettings routeSettings,
+  RouteSettings? routeSettings,
   PageTransitionType transitionType = PageTransitionType.scale,
 }) {
-  assert(useRootNavigator != null);
   assert(debugCheckHasMaterialLocalizations(context));
 
   return showGeneralDialog(

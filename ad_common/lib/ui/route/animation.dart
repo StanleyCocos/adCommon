@@ -20,8 +20,8 @@ enum PageTransitionType {
 }
 
 //缩放路由动画
-class ScaleRouter extends PageRouteBuilder {
-  final Widget page;
+class ScaleRouter<T> extends PageRouteBuilder<T> {
+  final Widget? page;
   final int duration;
   final Curve curve;
   final RouteSettings settings;
@@ -29,10 +29,10 @@ class ScaleRouter extends PageRouteBuilder {
   ScaleRouter({
     this.page,
     this.duration = 300,
-    this.settings,
+    required this.settings,
     this.curve = Curves.easeOut,
   }) : super(
-            pageBuilder: (context, animation, secondaryAnimation) => page,
+            pageBuilder: (context, animation, secondaryAnimation) => page!,
             transitionDuration: Duration(milliseconds: duration),
             transitionsBuilder: (context, a1, a2, child) => ScaleTransition(
                   scale: Tween(begin: 0.0, end: 1.0)
@@ -43,8 +43,8 @@ class ScaleRouter extends PageRouteBuilder {
 }
 
 //渐变透明路由动画
-class FadeRouter extends PageRouteBuilder {
-  final Widget page;
+class FadeRouter<T> extends PageRouteBuilder<T>  {
+  final Widget? page;
   final int duration;
   final Curve curve;
   final RouteSettings settings;
@@ -53,9 +53,9 @@ class FadeRouter extends PageRouteBuilder {
     this.page,
     this.duration = 300,
     this.curve = Curves.easeOut,
-    this.settings,
+    required this.settings,
   }) : super(
-          pageBuilder: (context, animation, secondaryAnimation) => page,
+          pageBuilder: (context, animation, secondaryAnimation) => page!,
           transitionDuration: Duration(milliseconds: duration),
           transitionsBuilder: (context, a1, a2, child) => FadeTransition(
             opacity: Tween(begin: 0.1, end: 1.0).animate(CurvedAnimation(
@@ -69,8 +69,8 @@ class FadeRouter extends PageRouteBuilder {
 }
 
 //旋转路由动画
-class RotateRouter extends PageRouteBuilder {
-  final Widget page;
+class RotateRouter<T>  extends PageRouteBuilder<T>  {
+  final Widget? page;
   final int duration;
   final Curve curve;
   final RouteSettings settings;
@@ -79,9 +79,9 @@ class RotateRouter extends PageRouteBuilder {
     this.page,
     this.duration = 300,
     this.curve = Curves.easeOut,
-    this.settings,
+    required this.settings,
   }) : super(
-          pageBuilder: (context, animation, secondaryAnimation) => page,
+          pageBuilder: (context, animation, secondaryAnimation) => page!,
           transitionDuration: Duration(milliseconds: duration),
           transitionsBuilder: (context, a1, a2, child) => RotationTransition(
             turns: Tween(begin: 0.1, end: 1.0).animate(CurvedAnimation(
@@ -95,8 +95,8 @@ class RotateRouter extends PageRouteBuilder {
 }
 
 //上--->下
-class TopBottomRouter extends PageRouteBuilder {
-  final Widget page;
+class TopBottomRouter<T>  extends PageRouteBuilder<T>  {
+  final Widget? page;
   final int duration;
   final Curve curve;
   final RouteSettings settings;
@@ -105,11 +105,11 @@ class TopBottomRouter extends PageRouteBuilder {
     this.page,
     this.duration = 300,
     this.curve = Curves.fastOutSlowIn,
-    this.settings,
+    required this.settings,
   }) : super(
           transitionDuration: Duration(milliseconds: duration),
           pageBuilder: (ctx, a1, a2) {
-            return page;
+            return page!;
           },
           transitionsBuilder: (
             ctx,
@@ -129,8 +129,8 @@ class TopBottomRouter extends PageRouteBuilder {
 }
 
 //左--->右
-class LeftRightRouter extends PageRouteBuilder {
-  final Widget page;
+class LeftRightRouter<T> extends PageRouteBuilder<T> {
+  final Widget? page;
   final int duration;
   final Curve curve;
   final RouteSettings settings;
@@ -139,12 +139,12 @@ class LeftRightRouter extends PageRouteBuilder {
     this.page,
     this.duration = 300,
     this.curve = Curves.easeOut,
-    this.settings,
+    required this.settings,
   })  : assert(true),
         super(
           transitionDuration: Duration(milliseconds: duration),
           pageBuilder: (ctx, a1, a2) {
-            return page;
+            return page!;
           },
           transitionsBuilder: (
             ctx,
@@ -164,8 +164,8 @@ class LeftRightRouter extends PageRouteBuilder {
 }
 
 //下--->上
-class BottomTopRouter extends PageRouteBuilder {
-  final Widget page;
+class BottomTopRouter<T>  extends PageRouteBuilder<T>  {
+  final Widget? page;
   final int duration;
   final Curve curve;
   final RouteSettings settings;
@@ -174,11 +174,11 @@ class BottomTopRouter extends PageRouteBuilder {
     this.page,
     this.duration = 300,
     this.curve = Curves.easeOut,
-    this.settings,
+    required this.settings,
   }) : super(
           transitionDuration: Duration(milliseconds: duration),
           pageBuilder: (ctx, a1, a2) {
-            return page;
+            return page!;
           },
           transitionsBuilder: (
             ctx,
@@ -198,8 +198,8 @@ class BottomTopRouter extends PageRouteBuilder {
 }
 
 //右--->左
-class RightLeftRouter extends PageRouteBuilder {
-  final Widget page;
+class RightLeftRouter<T> extends PageRouteBuilder<T> {
+  final Widget? page;
   final int duration;
   final Curve curve;
   final RouteSettings settings;
@@ -208,11 +208,11 @@ class RightLeftRouter extends PageRouteBuilder {
     this.page,
     this.duration = 300,
     this.curve = Curves.easeOut,
-    this.settings,
+    required this.settings,
   }) : super(
           transitionDuration: Duration(milliseconds: duration),
           pageBuilder: (ctx, a1, a2) {
-            return page;
+            return page!;
           },
           transitionsBuilder: (
             ctx,
@@ -232,8 +232,8 @@ class RightLeftRouter extends PageRouteBuilder {
 }
 
 //缩放+透明+旋转路由动画
-class ScaleFadeRotateRouter extends PageRouteBuilder {
-  final Widget page;
+class ScaleFadeRotateRouter<T> extends PageRouteBuilder<T> {
+  final Widget? page;
   final int duration;
   final Curve curve;
 
@@ -243,7 +243,7 @@ class ScaleFadeRotateRouter extends PageRouteBuilder {
     this.curve = Curves.fastOutSlowIn,
   }) : super(
             transitionDuration: Duration(milliseconds: duration),
-            pageBuilder: (ctx, a1, a2) => page, //页面
+            pageBuilder: (ctx, a1, a2) => page!, //页面
             transitionsBuilder: (
               ctx,
               a1,
@@ -274,13 +274,13 @@ class ScaleFadeRotateRouter extends PageRouteBuilder {
 
 //无动画
 class NoAnimRouter<T> extends PageRouteBuilder<T> {
-  final Widget page;
+  final Widget? page;
   final RouteSettings settings;
-  NoAnimRouter({this.page, this.settings})
+  NoAnimRouter({this.page, required this.settings})
       : super(
             opaque: false,
             settings: settings,
-            pageBuilder: (context, animation, secondaryAnimation) => page,
+            pageBuilder: (context, animation, secondaryAnimation) => page!,
             transitionDuration: Duration(milliseconds: 0),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) => child);

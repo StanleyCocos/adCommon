@@ -14,13 +14,13 @@ class HttpRequestSetting {
   final String contentType;
 
   /// 拦截器集合
-  final List<Interceptor> interceptors;
+  final List<Interceptor>? interceptors;
 
   /// 请求代理(测试环境)
-  final String delegateHost;
+  final String? delegateHost;
 
   /// 添加cookie
-  final String dev;
+  final String? dev;
 
   HttpRequestSetting({
     this.baseUrl = "",

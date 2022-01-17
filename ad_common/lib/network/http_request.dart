@@ -1,13 +1,19 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
-import 'package:ad_common/ad_common.dart';
+
+import 'package:ad_common/common/extension/log_extension.dart';
+import 'package:ad_common/common/extension/string_extension.dart';
 import 'package:ad_common/network/options_extra.dart';
+import 'package:ad_common/ui/widget/toast_manager.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+
 import 'http_request_setting.dart';
 
-typedef HttpRequestSuccessCallback = void Function(dynamic data);
-typedef HttpRequestErrorCallback = void Function(DioError error, int stateCode);
+typedef HttpRequestSuccessCallback = void Function(Map<String, dynamic> data);
+typedef HttpRequestErrorCallback = void Function(
+    DioError? error, int? stateCode);
 typedef HttpRequestCommonCallback = void Function();
 
 /// 可支持 restful 请求和普通API请求
@@ -19,7 +25,7 @@ typedef HttpRequestCommonCallback = void Function();
 ///  - 统一打印响应信息；<br>
 ///  - 统一打印报错信息；
 class HttpRequest {
-  static HttpRequest _instance;
+  static HttpRequest? _instance;
 
   /// 请求方式
   static const String GET = "get";
@@ -28,18 +34,18 @@ class HttpRequest {
   static const String PATCH = 'patch';
   static const String DELETE = 'delete';
 
-  factory   HttpRequest() => getInstance();
+  factory HttpRequest() => getInstance();
 
   static HttpRequest getInstance() {
     if (_instance == null) {
       _instance = HttpRequest._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
-  Dio _client;
+  Dio? _client;
 
-  Dio get client => _client;
+  Dio get client => _client!;
 
   HttpRequest._internal();
 
@@ -47,22 +53,24 @@ class HttpRequest {
   void init(HttpRequestSetting setting) async {
     if (_client == null) {
       BaseOptions options = BaseOptions();
-      if(setting.dev.isNotEmptyOrNull)options.headers[HttpHeaders.cookieHeader] = "dev=${setting.dev};";
+      if (setting.dev.isNotEmptyOrNull)
+        options.headers[HttpHeaders.cookieHeader] = "dev=${setting.dev};";
       options.connectTimeout = setting.connectTimeOut * 1000;
       options.receiveTimeout = setting.receiveTimeOut * 1000;
       options.baseUrl = setting.baseUrl;
       options.contentType = setting.contentType;
       _client = Dio(options);
       setting.interceptors?.forEach((interceptor) {
-        _client.interceptors.add(interceptor);
+        _client!.interceptors.add(interceptor);
       });
       if (isDebug && !setting.delegateHost.isEmptyOrNull) {
-        (_client.httpClientAdapter as DefaultHttpClientAdapter)
+        (_client!.httpClientAdapter as DefaultHttpClientAdapter)
             .onHttpClientCreate = (client) {
-          client.findProxy = (url){
+          client.findProxy = (url) {
             return "PROXY ${setting.delegateHost}";
           };
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+          client.badCertificateCallback =
+              (X509Certificate cert, String host, int port) => true;
         };
       }
     }
@@ -79,13 +87,13 @@ class HttpRequest {
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
   Future<bool> get(
     String url, {
-    Options options,
-    Map<String, dynamic> params,
-    OptionsExtra extra,
-    HttpRequestSuccessCallback callBack,
-    HttpRequestErrorCallback errorCallBack,
-    HttpRequestCommonCallback commonCallBack,
-    CancelToken token,
+    Options? options,
+    Map<String, dynamic>? params,
+    OptionsExtra? extra,
+    HttpRequestSuccessCallback? callBack,
+    HttpRequestErrorCallback? errorCallBack,
+    HttpRequestCommonCallback? commonCallBack,
+    CancelToken? token,
   }) async {
     return await _request(
       url,
@@ -111,14 +119,14 @@ class HttpRequest {
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
   Future<bool> post(
     String url, {
-    Options options,
-    Map<String, dynamic> params,
-    Map<String, dynamic> formData,
-    OptionsExtra extra,
-    HttpRequestSuccessCallback callBack,
-    HttpRequestErrorCallback errorCallBack,
-    HttpRequestCommonCallback commonCallBack,
-    CancelToken token,
+    Options? options,
+    Map<String, dynamic>? params,
+    Map<String, dynamic>? formData,
+    OptionsExtra? extra,
+    HttpRequestSuccessCallback? callBack,
+    HttpRequestErrorCallback? errorCallBack,
+    HttpRequestCommonCallback? commonCallBack,
+    CancelToken? token,
   }) async {
     return await _request(
       url,
@@ -145,13 +153,13 @@ class HttpRequest {
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
   Future<bool> delete(
     String url, {
-    Options options,
-    Map<String, dynamic> params,
-    OptionsExtra extra,
-    HttpRequestSuccessCallback callBack,
-    HttpRequestErrorCallback errorCallBack,
-    HttpRequestCommonCallback commonCallBack,
-    CancelToken token,
+    Options? options,
+    Map<String, dynamic>? params,
+    OptionsExtra? extra,
+    HttpRequestSuccessCallback? callBack,
+    HttpRequestErrorCallback? errorCallBack,
+    HttpRequestCommonCallback? commonCallBack,
+    CancelToken? token,
   }) async {
     return await _request(
       url,
@@ -177,13 +185,13 @@ class HttpRequest {
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
   Future<bool> patch(
     String url, {
-    Options options,
-    Map<String, dynamic> params,
-    OptionsExtra extra,
-    HttpRequestSuccessCallback callBack,
-    HttpRequestErrorCallback errorCallBack,
-    HttpRequestCommonCallback commonCallBack,
-    CancelToken token,
+    Options? options,
+    Map<String, dynamic>? params,
+    OptionsExtra? extra,
+    HttpRequestSuccessCallback? callBack,
+    HttpRequestErrorCallback? errorCallBack,
+    HttpRequestCommonCallback? commonCallBack,
+    CancelToken? token,
   }) async {
     return await _request(
       url,
@@ -211,14 +219,14 @@ class HttpRequest {
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
   Future<bool> put(
     String url, {
-    Options options,
-    Map<String, dynamic> params,
-    OptionsExtra extra,
-    HttpRequestSuccessCallback callBack,
-    HttpRequestErrorCallback errorCallBack,
-    HttpRequestCommonCallback commonCallBack,
-    ProgressCallback progressCallBack,
-    CancelToken token,
+    Options? options,
+    Map<String, dynamic>? params,
+    OptionsExtra? extra,
+    HttpRequestSuccessCallback? callBack,
+    HttpRequestErrorCallback? errorCallBack,
+    HttpRequestCommonCallback? commonCallBack,
+    ProgressCallback? progressCallBack,
+    CancelToken? token,
   }) async {
     return await _request(
       url,
@@ -246,14 +254,14 @@ class HttpRequest {
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
   Future<bool> postUpload(
     String url, {
-    Options options,
-    Map<String, dynamic> formData,
-    OptionsExtra extra,
-    HttpRequestSuccessCallback callBack,
-    HttpRequestErrorCallback errorCallBack,
-    HttpRequestCommonCallback commonCallBack,
-    ProgressCallback progressCallBack,
-    CancelToken token,
+    Options? options,
+    Map<String, dynamic>? formData,
+    OptionsExtra? extra,
+    HttpRequestSuccessCallback? callBack,
+    HttpRequestErrorCallback? errorCallBack,
+    HttpRequestCommonCallback? commonCallBack,
+    ProgressCallback? progressCallBack,
+    CancelToken? token,
   }) async {
     return await _request(
       url,
@@ -283,16 +291,16 @@ class HttpRequest {
   /// @param [token] 取消请求时使用的CancelToken（可选） <br/>
   Future<bool> _request(
     String url, {
-    String method,
-    Options options,
-    Map<String, dynamic> params,
-    Map<String, dynamic> formData,
-    OptionsExtra extra,
-    HttpRequestSuccessCallback callBack,
-    HttpRequestErrorCallback errorCallBack,
-    HttpRequestCommonCallback commonCallBack,
-    ProgressCallback progressCallBack,
-    CancelToken token,
+    String? method,
+    Options? options,
+    Map<String, dynamic>? params,
+    Map<String, dynamic>? formData,
+    OptionsExtra? extra,
+    HttpRequestSuccessCallback? callBack,
+    HttpRequestErrorCallback? errorCallBack,
+    HttpRequestCommonCallback? commonCallBack,
+    ProgressCallback? progressCallBack,
+    CancelToken? token,
   }) async {
     // restful api 格式化处理
     // 例：将 /user/:userId 转换为 /user/12
@@ -319,20 +327,20 @@ class HttpRequest {
       singleShowErrorToastKey: extra.singleErrorToastKey,
     };
 
-    Response response;
+    late Response response;
     try {
       switch (method) {
         case GET:
           // 组合GET请求的参数
-          if (newParams != null && newParams.isNotEmpty) {
-            response = await _client.get(
+          if (newParams.isNotEmpty) {
+            response = await _client!.get(
               url,
               options: options,
               queryParameters: newParams,
               cancelToken: token,
             );
           } else {
-            response = await _client.get(
+            response = await _client!.get(
               url,
               options: options,
               cancelToken: token,
@@ -340,8 +348,8 @@ class HttpRequest {
           }
           break;
         case POST:
-          if (newParams != null && newParams.isNotEmpty) {
-            response = await _client.post(
+          if (newParams.isNotEmpty) {
+            response = await _client!.post(
               url,
               data: newParams,
               options: options,
@@ -349,7 +357,7 @@ class HttpRequest {
               cancelToken: token,
             );
           } else if (formData != null && formData.isNotEmpty) {
-            response = await _client.post(
+            response = await _client!.post(
               url,
               data: FormData.fromMap(formData),
               options: options,
@@ -357,7 +365,7 @@ class HttpRequest {
               cancelToken: token,
             );
           } else {
-            response = await _client.post(
+            response = await _client!.post(
               url,
               options: options,
               cancelToken: token,
@@ -365,15 +373,15 @@ class HttpRequest {
           }
           break;
         case DELETE:
-          if (newParams != null && newParams.isNotEmpty) {
-            response = await _client.delete(
+          if (newParams.isNotEmpty) {
+            response = await _client!.delete(
               url,
               options: options,
               queryParameters: newParams,
               cancelToken: token,
             );
           } else {
-            response = await _client.delete(
+            response = await _client!.delete(
               url,
               options: options,
               cancelToken: token,
@@ -381,15 +389,15 @@ class HttpRequest {
           }
           break;
         case PUT:
-          if (newParams != null && newParams.isNotEmpty) {
-            response = await _client.put(
+          if (newParams.isNotEmpty) {
+            response = await _client!.put(
               url,
               options: options,
               queryParameters: newParams,
               cancelToken: token,
             );
           } else {
-            response = await _client.put(
+            response = await _client!.put(
               url,
               options: options,
               cancelToken: token,
@@ -397,15 +405,15 @@ class HttpRequest {
           }
           break;
         case PATCH:
-          if (newParams != null && newParams.isNotEmpty) {
-            response = await _client.patch(
+          if (newParams.isNotEmpty) {
+            response = await _client!.patch(
               url,
               options: options,
               queryParameters: newParams,
               cancelToken: token,
             );
           } else {
-            response = await _client.patch(
+            response = await _client!.patch(
               url,
               options: options,
               cancelToken: token,
@@ -413,29 +421,14 @@ class HttpRequest {
           }
           break;
       }
-      // 请求回调公共处理方法
-      if (commonCallBack != null) commonCallBack();
 
-      // 请求成功的回调
-      if (callBack != null) {
-        callBack(response.data);
-      }
-      Map<String, dynamic> tempHeader = {};
-      if (_client?.options?.headers != null &&
-          _client.options.headers.length > 0) {
-        tempHeader.addAll(_client.options.headers);
-      }
-      if (options?.headers != null && options.headers.length > 0) {
-        tempHeader.addAll(options.headers);
-      }
-      // 请求成功返回 true
+      commonCallBack?.call();
+      callBack?.call(_resultToMap(response));
       return true;
     } on DioError catch (e) {
       if (CancelToken.isCancel(e)) print('网络请求取消：' + e.message);
-      // 请求回调公共处理方法s
-      if (commonCallBack != null) commonCallBack();
+      commonCallBack?.call();
       _handleError(errorCallBack, error: e);
-      // 请求失败返回 false
       return false;
     }
   }
@@ -445,8 +438,8 @@ class HttpRequest {
   /// @param [errorCallback] 错误处理回调方法 <br/>
   /// @param [error] DioError由dio封装的错误信息（可选） <br/>
   /// @param [errorMsg] 出错信息（可选） <br/>
-  void _handleError(HttpRequestErrorCallback errorCallback,
-      {DioError error, String errorMsg}) {
+  void _handleError(HttpRequestErrorCallback? errorCallback,
+      {DioError? error, String? errorMsg}) {
     String errorOutput = "";
     if (error is DioError) {
       switch (error.type) {
@@ -466,10 +459,10 @@ class HttpRequest {
           errorOutput = "服務器響應超時";
           break;
         case DioErrorType.response:
-          errorOutput = "請求錯誤: ${error.response.statusMessage}";
+          errorOutput = "請求錯誤: ${error.response!.statusMessage}";
           break;
       }
-    } else if (errorMsg.isNotEmpty) {
+    } else if (errorMsg!.isNotEmpty) {
       errorOutput = "網絡不順，請檢查網絡後再重新整理";
     } else {
       errorOutput = "未知錯誤";
@@ -477,15 +470,27 @@ class HttpRequest {
 
     // 是否显示错误提示
     bool singleShowErrorToast =
-        error.requestOptions.extra[singleShowErrorToastKey] ?? false;
+        error?.requestOptions.extra[singleShowErrorToastKey] ?? false;
     if (errorCallback != null) {
       if (error?.response?.statusCode == null) {
         errorCallback(error, 0);
       } else {
-        errorCallback(error, error.response.statusCode);
+        errorCallback(error, error?.response?.statusCode);
       }
     } else if (singleShowErrorToast) {
       ToastManager.show(errorOutput);
     }
+  }
+
+  Map<String, dynamic> _resultToMap(Response<dynamic> response) {
+    if (response.data == null) return {};
+    var result = response.data;
+    if (result is Map) return response.data;
+    if (result is List) return {"result": json.encode(result)};
+    if (result is String) return {"result": result};
+    if (result is int) return {"result": result};
+    if (result is bool) return {"result": result};
+    if (result is double) return {"result": result};
+    return response.data;
   }
 }

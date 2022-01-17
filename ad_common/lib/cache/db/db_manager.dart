@@ -2,12 +2,12 @@ import 'package:sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
 
 class DBManager {
-  static Database _db;
+  static Database? _db;
   static const String DB_NAME = "flutter_db";
 
   static final _lock = Lock();
 
-  static Future<Database> getDatabase() async {
+  static Future<Database?> getDatabase() async {
     if (_db == null) {
       await _lock.synchronized(() async {
         if (_db == null) await init();
@@ -20,7 +20,7 @@ class DBManager {
   static Future<void> init({
     int version = 1,
     String name = DB_NAME,
-    OnDatabaseVersionChangeFn changeCallback,
+    OnDatabaseVersionChangeFn? changeCallback,
   }) async {
     // 获取数据库文件的存储路径
     var databasesPath = await getDatabasesPath();

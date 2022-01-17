@@ -1,5 +1,3 @@
-
-
 import 'package:ad_common/ad_common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +130,7 @@ extension STPaddingExtension on Widget {
 }
 
 extension STTapExtension on Widget {
-  Widget onTap(GestureTapCallback callback) {
+  Widget onTap(GestureTapCallback? callback) {
     return GestureDetector(
       onTap: callback,
       behavior: HitTestBehavior.opaque,
@@ -140,7 +138,7 @@ extension STTapExtension on Widget {
     );
   }
 
-  Widget inkWell(GestureTapCallback callback) {
+  Widget inkWell(GestureTapCallback? callback) {
     return InkWell(
       onTap: callback,
       child: this,
@@ -193,10 +191,10 @@ extension STOffsetExtension on Widget {
 
 extension STPositionExtension on Widget {
   Widget position({
-    double left,
-    double top,
-    double right,
-    double bottom,
+    double? left,
+    double? top,
+    double? right,
+    double? bottom,
   }) {
     return Positioned(
       left: left,
@@ -211,7 +209,7 @@ extension STPositionExtension on Widget {
 
 extension STSizeExtension on Widget {
 
-  Widget size({Size size}){
+  Widget size({Size? size}){
     size ??= Size(double.infinity, double.infinity);
     return SizedBox(
       width: size.width,
@@ -259,7 +257,7 @@ extension STRadiusWidgetExtension on Widget {
     );
   }
 
-  Widget border(double border, {Color color}){
+  Widget border(double border, {Color? color}){
     color ??=  ColorManager.hexColor(0xEEEEEE);
     return Container(
       decoration: BoxDecoration(
@@ -297,3 +295,8 @@ extension STBorderRadiusExtension on double {
 
   BorderRadiusGeometry get bR => BorderRadius.only(topRight: this.r, bottomRight: this.r);
 }
+
+
+
+
+

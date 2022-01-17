@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ad_common/ad_common.dart';
+import 'package:ad_common/common/extension/log_extension.dart';
 import 'package:ad_common/network/options_extra.dart';
 import 'package:dio/dio.dart';
 
@@ -137,7 +137,7 @@ class LogPrintInterceptor extends Interceptor {
       printKV("出错链接", err.requestOptions.uri);
       printKV("出错原因", err);
       if (err.response != null) {
-        _printResponse(err.response);
+        _printResponse(err.response!);
       }
       printV("");
     }
@@ -145,7 +145,7 @@ class LogPrintInterceptor extends Interceptor {
 
   void _printResponse(Response response) {
     printV("*************** 请求响应 ***************");
-    printKV('响应链接', response.requestOptions?.uri);
+    printKV('响应链接', response.requestOptions.uri);
     //单个请求-是否打印-响应头
     bool singleResponseHeaderShowLog =
         response.requestOptions.extra[singleResponseHeaderShowLogKey] ?? true;
@@ -154,12 +154,8 @@ class LogPrintInterceptor extends Interceptor {
       if (response.isRedirect == true) {
         printKV('redirect', response.realUri);
       }
-      if (response.headers != null) {
-        var headers = response.headers.toString()?.replaceAll("\n", "\n ");
-        if (headers != null) {
-          printKV('响应头部', headers);
-        }
-      }
+      var headers = response.headers.toString().replaceAll("\n", "\n ");
+      printKV('响应头部', headers);
     }
 
     //单个请求-是否打印-响应头
@@ -176,7 +172,7 @@ class LogPrintInterceptor extends Interceptor {
     logPrint('$value');
   }
 
-  void printKV(String key, Object value) {
+  void printKV(String key, Object? value) {
     logPrint('$key: $value');
   }
 

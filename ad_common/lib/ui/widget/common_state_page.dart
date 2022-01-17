@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 class CommonStatePage extends StatelessWidget {
   final Widget image;
   final String text;
-  final double textSize;
-  final double width;
-  final double height;
+  final double? textSize;
+  final double? width;
+  final double? height;
 
   CommonStatePage({
-    Key key,
-    this.image,
-    this.text,
+    Key? key,
+    required this.image,
+    this.text = "",
     this.textSize,
     this.width,
     this.height,

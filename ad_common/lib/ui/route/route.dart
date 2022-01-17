@@ -11,100 +11,114 @@ class RouteManager extends NavigatorObserver {
   factory RouteManager() => _getInstance();
 
   static RouteManager get instance => _getInstance();
-  static RouteManager _instance;
+  static RouteManager? _instance;
 
   RouteManager._internal();
 
   static RouteManager _getInstance() {
     if (_instance == null) _instance = RouteManager._internal();
-    return _instance;
+    return _instance!;
   }
 
   /// 当前路由栈
-  List<Route> _mRoutes = [];
+  List<Route?> _mRoutes = [];
 
   /// 当前路由大小
   int get routesSize => _mRoutes.length;
 
   /// 当前路由
-  Route get currentRoute => _mRoutes[routesSize - 1];
+  Route? get currentRoute => _mRoutes[routesSize - 1];
 
   /// 上个路由
-  Route get previousRoute {
+  Route? get previousRoute {
     return routesSize > 1 ? _mRoutes[routesSize - 2] : null;
   }
 
   /// 上个路由
-  Route getRouteByIndex(int index) {
+  Route? getRouteByIndex(int index) {
     if (index < routesSize && index >= 0) return _mRoutes[index];
     return null;
   }
 
   /// 获取所有路由
-  List<Route> get routes => _mRoutes;
+  List<Route?> get routes => _mRoutes;
 
   List<BaseRouteOption> option = [];
   String homePageType = "";
 
   /// 跳转页面
-  Future<Object> push(
+  Future<Object?> push(
     routeName, {
-    Object arguments,
+    Object? arguments,
     bool isReplace = false,
     bool isRemoveUntil = false,
+    RoutePredicate? predicate,
   }) {
     if (isRemoveUntil) {
-     return navigator.pushNamedAndRemoveUntil(routeName.toString(), (route) => false,
-          arguments: arguments ?? "");
+      return navigator!.pushNamedAndRemoveUntil(
+        routeName.toString(),
+        predicate ?? (route) => false,
+        arguments: arguments ?? "",
+      );
     } else if (isReplace) {
-      return navigator.pushReplacementNamed(routeName.toString(),
-          arguments: arguments ?? "");
+      return navigator!.pushReplacementNamed(
+        routeName.toString(),
+        arguments: arguments ?? "",
+      );
     } else {
-      return navigator.pushNamed(routeName.toString(),
-          arguments: arguments ?? "");
+      return navigator!.pushNamed(
+        routeName.toString(),
+        arguments: arguments ?? "",
+      );
     }
   }
 
   /// 跳转页面
-  Future<Object> pushRoute(
+  Future<Object?> pushRoute(
     Route route, {
-    Object arguments,
     bool isReplace = false,
     bool isRemoveUntil = false,
+    RoutePredicate? predicate,
   }) {
     if (isRemoveUntil) {
-      return navigator.pushAndRemoveUntil(route, (route) => false);
+      return navigator!.pushAndRemoveUntil(
+        route as Route<Object>,
+        predicate ?? (route) => false,
+      );
     } else if (isReplace) {
-      return navigator.pushReplacement(route);
+      return navigator!.pushReplacement(route as Route<Object>);
     } else {
-      return navigator.push(route);
+      return navigator!.push(route as Route<Object>);
     }
   }
 
   /// 返回页面
-  void pop<T extends Object>({type, T result}) {
-    if (!navigator.canPop()) return;
-    if (_mRoutes.length <= 0 || _mRoutes.last.settings.name == "/") return;
+  void pop<T extends Object?>({type, T? result}) {
+    if (!navigator!.canPop()) return;
+    if (_mRoutes.length <= 0 || _mRoutes.last!.settings.name == "/") return;
     if (type == null) {
-      navigator.pop(result);
+      navigator!.pop(result);
     } else {
-      navigator.popUntil((Route<dynamic> route) {
-        if (route.settings.name == homePageType) {
-          return true;
-        } else {
-          return type.toString() == route.settings.name;
-        }
-      });
+      navigator!.popUntil(
+        (Route<dynamic> route) {
+          if (route.settings.name == homePageType) {
+            return true;
+          } else {
+            return type.toString() == route.settings.name;
+          }
+        },
+      );
     }
   }
 
-  Route routeBuild(
-      {Widget page,
-      PageTransitionType type = PageTransitionType.right,
-      Object arguments}) {
+  Route routeBuild({
+    Widget? page,
+    PageTransitionType type = PageTransitionType.right,
+    Object? arguments,
+  }) {
     switch (type) {
       case PageTransitionType.scale:
-        return ScaleRouter(
+        return ScaleRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -113,7 +127,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.fade:
-        return FadeRouter(
+        return FadeRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -122,7 +136,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.rotate:
-        return RotateRouter(
+        return RotateRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -131,7 +145,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.top:
-        return TopBottomRouter(
+        return TopBottomRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -140,7 +154,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.left:
-        return LeftRightRouter(
+        return LeftRightRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -149,7 +163,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.bottom:
-        return BottomTopRouter(
+        return BottomTopRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -158,7 +172,7 @@ class RouteManager extends NavigatorObserver {
         );
 
       case PageTransitionType.right:
-        return RightLeftRouter(
+        return RightLeftRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -166,7 +180,7 @@ class RouteManager extends NavigatorObserver {
           ),
         );
       case PageTransitionType.none:
-        return NoAnimRouter(
+        return NoAnimRouter<Object>(
           page: page,
           settings: RouteSettings(
             name: page.runtimeType.toString(),
@@ -174,61 +188,83 @@ class RouteManager extends NavigatorObserver {
           ),
         );
     }
-    return MaterialPageRoute(
-      builder: (context) => page,
-      settings: RouteSettings(
-        name: page.runtimeType.toString(),
-        arguments: arguments,
-      ),
-    );
   }
 
   bool isCurrentRoute(String pageType) {
-    return currentRoute.settings.name == pageType.toString();
+    return currentRoute!.settings.name == pageType.toString();
   }
 
   @override
-  void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
     _mRoutes.add(route);
-    PaintingBinding.instance.imageCache.clearLiveImages();
+    PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didPush(route, previousRoute));
   }
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
     _mRoutes.remove(route);
-    PaintingBinding.instance.imageCache.clearLiveImages();
+    PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didPop(route, previousRoute));
   }
 
   @override
-  void didRemove(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didRemove(route, previousRoute);
-    PaintingBinding.instance.imageCache.clearLiveImages();
+    PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didRemove(route, previousRoute));
   }
 
   @override
-  void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     _mRoutes.last = newRoute;
-    PaintingBinding.instance.imageCache.clearLiveImages();
+    PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didReplace(newRoute: newRoute, oldRoute: oldRoute));
   }
 
   @override
-  void didStartUserGesture(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didStartUserGesture(
+      Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didStartUserGesture(route, previousRoute);
-    PaintingBinding.instance.imageCache.clearLiveImages();
+    PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didStartUserGesture(route, previousRoute));
   }
 
   @override
   void didStopUserGesture() {
     super.didStopUserGesture();
-    PaintingBinding.instance.imageCache.clearLiveImages();
+    PaintingBinding.instance!.imageCache!.clearLiveImages();
     option.forEach((e) => e.didStopUserGesture());
+  }
+}
+
+/// 路由扩展
+extension RoutePush on RouteManager {
+  Future<Object?> pushPage(
+    Widget page, {
+    Object? arguments,
+    bool isReplace = false,
+    PageTransitionType type = PageTransitionType.right,
+    bool isRemoveUntil = false,
+    RoutePredicate? predicate,
+  }) {
+    var route = RouteManager().routeBuild(
+      page: page,
+      type: type,
+      arguments: arguments,
+    );
+    return RouteManager().pushRoute(
+      route,
+      isReplace: isReplace,
+      isRemoveUntil: isRemoveUntil,
+      predicate: predicate,
+    );
+  }
+
+  void popPage<T>({type, T? result}) {
+    return RouteManager().pop(type: type, result: result);
   }
 }

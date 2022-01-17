@@ -58,12 +58,11 @@ typedef AuthCheckCallback = void Function(bool status);
 
 class Auth {
   static Future<PermissionStatus> request({
-    AuthType type,
-    AuthStateCallback callback,
-    AuthErrorCallback errorCallback,
+    required AuthType type,
+    AuthStateCallback? callback,
+    AuthErrorCallback? errorCallback,
   }) async {
     PermissionStatus status;
-    print(type);
     switch (type) {
       case AuthType.Calendar:
         status = await Permission.calendar.request();
@@ -96,7 +95,7 @@ class Auth {
         status = await Permission.storage.request();
         break;
     }
-    if (status.isGranted) {
+    if (status.isGranted || status.isLimited) {
       if (callback != null) callback(status);
     } else {
       if (errorCallback != null) errorCallback(status);
@@ -104,7 +103,10 @@ class Auth {
     return status;
   }
 
-  static Future<bool> check({AuthType type, AuthCheckCallback callback}) async {
+  static Future<bool> check({
+    required AuthType type,
+    AuthCheckCallback? callback,
+  }) async {
     PermissionStatus status;
     switch (type) {
       case AuthType.Calendar:
@@ -138,17 +140,19 @@ class Auth {
         status = await Permission.storage.status;
         break;
     }
-    if (callback != null) callback(status.isGranted);
-    return status.isGranted;
+
+    final state = status.isGranted || status.isLimited;
+    if (callback != null) callback(state);
+    return state;
   }
 
   static Future use({
-    AuthType type,
-    AuthStateCallback callback,
-    AuthErrorCallback errorCallback,
+    required AuthType type,
+    AuthStateCallback? callback,
+    AuthErrorCallback? errorCallback,
   }) async {
     PermissionStatus status = await request(type: type);
-    if (status.isGranted) {
+    if (status.isGranted || status.isLimited) {
       if (callback != null) callback(status);
     } else {
       if (errorCallback != null) errorCallback(status);

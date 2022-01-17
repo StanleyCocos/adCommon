@@ -1,9 +1,10 @@
-import 'package:ad_common/ad_common.dart';
+import 'package:dio/dio.dart';
 
 ///网络请求拦截器
 class NetworkInterceptor extends InterceptorsWrapper {
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     options.headers = getHeaders();
     handler.next(options);
   }
@@ -12,7 +13,7 @@ class NetworkInterceptor extends InterceptorsWrapper {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     var data = response.data;
     if (data is Map) {
-      int code = data['code'];
+      int? code = data['code'];
       print('NetworkInterceptor onResponse=$code ');
     }
     return handler.next(response);

@@ -1,5 +1,13 @@
+import 'package:intl/intl.dart';
+
 ///时间-日期 扩展类
 extension DateOption on DateTime {
+
+  /*
+  * 获取当前毫秒
+  * */
+  int get nowMillisecond => this.millisecondsSinceEpoch;
+
   /*
   * 是否为今天
   * */
@@ -34,6 +42,13 @@ extension DateOption on DateTime {
   * 获取月份的第一天
   * */
   DateTime get firstDayOfMonth => DateTime(this.year, this.month);
+
+  /*
+  * 获取指定格式的当前时间
+  * */
+  String format({String format = "yyyy-MM-dd HH:mm:ss"}) {
+    return DateFormat(format).format(this);
+  }
 
   /*
   * 获取月份的最后一天
@@ -170,7 +185,7 @@ extension DateOption on DateTime {
     if (curTime <= 0) return "00:00:00";
     int hour = curTime ~/ 3600;
     int minutes = (curTime - hour * 3600) ~/ 60;
-    int seconds = curTime % 60;
+    int seconds = curTime % 60 as int;
     String hourValue;
     if (hour == 0) {
       hourValue = "00";

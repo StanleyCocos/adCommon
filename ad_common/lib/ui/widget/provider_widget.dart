@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 class ProviderWidget<T extends ChangeNotifier> extends StatelessWidget {
   final T controller;
   final Widget Function() builder;
-  ProviderWidget({this.controller, this.builder});
+  ProviderWidget({required this.controller, required this.builder});
 
   @override
   Widget build(BuildContext context) {
